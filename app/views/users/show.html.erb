@@ -1,0 +1,23 @@
+<p>
+  <b>Institution:</b>
+  <%=h @user.institution_id %>
+</p>
+
+<p>
+  <b>Service level:</b>
+  <%=h @user.service_level_id %>
+</p>
+
+<p>
+  <b>Segment:</b>
+  <%=h @user.segment_id %>
+</p>
+
+<p>
+  <b>Password:</b>
+  <%=h @user.password %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>

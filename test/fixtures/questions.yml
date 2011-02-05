@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  dimension_id: 1
+  number: 1
+  description: MyText
+
+two:
+  dimension_id: 1
+  number: 1
+  description: MyText

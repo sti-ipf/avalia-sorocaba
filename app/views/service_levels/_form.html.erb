@@ -1,0 +1,19 @@
+<% form_for(@service_level) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <h2>Segmentos</h2>
+
+  <% @segments.each do |segment| %>
+     <%= check_box_tag "service_level[segment_ids][]", segment.id, @service_level.segments.include?(segment) %>  
+     <%= segment.name %> <br />
+  <% end %>  
+  <p>
+
+    <%= f.submit 'Salvar' %>
+  </p>
+<% end %>

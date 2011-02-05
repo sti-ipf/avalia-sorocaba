@@ -1,0 +1,18 @@
+<p>
+  <b>Survey Description:</b>
+  <%=h @survey_desc %>
+</p>
+
+<p>
+  <b>Number:</b>
+  <%=h @question.number %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @question.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_question_path(@question) %> |
+<%= link_to 'Back', questions_path %>

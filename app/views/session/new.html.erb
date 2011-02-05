@@ -1,0 +1,22 @@
+
+
+
+<div style="padding: 5px; width:400px; margin-left: auto; margin-right: auto; border: solid 1px blue">
+<p style="color: red"><%= flash[:error] %></p>
+<% form_tag "/2010/create_session" do %>
+
+Unidade<br />
+<%= select_tag "institution_id", options_from_collection_for_select(@institutions, 'id', 'name'), {:size => 5, :style => 'width: 20em;'} %>
+<br />
+Nível de Atendimento<br />
+<%= select_tag "service_level_id", options_from_collection_for_select(@service_levels, 'id', 'name'), {:style => 'width: 20em;'} %>
+<br />
+Segmento<br />
+<%= select_tag "segment_id", options_from_collection_for_select(@segments, 'id', 'name'), {:style => 'width: 20em;'} %>
+<br />
+Senha<br />
+<%= password_field_tag "password" %>
+
+<%= submit_tag 'entrar' %>
+<% end %>
+<div>

@@ -1,0 +1,18 @@
+<h1>Lista de Presença</h1>
+<h2>Preencha de uma só vez. Não pode ser editada</h2>
+
+<% form_for(@user) do |f| %>
+
+  <p>
+    Participantes:<br />
+  </p>
+     <% f.fields_for :attendees do |af| %>
+       <%= render 'attendee_fields', :af => af %>
+     <% end %>
+
+  <p>
+    <%= f.submit 'Salvar Lista' %>
+  </p>
+<% end %>
+
+<center><%= link_to 'Voltar para a Página Incial', '/2010/session' %></center>

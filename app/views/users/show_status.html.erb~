@@ -1,0 +1,35 @@
+<h1>Relatório de Acompanhamento</h1>
+
+<p>
+Completos: <%=h @completed %>
+</p>
+
+<p>
+Em preenchimento: <%=h @in_progress %>
+</p>
+
+<p>
+Não iniciados: <%=h @not_started %>
+</p>
+
+<table>
+  <tr>
+    <th>Institutição</th>
+    <th>Nivel de Atendimento</th>
+    <th>Segmento</th>
+    <th>Status</th>
+  </tr>
+
+<% @data.each do |d| %>
+  <tr>
+    <td><%=h d[0] %></td>
+    <td><%=h d[1] %></td>
+    <td><%=h d[2] %></td>
+    <td><%=h d[3] %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New user', new_user_path %>

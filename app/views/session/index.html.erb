@@ -1,0 +1,17 @@
+<% content_for :institution do %>
+ <%= "#{@institution_name} - #{@subtitle}" %>
+ <% if @user %>
+ <%= link_to "Sair", '/2010/session/destroy', :method => 'delete' %>
+ <% end %> 
+<% end %>
+
+<div style= "width:50%; text-align:center; margin-top: 100px;">
+<h2><%= link_to "Instrumental de Avaliação", 
+	survey_path(@survey.id) %></h2>
+</div>
+
+
+<div style= "width:50%; float:left; text-align:center; margin-top: 100px;">
+
+<h2><%= link_to "Lista de Presença", new_attendee_path %><h2>
+</div>

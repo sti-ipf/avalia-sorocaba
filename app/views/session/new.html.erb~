@@ -1,0 +1,7 @@
+<h1>Login</h1>
+
+<% form_tag "teste" do %>
+
+<%= select_tag "institution_id",  Institution.all.collect {|i| [ i.name, i.id ] }.join.html_safe, :size => 5 %>
+
+<% end %>

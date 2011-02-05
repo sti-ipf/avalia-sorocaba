@@ -1,0 +1,8 @@
+<% content_for :institution do %>
+ <%= "#{@institution_name} - #{@subtitle}" %>
+<% end %>
+
+@questions.each do |question|
+  render "question", :locals => { :question => question }
+  render "answer", :locals => { :answer => @answers[question.id] }
+end

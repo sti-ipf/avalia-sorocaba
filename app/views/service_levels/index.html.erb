@@ -1,0 +1,20 @@
+<h1>Listing service_levels</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+
+<% @service_levels.each do |service_level| %>
+  <tr>
+    <td><%=h service_level.name %></td>
+    <td><%= link_to 'Show', service_level %></td>
+    <td><%= link_to 'Edit', edit_service_level_path(service_level) %></td>
+    <td><%= link_to 'Destroy', service_level, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New service_level', new_service_level_path %>
