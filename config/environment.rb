@@ -23,6 +23,7 @@ Rails::Initializer.run do |config|
   config.gem "pdf-reader", :lib => "pdf/reader"
   config.gem "Ascii85", :lib => "ascii85"
   config.gem "gruff"
+  config.gem "rmagick", :lib => "RMagick2"
   config.gem "rghost"
 
   # Only load the plugins named here, in the order given (default is alphabetical).

@@ -6,7 +6,6 @@ development:
   database: unifreire_sorocaba
   username: root
   password: root
-  socket: /tmp/mysql.sock
 
 sorocaba2009:
   adapter: mysql
@@ -14,8 +13,6 @@ sorocaba2009:
   database: sorocaba2009
   username: root
   password: root
-  socket: /tmp/mysql.sock
-
 
 sorocaba2008:
   adapter: mysql
@@ -23,7 +20,6 @@ sorocaba2008:
   database: cedecapaulofreire
   username: root
   password: root
-  socket: /tmp/mysql.sock
 
 #  development:
 #    adapter: mysql
@@ -45,11 +41,11 @@ test:
   pool: 5
   timeout: 5000
 
-production:
-  adapter: mysql
-  host: localhost 
-  encoding: utf8
-  database: paulo1_sorocaba
-  username: sorocaba
-  password: ipfs9550
-  socket: /tmp/mysql.sock
+#production:
+#  adapter: mysql
+#  host: localhost 
+#  encoding: utf8
+#  database: paulo1_sorocaba
+#  username: sorocaba
+#  password: ipfs9550
+#  socket: /tmp/mysql.sock
