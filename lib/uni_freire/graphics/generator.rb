@@ -26,24 +26,19 @@ module UniFreire
         self.title = params[:title] if !params[:title].nil?
         self.theme = {
           :colors => params[:colors],
-          :marker_color => '#004586', #orange
+          :marker_color => '#004586', #laranja
           :font_color => 'black',
           :background_colors => 'white'
         }
         DEFAULT_PARAMS.each {|k, v| self.instance_variable_set("@#{k}", v)}
       end
         
+      #estrutura os dados para gerar o gráfico e salva no diretório temporário  
       def generate(result)
         build_graphic_with_data(result)
-        self.save
+        save
       end
-      
-      def save(optional_name=nil)
-        target_file = target_file(optional_name || "_graphic_#{self.object_id}")
-        self.write target_file
-        target_file
-      end
-      
+            
     private
     
       def build_graphic_with_data(db_result)
@@ -96,6 +91,13 @@ module UniFreire
       def target_file(chart_name)
         filename = chart_name << '.jpg'
         File.join(TMP_DIRECTORY,filename)
+      end
+      
+      #salva o gráfico baseado num nome ou o id do objeto
+      def save(optional_name=nil)
+        target_file = target_file(optional_name || "_graphic_#{self.object_id}")
+        self.write target_file
+        target_file
       end
       
     end
