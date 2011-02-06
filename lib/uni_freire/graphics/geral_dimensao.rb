@@ -43,11 +43,11 @@ module UniFreire
                    from all_answers a
                    where
                         a.id_instituicao = ?
-                        and dimension_id(a.numero) = ?
                         and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
-                   group by a.segment_name, a.level_name}, @institution_id, @dimension_id])
+                   group by a.segment_name, a.level_name}, @institution_id])
        # _colors = %w(#FFD33F #FF361E #004584 gray )
-        _colors = theme_greyscale[:colors]
+         graphic =  UniFreire::Graphics::Base.new
+         _colors = graphic.theme_options[:colors]
          group = result.group_by{|r| r['service_levels'] }
 
          label_idx = 0
@@ -56,6 +56,9 @@ module UniFreire
            values.each do |row|
               seg = row['segment_name']
               labels[ label_idx ] =  seg
+              puts "_" * 100
+            puts "#{labels[ label_idx ]}"
+              puts "_" * 100
               label_idx +=1
               _data << row['avg'].to_f
 

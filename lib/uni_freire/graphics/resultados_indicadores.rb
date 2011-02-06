@@ -59,7 +59,7 @@ module UniFreire
            graphic =  UniFreire::Graphics::Base.new(@size)
            labels, data = {}, []
            # colors = %w(#FFD33F #FF361E #004584)
-           colors = graphic.theme_greyscale[:colors]
+           colors = graphic.theme_options[:colors]
            label_idx = 0
            hash_values.each do |year, values|
              labels, data = {}, []

@@ -23,15 +23,9 @@ module UniFreire
         
         # Serie Historica
         doc.image next_page_file
-        g = UniFreire::Graphics::Generator.new(@institution_id,"600x300","general of results for the dimensions series").generate
-        puts "*" * 100
-        puts " " * 100
-        puts g
-        puts g.class
-        puts " " * 100
-        puts "*" * 100
+        g = UniFreire::Graphics::Generator.new(@institution_id,"960x400","general of results for the dimensions series").generate
         file = g.save_temporary
-        doc.image file, :x => 2.5, :y => 9.5, :zoom => 65
+        doc.image file, :x => 1.6, :y => 9.5, :zoom => 50
         doc.showpage
         doc.image next_page_file
         doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
