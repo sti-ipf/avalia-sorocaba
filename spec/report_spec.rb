@@ -1,5 +1,3 @@
-require 'gruff'
-
 require(File.dirname(__FILE__) + "/../config/environment") unless defined? RAILS_ROOT
 require 'lib/uni_freire/graphics/base'
 require "lib/uni_freire/reports/relatorio_individual_sorocaba/relatorio_individual_sorocaba"

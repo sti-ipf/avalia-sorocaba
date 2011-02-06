@@ -13,12 +13,6 @@ class Institution < ActiveRecord::Base
     values_mean = []
     labels = []
     graph = Gruff::Bar.new("400x300")
-    graph.theme = {
-   :colors => ['#3704ba','#bd0004','#f8e900'],
-   :marker_color => 'black',
-   :background_colors => 'white'
-    }
-
     graph.minimum_value = 0
     graph.maximum_value = 5
     graph.marker_count = 10

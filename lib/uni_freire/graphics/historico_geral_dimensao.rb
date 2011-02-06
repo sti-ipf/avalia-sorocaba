@@ -35,16 +35,16 @@ module UniFreire
          # }, @institution_id])
          result = Answer.find_by_sql([%Q{
            select
-            dimension_id(a.numero) as dim,
             year(a.data) as year,
             avg(case when a.nota = 6 then 0 else a.nota end) as avg
            from all_answers a
            where
              a.id_instituicao  = ?
-           group by dimension_id(a.numero)}, @institution_id])
+           group by year}, @institution_id])
          _labels={}
          # _colors = %w(#FFD33F #FF361E #004584  )
-         _colors = theme_greyscale[:colors]
+         graphic =  UniFreire::Graphics::Base.new
+         _colors = graphic.theme_options[:colors]
          group = result.group_by{|r| r['year'] }
          #group['2011'] = group['2010'].dup
 
@@ -56,10 +56,13 @@ module UniFreire
               _data << row['avg'].to_f
               puts "dim: #{dim } #{year}, #{row['avg'].to_i}"
             end
+            puts "*" * 100
+            puts [year.to_s,_data.size, _colors.shift]
+            puts "*" * 100
             self.data year.to_s,_data, _colors.shift
          end
-          minimum_value = 0
-          maximum_value = 5
+#          minimum_value = 0
+#          maximum_value = 5
         #self.labels = _labels
 
 

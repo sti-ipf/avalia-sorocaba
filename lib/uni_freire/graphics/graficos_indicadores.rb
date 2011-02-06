@@ -39,18 +39,15 @@ module UniFreire
          #   }, @institution_id, @dimension_id])
          result = Answer.find_by_sql([%Q{
            select distinct
-              indicator_id(a.numero) as indicator,
                a.level_name as service_levels,
                year(a.data) as year,
                avg(case when a.nota = 6 then 0 else a.nota end) as avg
            from all_answers a
            where
-             a.id_instituicao  = ? and
-             dimension_id(a.numero) = ?
+             a.id_instituicao  = ?
            group by
-            indicator_id(a.numero),
-            a.level_name,
-            year(a.data)}, @institution_id, @dimension_id])
+            service_levels,
+            year}, @institution_id])
          group = result.group_by{|r| r['indicator'].to_i}
 
           group_all = {}
@@ -62,7 +59,7 @@ module UniFreire
             graphic = UniFreire::Graphics::Base.new(@size)
 
             # colors = %w(#FFD33F #FF361E #004584)
-            colors = graphic.theme_greyscale[:colors]
+            colors = graphic.theme_options[:colors]
 
             hash_values.each do |service_levels, values|
                _labels, _data = {}, []

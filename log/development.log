@@ -1,1 +1,644 @@
-# Logfile created on Thu Feb 03 05:46:52 -0200 2011
+# Logfile created on Thu Feb 03 05:46:52 -0200 2011  [4;36;1mSQL (0.3ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mAnswer Load (0.3ms)[0m   [0m
+ select
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by year[0m
+  [4;36;1mAnswer Columns (2.5ms)[0m   [0;1mSHOW FIELDS FROM `answers`[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ a.numero as number,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ a.numero,
+ year(a.data)[0m
+  [4;36;1mAnswer Load (0.1ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.3ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (5.0ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (2.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.3ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.6ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (6.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mAnswer Load (0.1ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+****************************************************************************************************
+#282828#383838#686868#989898#c8c8c8#e8e8e8
+****************************************************************************************************
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by year[0m
+  [4;36;1mAnswer Columns (1.7ms)[0m   [0;1mSHOW FIELDS FROM `answers`[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ a.numero as number,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ a.numero,
+ year(a.data)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by year[0m
+  [4;36;1mAnswer Columns (1.6ms)[0m   [0;1mSHOW FIELDS FROM `answers`[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ a.numero as number,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ a.numero,
+ year(a.data)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by year[0m
+  [4;36;1mAnswer Columns (1.6ms)[0m   [0;1mSHOW FIELDS FROM `answers`[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ a.numero as number,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ a.numero,
+ year(a.data)[0m
+  [4;36;1mAnswer Load (0.1ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.3ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mAnswer Load (0.4ms)[0m   [0m
+ select
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by year[0m
+  [4;36;1mAnswer Columns (1.7ms)[0m   [0;1mSHOW FIELDS FROM `answers`[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select
+ a.numero as number,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ a.numero,
+ year(a.data)[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.1ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.1ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.2ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
+  [4;36;1mAnswer Load (0.2ms)[0m   [0;1m
+ select distinct
+ a.segment_name as segment_name,
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ and a.segment_name in ('Funcionários', 'Professores', 'Gestores', 'Funcionários de Apoio Pedagógico','Familiares')
+ group by a.segment_name, a.level_name[0m
+  [4;35;1mAnswer Load (0.1ms)[0m   [0m
+ select distinct
+ a.level_name as service_levels,
+ year(a.data) as year,
+ avg(case when a.nota = 6 then 0 else a.nota end) as avg
+ from all_answers a
+ where
+ a.id_instituicao = 11
+ group by
+ service_levels,
+ year[0m
