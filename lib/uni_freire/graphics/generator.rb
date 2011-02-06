@@ -33,12 +33,8 @@ module UniFreire
               end
             end
             @datasets << [@ano,@medias]
-            color_index = 0
             @datasets.each do |data| 
-              puts "_" * 100
-              puts data.inspect
-              @graphic.data(data[0], data[1], @colors[color_index])
-              color_index += 1
+              @graphic.data(data[0], data[1])
             end
             (1..11).each{|i| @graphic.labels[i-1] = "#{i}"}
             @graphic.bar_spacing = 0.4
