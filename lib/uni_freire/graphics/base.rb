@@ -4,7 +4,7 @@ module UniFreire
 
       TMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"      
       COLORS = {
-        :three => %w(#004586 #ff420e #ffd320)
+        :three => %w(#004586 #ff420e #ffd320),
         :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
         }
       SIZE = {:wide => "960X400"}
@@ -16,12 +16,14 @@ module UniFreire
         :legend_font_size => 14,
         :marker_font_size => 14,  
         :legend_box_size  => 14,
-        :title_font_size  => 18
+        :title_font_size  => 18,
+        :bar_spacing      => 1
         }
 
       def initialize(params={})
-        params = {:size => SIZE[:wide], :colors => COLORS[:three]}.merge(params)
+        params = {:title => '',:size => SIZE[:wide], :colors => COLORS[:three]}.merge(params)
         super(params[:size])
+        self.title = params[:title] if !params[:title].nil?
         self.theme = {
           :colors => params[:colors],
           :marker_color => '#004586', #orange
