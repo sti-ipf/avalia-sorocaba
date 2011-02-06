@@ -1,6 +1,6 @@
 module UniFreire
   module Graphics
-    class ResultadosIndicadores
+    class Indicadores
       
       def self.create(institution_id, size, title=nil)
         connection = ActiveRecord::Base.connection

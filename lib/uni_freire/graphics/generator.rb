@@ -4,8 +4,8 @@ module UniFreire
 
       TMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"      
       COLORS = {
-        :three => %w(#004586 #ff420e #ffd320),
-        :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
+          :three => %w(#004586 #ff420e #ffd320),
+          :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
         }
       SIZE = {:wide => "960X400"}
       DEFAULT_PARAMS = {
@@ -36,6 +36,12 @@ module UniFreire
       def generate(result)
         build_graphic_with_data(result)
         self.save
+      end
+      
+      def save(optional_name=nil)
+        target_file = target_file(optional_name || "_graphic_#{self.object_id}")
+        self.write target_file
+        target_file
       end
       
     private
@@ -87,16 +93,11 @@ module UniFreire
         
       end
       
-      def save(optional_name=nil)
-        target_file = target_file(optional_name || "_graphic_#{self.object_id}")
-        self.write target_file
-        target_file
-      end
-      
       def target_file(chart_name)
         filename = chart_name << '.jpg'
         File.join(TMP_DIRECTORY,filename)
       end
+      
     end
   end
 end

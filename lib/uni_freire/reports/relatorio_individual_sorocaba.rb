@@ -5,7 +5,6 @@ module UniFreire
       def initialize(institution)
          to_id = lambda{|model| (model.is_a?(Numeric)) ? model : model.id }
         @institution_id = to_id.call(institution)
-        @connection = ActiveRecord::Base.connection
       end
 
       def report
@@ -25,7 +24,6 @@ module UniFreire
         # Serie Historica
         doc.image next_page_file
         file = UniFreire::Graphics::ResultadosDimensoes.create(@connection, 72, '960x400')
-        puts g.class
         doc.image file, :x => 1.6, :y => 9.5, :zoom => 50
         doc.showpage
         doc.image next_page_file
