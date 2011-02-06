@@ -22,16 +22,15 @@ ENGINE = MyISAM;
 -- Inicio das queries de transformação dos dados
 ----------------------------------------------------------------------
 
-<<<<<<< HEAD
 ----------------------------------------------------------------------
 -- Query para transformar as respostas 1.1.2 de 2008 para 1.1.1
 -- pois é o numero equivalente em 2010
-insert into comparable_answers 
+insert into comparable_answers
   (external_id, institution_id, number, original_number, score, level_name,
-  segment_name, dimension, indicator, question, year, answer_date)  
+  segment_name, dimension, indicator, question, year, answer_date)
   select external_id, id_instituicao, '1.1.1', '1.1.2', nota, null, null, 1, 1, 1, year(data), data
     from dados_2008
-      where 
+      where
         numero = '1.1.2'
         and year(data) = 2008
 ----------------------------------------------------------------------
@@ -39,12 +38,12 @@ insert into comparable_answers
 ----------------------------------------------------------------------
 -- Query para transformar as respostas 1.1.2 de 2009 para 1.1.1
 -- pois é o numero equivalente em 2010
-insert into comparable_answers 
+insert into comparable_answers
   (external_id, institution_id, number, original_number, score, level_name,
-  segment_name, dimension, indicator, question, year, answer_date)  
+  segment_name, dimension, indicator, question, year, answer_date)
   select external_id, id_instituicao, '1.1.1', '1.1.2', nota, null, null, 1, 1, 1, year(data), data
     from dados_2009
-      where 
+      where
         numero = '1.1.2'
         and year(data) = 2009
 ----------------------------------------------------------------------
@@ -53,7 +52,6 @@ insert into comparable_answers
 
 
 
-=======
 insert into comparable_answers
   (external_id, institution_id, number, original_number, score, level_name,
   segment_name, dimension, indicator, question, year, answer_date)
@@ -68,5 +66,4 @@ substr(q.number,LOCATE(".",q.number,LOCATE(".",q.number)+1) + 1) as questao,
  inner join questions q on q.id = a.question_id
  inner join segments s on s.id = u.segment_id
  group by a.user_id, q.number);
->>>>>>> faf501d5ff770d7ec0d61499cb19eb5990568496
 

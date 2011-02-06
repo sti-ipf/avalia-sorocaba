@@ -39,25 +39,39 @@ delete from report_data where instituicao_id=72
 
 * Calculo da media da UE
 
-insert into report_data select id_instituicao,1,segment_name,sum(nota) / count(*) as media,dimensao,indicador,questao  from all_answers where id_instituicao=72 and ano=2010 and segment_name <> "Alessandra" and dimensao=1 group by segment_name,indicador,questao;
+insert into report_data select id_instituicao,1,segment_name,sum(nota) / count(*) as media,dimensao,indicador,questao  f
+rom all_answers where id_instituicao=72 and ano=2010 and segment_name <> "Alessandra" group by segment_name,indicador,questao;
 
 
+* Calculo da media da Ed. Infantil       *
 
-* Calculo da media da Ed. Infantil
+insert into report_data
+select institution_id,2,segment_name,sum(score) / count(*) as media,dimension,indicator,question  from comparable_answers
+where institution_id=72 and year=2010  and segment_name <> "Alessandra"  and level_name = 2
+group by segment_name,question;
 
-insert into report_data select id_instituicao,2,segment_name,sum(nota) / count(*) as media,dimensao,indicador,questao  from all_answers where id_instituicao=72 and ano=2010  and segment_name <> "Alessandra" and dimensao=1 and level_name LIKE "%Infantil" group by segment_name,questao;
 
+* Calculo da media do Ensino Fundamental *
 
-* Calculo da media do Ensino Fundamental
-
-select id_instituicao,3,segment_name,sum(nota) / count(*) as media,dimensao,indicador,questao  from all_answers where id_instituicao=72 and ano=2010  and segment_name <> "Alessandra" and dimensao=1 and level_name LIKE "%Fundamental" group by segment_name,questao;
+insert into report_data
+select institution_id,3,segment_name,sum(score) / count(*) as media,dimension,indicator,question  from comparable_answers
+ where institution_id=72 and year=2010  and segment_name <> "Alessandra" and dimension=1 and level_name =3
+ group by segment_name,question;
 
 
 * Calculo da media do agrupamento
 
+select institution_id,4,segment_name,sum(score) / count(*) as media,dimension,indicator,question
+from comparable_answers ca inner join institutions i on i.id=ca.institution_id
+where i.group_id=(select group_id from institutions where id=72) and ca.year=2010  and ca.segment_name <> "Alessandra"
+group by ca.segment_name,ca.question;
 
 * Calculo da media da regiao
 
+select institution_id,5,segment_name,sum(score) / count(*) as media,dimension,indicator,question
+from comparable_answers ca inner join institutions i on i.id=ca.institution_id
+where i.region_id=(select region_id from institutions where id=72) and ca.year=2010  and ca.segment_name <> "Alessandra"
+group by ca.segment_name,ca.question;
 
 
 ####################################################################
@@ -71,5 +85,5 @@ select segment_name,sum_type,sum(score)/count(*) from report_data where institut
          Select para o gráfico do indicador
 ####################################################################
 
-select segment_name,sum_type,sum(score)/count(*),question from report_data where institution_id=72 and dimension=1 group by segment_name,question,sum_type
+select segment_name,question,sum_type,sum(score)/count(*) from report_data where institution_id=72 and dimension=1 group by segment_name,question,sum_type
 
