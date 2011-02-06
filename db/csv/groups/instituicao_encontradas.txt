@@ -1,0 +1,234 @@
+[Infantil]Abney Medeiros Carneiro, Drª
+[Infantil]Achilles Kloeckner, Frei
+[Infantil]Adail Odin Arruda, Profº
+[Infantil]Alberto Grosso
+[Infantil]Alcir Guedes Ribeiro, Jornalista
+[Infantil]Aluisio de Almeida
+[Infantil]Ana Rosa Judice Moreira Zanussi de Oliveira, Profª
+[Infantil]Anna Rusconi
+[Infantil]Antonio Amábile
+[Infantil]Antonio Amábile
+[Infantil]Aureliano Rodrigues
+[Infantil]Betty Souza Oliveira, Profª
+[Infantil]Carlos Reinaldo Mendes, Eng°
+[Infantil]Christina dos Reis, Profª
+[Infantil]Diva Ferreira Cordeiro
+[Infantil]Dolores Cupiam do Amaral
+[Infantil]Duzolina Batiolla Pagliato, Dona
+[Infantil]Ernesto Martins
+[Infantil]Ester Bueno de Camargo Nascimento, Profª
+[Infantil]Ettore Marangoni
+[Infantil]Fernando Rios, Prof.
+[Infantil]Francisca Moura Pereira da Silva
+[Infantil]Frat. Feminina Cruzeiro do Sul
+[Infantil]Gladys Moeckel de Togni Amaral
+[Infantil]Issa Latuf
+[Infantil]Joana Simon Sola
+[Infantil]Jorge Frederico Scherepel
+[Infantil]Luiz de Sanctis
+[Infantil]Luiz de Sanctis
+[Infantil]Maria Carmen Rodrigues Sacker
+[Infantil]Maria de Castro Affonso Marins, Profª
+[Infantil]Maria Garcia Vecina
+[Infantil]Maria Ondina Soares Vial Brunetto
+[Infantil]Maria Pedroso Bellotti
+[Infantil]Maria Regina A. Godoy
+[Infantil]Marina Grohmann, Profª
+[Infantil]Matilde Gavin
+[Infantil]Menino Jesus
+[Infantil]Messias Ribeiro de Noronha Cunha, Profº
+[Infantil]Miguel Cheda
+[Infantil]Olga Chibau Fornazieiro
+[Infantil]Olga de Toledo Lara, Profª
+[Infantil]Osmar de Almeida
+[EMEF + Medio]Leonor Pinto Thomaz
+[EMEF + Medio]Achilles de Almeida
+[EMEF Integral]Zilah Dias de Mello Schrepel
+[EMEF Integral]Oswaldo de Oliveira
+[EMEF Integral]Irineu Leister
+[EMEF Integral]Edward F. Marciano da Silva
+[EMEF Integral]Edemir Antonio Digiampietri
+[EMEF Integral]Darlene Devasto
+[EMEF Parcial]Sorocaba-Leste
+[EMEF Parcial]Matheus Maylasky
+[EMEF Parcial]Luiz de Almeida Marins
+[EMEF Parcial]Julica Bierrenbach,Profª
+[EMEF Parcial]Josefina Zilia de Carvalho
+[Infantil + EMEF Parcial]Rosa Cury
+[Infantil + EMEF Parcial]Quinzinho de Barros
+[Infantil + EMEF Parcial]Genny Kalil Milego
+[Infantil + EMEF Integral]Walter Carretero
+[Infantil + EMEF Integral]Tereza Ciambelli Gianni  *
+[Infantil + EMEF Integral]Oswaldo Duarte
+[Infantil]Reynaldo D'Alessandro
+[Infantil + EMEF Integral]Norma Justa Dall'Ara, Profª
+[Infantil + EMEF Integral]Maria de Lourdes Ayres de Moraes, Profª
+[Infantil + EMEF Integral]Duljara F. de Oliveira
+[Infantil + EMEF Integral]Avelino Leite de Camargo
+[Infantil + EMEF Integral]Ary de Oliveira Seabra
+[Infantil]Zizi de Almeida, Dona
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Victoria Haddad Sayeg
+[Infantil]Victor Pedroso, Dr.
+[Infantil]Vera Apparecida Guariglia dos Santos, Profª
+[Infantil]Terezinha Lucas Fernandes, Profª
+[Infantil]Sha'ar Hanegev
+[Infantil]Santo Agostinho
+[Infantil]Rubens Vieira
+[Infantil]Abney Medeiros Carneiro, Drª
+[Infantil]Achilles Kloeckner, Frei
+[Infantil]Adail Odin Arruda, Profº
+[Infantil]Alberto Grosso
+[Infantil]Alcir Guedes Ribeiro, Jornalista
+[Infantil]Aluisio de Almeida
+[Infantil]Ana Rosa Judice Moreira Zanussi de Oliveira, Profª
+[Infantil]Anna Rusconi
+[Infantil]Antonio Amábile
+[Infantil]Antonio Amábile
+[Infantil]Aureliano Rodrigues
+[Infantil]Betty Souza Oliveira, Profª
+[Infantil]Carlos Reinaldo Mendes, Eng°
+[Infantil]Christina dos Reis, Profª
+[Infantil]Diva Ferreira Cordeiro
+[Infantil]Dolores Cupiam do Amaral
+[Infantil]Duzolina Batiolla Pagliato, Dona
+[Infantil]Ernesto Martins
+[Infantil]Ester Bueno de Camargo Nascimento, Profª
+[Infantil]Ettore Marangoni
+[Infantil]Fernando Rios, Prof.
+[Infantil]Francisca Moura Pereira da Silva
+[Infantil]Frat. Feminina Cruzeiro do Sul
+[Infantil]Gladys Moeckel de Togni Amaral
+[Infantil]Issa Latuf
+[Infantil]Joana Simon Sola
+[Infantil]Jorge Frederico Scherepel
+[Infantil]Luiz de Sanctis
+[Infantil]Luiz de Sanctis
+[Infantil]Maria Carmen Rodrigues Sacker
+[Infantil]Maria de Castro Affonso Marins, Profª
+[Infantil]Maria Garcia Vecina
+[Infantil]Maria Ondina Soares Vial Brunetto
+[Infantil]Maria Pedroso Bellotti
+[Infantil]Maria Regina A. Godoy
+[Infantil]Marina Grohmann, Profª
+[Infantil]Matilde Gavin
+[Infantil]Menino Jesus
+[Infantil]Messias Ribeiro de Noronha Cunha, Profº
+[Infantil]Miguel Cheda
+[Infantil]Olga Chibau Fornazieiro
+[Infantil]Reynaldo D'Alessandro
+[Infantil]Rubens Vieira
+[Infantil]Santo Agostinho
+[Infantil]Sha'ar Hanegev
+[Infantil]Terezinha Lucas Fernandes, Profª
+[Infantil]Vera Apparecida Guariglia dos Santos, Profª
+[Infantil]Victor Pedroso, Dr.
+[Infantil]Victoria Haddad Sayeg
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Zizi de Almeida, Dona
+[Infantil + EMEF Integral]Ary de Oliveira Seabra
+[Infantil + EMEF Integral]Avelino Leite de Camargo
+[Infantil + EMEF Integral]Duljara F. de Oliveira
+[Infantil + EMEF Integral]Maria de Lourdes Ayres de Moraes, Profª
+[Infantil + EMEF Integral]Norma Justa Dall'Ara, Profª
+[Infantil + EMEF Integral]Oswaldo Duarte
+[Infantil]Osmar de Almeida
+[Infantil + EMEF Integral]Tereza Ciambelli Gianni  *
+[Infantil + EMEF Integral]Walter Carretero
+[Infantil + EMEF Parcial]Genny Kalil Milego
+[Infantil + EMEF Parcial]Quinzinho de Barros
+[Infantil + EMEF Parcial]Rosa Cury
+[EMEF Parcial]Josefina Zilia de Carvalho
+[EMEF Parcial]Julica Bierrenbach,Profª
+[EMEF Parcial]Luiz de Almeida Marins
+[EMEF Parcial]Matheus Maylasky
+[EMEF Parcial]Sorocaba-Leste
+[EMEF Integral]Darlene Devasto
+[EMEF Integral]Edemir Antonio Digiampietri
+[EMEF Integral]Edward F. Marciano da Silva
+[EMEF Integral]Irineu Leister
+[EMEF Integral]Oswaldo de Oliveira
+[EMEF Integral]Zilah Dias de Mello Schrepel
+[EMEF + Medio]Achilles de Almeida
+[EMEF + Medio]Leonor Pinto Thomaz
+[Infantil]Olga de Toledo Lara, Profª
+[Infantil]Abney Medeiros Carneiro, Drª
+[Infantil]Achilles Kloeckner, Frei
+[Infantil]Adail Odin Arruda, Profº
+[Infantil]Alberto Grosso
+[Infantil]Alcir Guedes Ribeiro, Jornalista
+[Infantil]Aluisio de Almeida
+[Infantil]Ana Rosa Judice Moreira Zanussi de Oliveira, Profª
+[Infantil]Anna Rusconi
+[Infantil]Antonio Amábile
+[Infantil]Antonio Amábile
+[Infantil]Aureliano Rodrigues
+[Infantil]Betty Souza Oliveira, Profª
+[Infantil]Carlos Reinaldo Mendes, Eng°
+[Infantil]Christina dos Reis, Profª
+[Infantil]Diva Ferreira Cordeiro
+[Infantil]Dolores Cupiam do Amaral
+[Infantil]Duzolina Batiolla Pagliato, Dona
+[Infantil]Ernesto Martins
+[Infantil]Ester Bueno de Camargo Nascimento, Profª
+[Infantil]Ettore Marangoni
+[Infantil]Fernando Rios, Prof.
+[Infantil]Francisca Moura Pereira da Silva
+[Infantil]Frat. Feminina Cruzeiro do Sul
+[Infantil]Gladys Moeckel de Togni Amaral
+[Infantil]Issa Latuf
+[Infantil]Joana Simon Sola
+[Infantil]Jorge Frederico Scherepel
+[Infantil]Luiz de Sanctis
+[Infantil]Luiz de Sanctis
+[Infantil]Maria Carmen Rodrigues Sacker
+[Infantil]Maria de Castro Affonso Marins, Profª
+[Infantil]Maria Garcia Vecina
+[Infantil]Maria Ondina Soares Vial Brunetto
+[Infantil]Maria Pedroso Bellotti
+[Infantil]Maria Regina A. Godoy
+[Infantil]Marina Grohmann, Profª
+[Infantil]Matilde Gavin
+[Infantil]Menino Jesus
+[Infantil]Messias Ribeiro de Noronha Cunha, Profº
+[Infantil]Miguel Cheda
+[Infantil]Olga Chibau Fornazieiro
+[Infantil]Reynaldo D'Alessandro
+[Infantil]Rubens Vieira
+[Infantil]Santo Agostinho
+[Infantil]Sha'ar Hanegev
+[Infantil]Terezinha Lucas Fernandes, Profª
+[Infantil]Vera Apparecida Guariglia dos Santos, Profª
+[Infantil]Victor Pedroso, Dr.
+[Infantil]Victoria Haddad Sayeg
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Zizi de Almeida, Dona
+[Infantil + EMEF Integral]Ary de Oliveira Seabra
+[Infantil + EMEF Integral]Avelino Leite de Camargo
+[Infantil + EMEF Integral]Duljara F. de Oliveira
+[Infantil + EMEF Integral]Maria de Lourdes Ayres de Moraes, Profª
+[Infantil + EMEF Integral]Norma Justa Dall'Ara, Profª
+[Infantil + EMEF Integral]Oswaldo Duarte
+[Infantil]Osmar de Almeida
+[Infantil + EMEF Integral]Tereza Ciambelli Gianni  *
+[Infantil + EMEF Integral]Walter Carretero
+[Infantil + EMEF Parcial]Genny Kalil Milego
+[Infantil + EMEF Parcial]Quinzinho de Barros
+[Infantil + EMEF Parcial]Rosa Cury
+[EMEF Parcial]Josefina Zilia de Carvalho
+[EMEF Parcial]Julica Bierrenbach,Profª
+[EMEF Parcial]Luiz de Almeida Marins
+[EMEF Parcial]Matheus Maylasky
+[EMEF Parcial]Sorocaba-Leste
+[EMEF Integral]Darlene Devasto
+[EMEF Integral]Edemir Antonio Digiampietri
+[EMEF Integral]Edward F. Marciano da Silva
+[EMEF Integral]Irineu Leister
+[EMEF Integral]Oswaldo de Oliveira
+[EMEF Integral]Zilah Dias de Mello Schrepel
+[EMEF + Medio]Achilles de Almeida
+[EMEF + Medio]Leonor Pinto Thomaz
+[Infantil]Olga de Toledo Lara, Profª

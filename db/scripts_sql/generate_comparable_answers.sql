@@ -22,6 +22,36 @@ ENGINE = MyISAM;
 -- Inicio das queries de transformação dos dados
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+-- Query para transformar as respostas 1.1.2 de 2008 para 1.1.1
+-- pois é o numero equivalente em 2010
+insert into comparable_answers
+  (external_id, institution_id, number, original_number, score, level_name,
+  segment_name, dimension, indicator, question, year, answer_date)
+  select external_id, id_instituicao, '1.1.1', '1.1.2', nota, null, null, 1, 1, 1, year(data), data
+    from dados_2008
+      where
+        numero = '1.1.2'
+        and year(data) = 2008
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+-- Query para transformar as respostas 1.1.2 de 2009 para 1.1.1
+-- pois é o numero equivalente em 2010
+insert into comparable_answers
+  (external_id, institution_id, number, original_number, score, level_name,
+  segment_name, dimension, indicator, question, year, answer_date)
+  select external_id, id_instituicao, '1.1.1', '1.1.2', nota, null, null, 1, 1, 1, year(data), data
+    from dados_2009
+      where
+        numero = '1.1.2'
+        and year(data) = 2009
+----------------------------------------------------------------------
+
+
+
+
+
 insert into comparable_answers
   (external_id, institution_id, number, original_number, score, level_name,
   segment_name, dimension, indicator, question, year, answer_date)
