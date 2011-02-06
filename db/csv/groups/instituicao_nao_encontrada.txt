@@ -32,3 +32,71 @@
 [Infantil]Tercília Freire, Dona
 [Infantil]Sueli Gazzolli Campos, Profª
 [Infantil]Sônia Aparecida Machado
+[Infantil]Alípio Guerra da Cunha, Profº
+[Infantil]Antônio Simon Sola, Monsenhor
+[Infantil]Beatriz de Moraes Leite Fogaça, Profª
+[Infantil]Benedito Marçal – Didi, Prof.
+[Infantil]Benjamin Felipe Grizzi
+[Infantil]Cássio Rosa, Dr.
+[Infantil]Dulce Puppo de Oliveira Pinheiros, Profª
+[Infantil]Edith Del Cistia Santos, Profª
+[Infantil]Eglatina Rocco Perli
+[Infantil]Eugênio Leite
+[Infantil]João Salerno, Engº
+[Infantil]João Tortello, Prof.
+[Infantil]Jorge Luís Prestes Del Cistia
+[Infantil]Maria das Graças A P Nardi, Profª
+[Infantil]Rauldinéia Esteves Machado
+[Infantil]Sônia Aparecida Machado
+[Infantil]Sueli Gazzolli Campos, Profª
+[Infantil]Tercília Freire, Dona
+[Infantil]Vera Lúcia Momesso Maldonado, Profª
+[Infantil]Victória Salus Lara
+[Infantil + EMEF Integral]Inêz Rodrigues Cesarotti
+[Infantil + EMEF Integral]José Mendes
+[Infantil + EMEF Integral]Maria Ignez Figueiredo Deluno", Profª
+[Infantil + EMEF Integral]Paulo Fernando Nóbrega Tortello
+[Infantil + EMEF Parcial]João Francisco Rosa
+[Infantil + EMEF Parcial]Léa Edy Alonso Saliba, Profª
+[Infantil + EMEF Parcial]Maria Domingas Tótora de Góes
+[EMEF Parcial]Mª de Lourdes M. Martinez
+[EMEF Integral](GENEBRA-Vinculada a EM Achilles de Almeida)
+[EMEF Integral]Basílio da Costa Daemon
+[EMEF Integral]Benedicto José Nunes
+[EMEF Integral]Hélio Rosa Baldy
+[EMEF + Medio]Flávio de Souza Nogueira
+[EMEF + Medio]Getúlio Vargas
+[Infantil]Alípio Guerra da Cunha, Profº
+[Infantil]Antônio Simon Sola, Monsenhor
+[Infantil]Beatriz de Moraes Leite Fogaça, Profª
+[Infantil]Benedito Marçal – Didi, Prof.
+[Infantil]Benjamin Felipe Grizzi
+[Infantil]Cássio Rosa, Dr.
+[Infantil]Dulce Puppo de Oliveira Pinheiros, Profª
+[Infantil]Edith Del Cistia Santos, Profª
+[Infantil]Eglatina Rocco Perli
+[Infantil]Eugênio Leite
+[Infantil]João Salerno, Engº
+[Infantil]João Tortello, Prof.
+[Infantil]Jorge Luís Prestes Del Cistia
+[Infantil]Maria das Graças A P Nardi, Profª
+[Infantil]Rauldinéia Esteves Machado
+[Infantil]Sônia Aparecida Machado
+[Infantil]Sueli Gazzolli Campos, Profª
+[Infantil]Tercília Freire, Dona
+[Infantil]Vera Lúcia Momesso Maldonado, Profª
+[Infantil]Victória Salus Lara
+[Infantil + EMEF Integral]Inêz Rodrigues Cesarotti
+[Infantil + EMEF Integral]José Mendes
+[Infantil + EMEF Integral]Maria Ignez Figueiredo Deluno", Profª
+[Infantil + EMEF Integral]Paulo Fernando Nóbrega Tortello
+[Infantil + EMEF Parcial]João Francisco Rosa
+[Infantil + EMEF Parcial]Léa Edy Alonso Saliba, Profª
+[Infantil + EMEF Parcial]Maria Domingas Tótora de Góes
+[EMEF Parcial]Mª de Lourdes M. Martinez
+[EMEF Integral](GENEBRA-Vinculada a EM Achilles de Almeida)
+[EMEF Integral]Basílio da Costa Daemon
+[EMEF Integral]Benedicto José Nunes
+[EMEF Integral]Hélio Rosa Baldy
+[EMEF + Medio]Flávio de Souza Nogueira
+[EMEF + Medio]Getúlio Vargas
