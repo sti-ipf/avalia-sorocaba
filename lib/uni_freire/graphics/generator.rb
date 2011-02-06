@@ -6,8 +6,7 @@ module UniFreire
         @size = size
         @graphics = {}
         @institution_id = (institution.is_a?(Numeric)) ? institution : institution.id
-        @graphic =  UniFreire::Graphics::Base.new(@size)
-        @colors = @graphic.theme_options[:colors]
+        @graphic =  UniFreire::Graphics::Base.new(:size => @size)
         @connection = ActiveRecord::Base.connection
       end
       
@@ -33,11 +32,15 @@ module UniFreire
               end
             end
             @datasets << [@ano,@medias]
+            @datasets << [" ",Array.new(11,0), "white"]
             @datasets.each do |data| 
-              @graphic.data(data[0], data[1])
+              puts "-" * 100
+              puts data.inspect
+              puts "-" * 100
+              @graphic.data(data[0], data[1], data[2])
             end
             (1..11).each{|i| @graphic.labels[i-1] = "#{i}"}
-            @graphic.bar_spacing = 0.4
+            @graphic.bar_spacing = 1
           when "historic series of results indicators"
         end
         @graphic

@@ -1,34 +1,46 @@
-require 'gruff'
-require 'tempfile'
 module UniFreire 
   module Graphics
     class Base < Gruff::Bar
-      attr_reader :theme_options
-      def initialize(size="600x215")
-        super(size)
-        self.minimum_value = 0
-        self.maximum_value = 5
-        self.legend_font_size = 14
-        self.marker_font_size = 14  
-        self.margins=5
-        self.top_margin=0
-        self.legend_box_size=14
-        self.title_font_size = 18
-        self.legend_font_size = 14
-        self.marker_font_size = 18
+
+      TMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"      
+      COLORS = {
+        :three => %w(#004586 #ff420e #ffd320)
+        :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
+        }
+      SIZE = {:wide => "960X400"}
+      DEFAULT_PARAMS = {
+        :minimum_value    => 0,
+        :maximum_value    => 5,
+        :margins          => 5,
+        :top_margin       => 0,
+        :legend_font_size => 14,
+        :marker_font_size => 14,  
+        :legend_box_size  => 14,
+        :title_font_size  => 18
+        }
+
+      def initialize(params={})
+        params = {:size => SIZE[:wide], :colors => COLORS[:three]}.merge(params)
+        super(params[:size])
         self.theme = {
-          :colors => %w(#CCCCCC #AAAAAA #777777 #444444 #222222), #grayscale
-          :marker_color => '#CCCCCC', # gray
+          :colors => params[:colors],
+          :marker_color => '#004586', #orange
           :font_color => 'black',
           :background_colors => 'white'
         }
+        DEFAULT_PARAMS.each {|k, v| self.instance_variable_set("@#{k}", v)}
       end
       
-      def save_temporary
-        #TODO change for ENV['TEMP']
-        filename = "/tmp/_graphic_#{self.object_id}.jpg"
-        File.open(filename, 'wb'){|f| f.puts to_blob('JPG') rescue nil } 
-        filename
+      def save(optional_name=nil)
+        target_file = target_file(optional_name || "_graphic_#{self.object_id}")
+        self.write target_file
+        target_file
+      end
+            
+    private
+      def target_file(chart_name)
+        filename = chart_name << '.jpg'
+        File.join(TMP_DIRECTORY,filename)
       end
   
     end
