@@ -12,7 +12,7 @@ insert into regions (id, name) values
   (10, 'POLO LESTE'),
   (11, 'POLO ÉDEN/CAJURU'),
   (12, 'POLO LESTE 2'),
-  (13, 'POLO BRIGADEIRO')
+  (13, 'POLO BRIGADEIRO');
 
 update institutions set region_id = 0 where id in (66, 48, 69, 62, 41, 132, 76, 25, 122);
 

@@ -27,7 +27,7 @@ module UniFreire
         doc.image file, :x => 1.6, :y => 9.5, :zoom => 50
         doc.showpage
         doc.image next_page_file
-        doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
+        doc.render :pdf, :filename => File.expand_path("~/Desktop /reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
                     :logfile => "/tmp/sorocaba.log"
                     return
         graphics_hash = UniFreire::Graphics::ResultadosIndicadores.new(@institution_id,"450x215").graphics
