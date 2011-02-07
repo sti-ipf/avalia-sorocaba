@@ -56,7 +56,7 @@ group by segment_name,question;
 
 insert into report_data
 select 72,'média do Ensino Fundamental',3,segment_name,avg(score) as media,dimension,indicator,question  from comparable_answers
- where year=2010  and segment_name <> "Alessandra" and level_name =3
+ where year=2010  and segment_name <> "Alessandra" and level_name in (3,4)
  group by segment_name,question;
 
 
