@@ -89,3 +89,11 @@ select segment_name,sum_type,avg(score) as media from report_data where institut
 
 select segment_name,question,sum_type,avg(score) as media from report_data where institution_id=72 and dimension=1 group by segment_name,question,sum_type
 
+
+####################################################################
+      Query para pegar o número de indicador
+####################################################################
+select count(*) from
+(select indicador from all_answers
+where dimensao=1 and id_instituicao=72 group by indicador) a;
+

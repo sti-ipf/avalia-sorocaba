@@ -14,13 +14,13 @@ module UniFreire
           doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
           doc.next_page
         end
-        
-        #salta 5 Paginas 
+
+        #salta 5 Paginas
         5.times do
           doc.image next_page_file
           doc.next_page
         end
-        
+
         # Serie Historica
         doc.image next_page_file
         file = UniFreire::Graphics::ResultadosDimensoes.create(72, '960x400')
@@ -29,9 +29,9 @@ module UniFreire
         doc.image next_page_file
         doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
                     :logfile => "/tmp/sorocaba.log"
-                    return        
+                    return
         graphics_hash = UniFreire::Graphics::ResultadosIndicadores.new(@institution_id,"450x215").graphics
-        
+
         top = 22.3
         axis_x = [2,10.5] * graphics_hash.size
         graphics_hash.keys.sort.each_with_index do |key,i|
@@ -53,7 +53,7 @@ module UniFreire
         doc.image next_page_file
         doc.showpage
         doc.image next_page_file
-        
+
         #Dimensoes
         (1..11).each do |dim|
           g = UniFreire::Graphics::GeralDimensao.new(@institution_id, dim,"650x265")
@@ -64,8 +64,8 @@ module UniFreire
           doc.image file, :x => 2.5, :y => y, :zoom => 65
           doc.showpage
           doc.image next_page_file
-          
-          
+
+
           graphics_hash = UniFreire::Graphics::GraficosIndicadores.new(@institution_id,dim,"450x215").graphics
           top = 19.3
           axis_x = [2,10.5] * graphics_hash.size
@@ -86,7 +86,7 @@ module UniFreire
               doc.image file, :x => axis_x.shift, :y => top, :zoom => 50
 
           end
-          
+
           if dim != 11
             doc.showpage
             doc.image next_page_file
@@ -101,7 +101,7 @@ module UniFreire
         @inc_page ||= 0
         @inc_page += 1
       end
-      
+
       def next_page_file
         p "Page #{@inc_page}"
         page_file(inc_page)
@@ -113,3 +113,4 @@ module UniFreire
     end
   end
 end
+
