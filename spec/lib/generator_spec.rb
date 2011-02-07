@@ -2,10 +2,8 @@ require 'spec_helper'
 
 describe UniFreire::Graphics::Generator do 
   before(:each) do
-    wide_size = UniFreire::Graphics::SIZE[:wide]
-
     @generator = UniFreire::Graphics::Generator.new(:size => '600x400', :title => nil)
-    @generator_with_title_and_wide = UniFreire::Graphics::Generator.new(:size => wide_size, :title => 'Title Test')
+    @generator_with_title_and_wide = UniFreire::Graphics::Generator.new(:size => '960x400', :title => 'Title Test')
     @data = [["1", "2008", "4.5577"],["1", "2009", "1.3"],["1", "2010", "2.1"]]
     @no_data = []
   end
@@ -28,12 +26,13 @@ describe UniFreire::Graphics::Generator do
       file_name.include?("grafico sem dados.jpg").should be_true
       File.exists?(file_name).should == true
     end
-    
+
     it 'deve salvar o gráfico com título e largo' do
       file_name = @generator_with_title_and_wide.generate(@data, 'gráfico com título e largo')
       file_name.include?("gráfico com título e largo.jpg").should be_true
       File.exists?(file_name).should == true
-    end
+    end    
+    
     
   end
 end

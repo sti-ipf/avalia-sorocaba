@@ -23,9 +23,7 @@ module UniFreire
         
         # Serie Historica
         doc.image next_page_file
-      SIZE_DEFAULT = "600X400"
-      SIZE_WIDE = "960X400"
-        file = UniFreire::Graphics::ResultadosDimensoes.create(72, "960x400")
+        file = UniFreire::Graphics::ResultadosDimensoes.create(72, '960x400')
         doc.image file, :x => 1.6, :y => 9.5, :zoom => 50
         doc.showpage
         doc.image next_page_file
