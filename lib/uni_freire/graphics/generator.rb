@@ -7,7 +7,6 @@ module UniFreire
           :three => %w(#004586 #ff420e #ffd320),
           :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
         }
-      SIZE = {:wide => "960X400"}
       DEFAULT_PARAMS = {
         :minimum_value    => 0,
         :maximum_value    => 5,
@@ -21,12 +20,12 @@ module UniFreire
         }
 
       def initialize(params={})
-        params = {:title => '',:size => SIZE[:wide], :colors => COLORS[:three]}.merge(params)
+        params = {:title => nil, :colors => COLORS[:three]}.merge(params)
         super(params[:size])
         self.title = params[:title] if !params[:title].nil?
         self.theme = {
           :colors => params[:colors],
-          :marker_color => '#004586', #laranja
+          :marker_color => 'black',
           :font_color => 'black',
           :background_colors => 'white'
         }
@@ -34,9 +33,9 @@ module UniFreire
       end
         
       #estrutura os dados para gerar o gráfico e salva no diretório temporário  
-      def generate(result)
+      def generate(result, file_name=nil)
         build_graphic_with_data(result)
-        save
+        save(file_name)
       end
             
     private
@@ -67,7 +66,9 @@ module UniFreire
           end
         end
         
+        # adiciona sequência da última legenda
         datasets << [legend,data]
+        
         # adiciona nova sequência de dados vazia, para dá o espaçamento entre as séries
         datasets << [" ", Array.new(series.size,0), "white"]
         
