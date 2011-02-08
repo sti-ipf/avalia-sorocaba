@@ -27,10 +27,16 @@ module UniFreire
         end
         i=0
         self.legends.each do |legend|
-          color=Generator::COLORS[:three][@colors[legend]]
+          color=@colors["color"][@colors[legend]]
           datasets << [legend,legend_data[legend],color]
           i=i+1
         end
+
+        puts "*" * 100
+        puts datasets.inspect
+        puts "*" * 100
+
+
         datasets
       end
 

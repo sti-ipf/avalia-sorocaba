@@ -11,7 +11,7 @@ module UniFreire
           GROUP  BY dimension, year;
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
-        colors={"2008"=>1,"2009"=>2,"2010"=>3}
+        colors={"2008"=>0,"2009"=>1,"2010"=>2,"color"=>Generator::COLORS[:three]}
         graphic.generate(result,colors)
       end
        #Generator::COLORS[:three][colors[l]]
