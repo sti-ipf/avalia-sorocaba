@@ -18,7 +18,6 @@ module UniFreire
         :title_font_size  => 24,
         :bar_spacing      => 1
         }
-      SERIE, LEGEND, DATA = 0, 1, 2
 
       def initialize(params={})
         params = {:title => nil, :colors => COLORS[:three]}.merge(params)
@@ -34,35 +33,21 @@ module UniFreire
       end
         
       #estrutura os dados para gerar o gráfico e salva no diretório temporário  
-      def generate(result, file_name=nil)
-        build_graphic_with_data(result)
+      def generate(db_result, file_name=nil)
+        build_graphic_with_data(db_result)
         save(file_name)
       end
             
     private
     
       def build_graphic_with_data(db_result)
-        result,legends = result_as_hash(db_result)
-        datasets = []
-        series = []
-        data = {}
-        series_data = {}
-        actual_serie = nil
-        legends.each {|l| data[l] = []}
-        
-        result.each do |r|
-          ser=r[1]
-          legends.each do |leg|
-            ser[leg] = "0" if ser[leg].nil?
-            data[leg] << ser[leg].to_f
-          end
-        end
-        legends.each do |leg|
-          datasets << [leg,data[leg]]
-        end
-        
+        graph_data = DataParser.new(db_result)
+        series = graph_data.series
+        legends = graph_data.legends    
+        datasets = graph_data.normalized_data
+
         # adiciona nova sequência de dados vazia, para dá o espaçamento entre as séries
-        datasets << [" ", Array.new(result.size,0), "white"]
+        datasets << [" ", Array.new(series.count,0), "white"]
         
         #adiciona os datasets no gráfico
         datasets.each do |ds| 
@@ -71,39 +56,15 @@ module UniFreire
           # quando não definida irá seguir o theme do gráfico
           self.data(ds[0], ds[1], ds[2])
         end
-        #adiciona os labels do gráfico de acordo com as series
-        label_index = 0
         
-        result.each do |r|
-          self.labels[label_index] = "#{r[0]}"
+        #adiciona os labels do gráfico de acordo com as séries
+        label_index = 0        
+        series.each do |serie|
+          self.labels[label_index] = "#{serie}"
           label_index += 1
         end      
-        
       end
-      
-      def result_as_hash(db_result)
-        arr = []
-        legends = []
-        arr_serie = nil
-        cur_serie = nil
-        db_result.each do |r|
-          cur_serie ||= r[SERIE]
-          if cur_serie == r[SERIE]
-            arr_serie ||= [r[SERIE],{}]
-            arr_serie[1][r[LEGEND]]=r[DATA]
-          else
-            arr << arr_serie
-            arr_serie=[r[SERIE],{}] 
-            arr_serie[1][r[LEGEND]]=r[DATA]
-            cur_serie=r[SERIE]
-          end
-          legends << r[LEGEND] if !legends.include?(r[LEGEND])
-        end
-        arr << arr_serie
-        return arr,legends
-      end
-      
-   
+            
       def target_file(chart_name)
         filename = chart_name << '.jpg'
         File.join(TMP_DIRECTORY,filename)
