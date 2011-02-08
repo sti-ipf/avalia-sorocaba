@@ -6,10 +6,10 @@ module UniFreire
 
       attr_accessor :series_data, :legends, :normalized_data
       def initialize(data,colors)
-        @colors=colors
+        @colors=colors["color"]
         @series_data = get_series_with_legends_and_data(data)
         @series_data = [] if @series_data.first.nil?
-        @legends = get_legends
+        @legends = colors["legend"]
         @normalized_data = normalize_data
       end
 
@@ -27,15 +27,10 @@ module UniFreire
         end
         i=0
         self.legends.each do |legend|
-          color=@colors["color"][@colors[legend]]
+          color=@colors[i]
           datasets << [legend,legend_data[legend],color]
           i=i+1
         end
-
-        puts "*" * 100
-        puts datasets.inspect
-        puts "*" * 100
-
 
         datasets
       end
