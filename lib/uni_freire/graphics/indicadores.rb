@@ -17,8 +17,10 @@ module UniFreire
     				group by question, sum_type, item_order
             "
           graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}.#{indicator_id}", :colors => UniFreire::Graphics::Generator::COLORS[:five])
-
-          graphics << graphic.generate(result)
+          colors={"média da UE"=>0,"média da Ed. Infantil"=>1,
+        "média do Ensino Fundamental"=>2, "média do agrupamento"=>3,
+        "média da região" =>4 ,"color"=>Generator::COLORS[:five]}
+          graphics << graphic.generate(result,colors)
         end
         graphics
       end

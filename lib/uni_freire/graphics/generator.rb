@@ -16,7 +16,8 @@ module UniFreire
         :marker_font_size => 18,
         :legend_box_size  => 14,
         :title_font_size  => 24,
-        :bar_spacing      => 1
+        :bar_spacing      => 1, 
+        :sort             => false
         }
 
       def initialize(params={})

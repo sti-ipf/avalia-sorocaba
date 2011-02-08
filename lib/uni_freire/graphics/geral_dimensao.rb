@@ -1,7 +1,6 @@
 module UniFreire
   module Graphics
     class GeralDimensao
-      
       def self.create_report_data(institution_id)
 
         connection = ActiveRecord::Base.connection
@@ -59,8 +58,12 @@ module UniFreire
           GROUP  BY segment_name, 
                     item_order 
         "
+
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :colors => UniFreire::Graphics::Generator::COLORS[:five])
-        graphic.generate(result)
+        colors={"média da UE"=>0,"média da Ed. Infantil"=>1,
+        "média do Ensino Fundamental"=>2, "média do agrupamento"=>3,
+        "média da região" =>4 ,"color"=>Generator::COLORS[:five]}
+        graphic.generate(result,colors)
       end
       
     end

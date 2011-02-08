@@ -19,7 +19,8 @@ module UniFreire
             else
               UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
             end
-          graphics << graphic.generate(result)
+          colors={"2008"=>0,"2009"=>1,"2010"=>2,"color"=>Generator::COLORS[:three]}
+          graphics << graphic.generate(result,colors)
         end
         graphics
       end
