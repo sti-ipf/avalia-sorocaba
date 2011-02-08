@@ -7,7 +7,7 @@ ActiveRecord::Base.establish_connection(
   :host => "localhost",
   :username => "root",
   :password => "root",
-  :database => "unifreire_sorocaba")
+  :database => "ipf")
 
 
 def generate_query(new_indicator, year, old_indicator)
@@ -24,13 +24,13 @@ def generate_query(new_indicator, year, old_indicator)
       indicators_where = "numero = '#{old_indicator}'"
   else
     return nil
-  end  
-  "insert into comparable_answers 
+  end
+  "insert into comparable_answers
   (external_id, institution_id, number, original_number, score, level_name,
-  segment_name, dimension, indicator, question, year, answer_date)  
+  segment_name, dimension, indicator, question, year, answer_date)
   select external_id, id_instituicao, '#{new_indicator}', '#{indicators_get}', avg(nota), null, null, #{ids[0]}, #{ids[1]}, #{ids[2]}, year(data), data
     from dados_#{year}
-    where 
+    where
       year(data) = #{year}
       and (#{indicators_where})
     group by id_instituicao"
@@ -40,7 +40,7 @@ ActiveRecord::Base.connection.execute("truncate comparable_answers")
 ActiveRecord::Base.connection.execute("insert into comparable_answers
                                           (external_id, institution_id, number, original_number, score, level_name,
                                           segment_name, dimension, indicator, question, year, answer_date)
-                                        select 
+                                        select
                                           a.id, u.institution_id, q.number, q.number,
                                           substr(concat(RPAD(a.created_at,25,' '),one+(two*2)+(three*3)+(four*4)+(five*5)),26) as nota,
                                           u.service_level_id,s.name, substr(q.number,1,LOCATE('.',q.number)-1) as dimensao,
@@ -65,5 +65,14 @@ dt.each_pair do |key, value|
   puts "Indicator:#{new_indicator}, 2008:#{value[2008]}"
   puts "Query:#{query}"
   ActiveRecord::Base.connection.execute(query) unless query.nil?
+
+  query = "update comparable_answers set old_segment_name=segment_name"
+  puts "Query:#{query}"
+  ActiveRecord::Base.connection.execute(query) unless query.nil?
+
+  query = "update comparable_answers set segment_name='Funcionários' where segment_name LIKE 'Funcion%'"
+  puts "Query:#{query}"
+  ActiveRecord::Base.connection.execute(query) unless query.nil?
+
 end
 

@@ -9,6 +9,7 @@ CREATE TABLE comparable_answers (
   score INTEGER  NOT NULL,
   level_name VARCHAR(200) ,
   segment_name VARCHAR(200) ,
+  old_segment_name VARCHAR(200) ,
   dimension INTEGER  NOT NULL,
   indicator INTEGER  NOT NULL,
   question INTEGER  NOT NULL,
@@ -17,3 +18,7 @@ CREATE TABLE comparable_answers (
   PRIMARY KEY (id)
 )
 ENGINE = MyISAM;
+
+---Este campo foi criado depois
+---ALTER TABLE `ipf`.`comparable_answers` ADD COLUMN `old_segment_name` VARCHAR(200) NULL  AFTER `answer_date` ;
+
