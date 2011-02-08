@@ -4,16 +4,20 @@ module UniFreire
       
       def self.create(institution_id, dimension_id, size, title=nil)
         connection = ActiveRecord::Base.connection
+        indicators_result = connection.execute("select indicator from comparable_answers
+          where dimension=#{dimension_id} and institution_id=#{institution_id} group by indicator;")
+        indicators = []        
+        indicators_result.each {|i| indicators << i[0]}
         graphics = []
 
-        (1..11).each do |dimension_id|
+        indicators.each do |indicator_id|
           result = connection.execute "
-            SELECT CONCAT(dimension,'.',indicator) as i, year, AVG(score) AS media 
-            FROM   comparable_answers 
-            WHERE  institution_id = #{institution_id} AND dimension = #{dimension_id}
-            GROUP  BY i, year; 
+            select question,sum_type,avg(score) as media from report_data 
+            where indicator = #{indicator_id} and institution_id=#{institution_id} and dimension=#{dimension_id} 
+    				group by question, sum_type, item_order
             "
-          graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
+          graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}.#{indicator_id}", :colors => UniFreire::Graphics::Generator::COLORS[:five])
+
           graphics << graphic.generate(result)
         end
         graphics

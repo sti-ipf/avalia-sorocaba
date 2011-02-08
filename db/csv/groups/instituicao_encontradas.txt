@@ -232,3 +232,81 @@
 [EMEF + Medio]Achilles de Almeida
 [EMEF + Medio]Leonor Pinto Thomaz
 [Infantil]Olga de Toledo Lara, Profª
+[EMEF + Medio]Leonor Pinto Thomaz
+[EMEF + Medio]Achilles de Almeida
+[EMEF Integral]Zilah Dias de Mello Schrepel
+[EMEF Integral]Oswaldo de Oliveira
+[EMEF Integral]Irineu Leister
+[EMEF Integral]Edward F. Marciano da Silva
+[EMEF Integral]Edemir Antonio Digiampietri
+[EMEF Integral]Darlene Devasto
+[EMEF Parcial]Sorocaba-Leste
+[EMEF Parcial]Matheus Maylasky
+[EMEF Parcial]Luiz de Almeida Marins
+[EMEF Parcial]Julica Bierrenbach,Profª
+[EMEF Parcial]Josefina Zilia de Carvalho
+[Infantil + EMEF Parcial]Rosa Cury
+[Infantil + EMEF Parcial]Quinzinho de Barros
+[Infantil + EMEF Parcial]Genny Kalil Milego
+[Infantil + EMEF Integral]Walter Carretero
+[Infantil + EMEF Integral]Tereza Ciambelli Gianni  *
+[Infantil + EMEF Integral]Oswaldo Duarte
+[Infantil + EMEF Integral]Norma Justa Dall'Ara, Profª
+[Infantil + EMEF Integral]Maria de Lourdes Ayres de Moraes, Profª
+[Infantil + EMEF Integral]Duljara F. de Oliveira
+[Infantil + EMEF Integral]Avelino Leite de Camargo
+[Infantil + EMEF Integral]Ary de Oliveira Seabra
+[Infantil]Zizi de Almeida, Dona
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Yolanda Prestes Neder, Profª
+[Infantil]Victoria Haddad Sayeg
+[Infantil]Victor Pedroso, Dr.
+[Infantil]Vera Apparecida Guariglia dos Santos, Profª
+[Infantil]Terezinha Lucas Fernandes, Profª
+[Infantil]Sha'ar Hanegev
+[Infantil]Santo Agostinho
+[Infantil]Rubens Vieira
+[Infantil]Reynaldo D'Alessandro
+[Infantil]Osmar de Almeida
+[Infantil]Olga de Toledo Lara, Profª
+[Infantil]Olga Chibau Fornazieiro
+[Infantil]Miguel Cheda
+[Infantil]Messias Ribeiro de Noronha Cunha, Profº
+[Infantil]Menino Jesus
+[Infantil]Matilde Gavin
+[Infantil]Marina Grohmann, Profª
+[Infantil]Maria Regina A. Godoy
+[Infantil]Maria Pedroso Bellotti
+[Infantil]Maria Ondina Soares Vial Brunetto
+[Infantil]Maria Garcia Vecina
+[Infantil]Maria de Castro Affonso Marins, Profª
+[Infantil]Maria Carmen Rodrigues Sacker
+[Infantil]Luiz de Sanctis
+[Infantil]Luiz de Sanctis
+[Infantil]Jorge Frederico Scherepel
+[Infantil]Joana Simon Sola
+[Infantil]Issa Latuf
+[Infantil]Gladys Moeckel de Togni Amaral
+[Infantil]Frat. Feminina Cruzeiro do Sul
+[Infantil]Francisca Moura Pereira da Silva
+[Infantil]Fernando Rios, Prof.
+[Infantil]Ettore Marangoni
+[Infantil]Ester Bueno de Camargo Nascimento, Profª
+[Infantil]Ernesto Martins
+[Infantil]Duzolina Batiolla Pagliato, Dona
+[Infantil]Dolores Cupiam do Amaral
+[Infantil]Diva Ferreira Cordeiro
+[Infantil]Christina dos Reis, Profª
+[Infantil]Carlos Reinaldo Mendes, Eng°
+[Infantil]Betty Souza Oliveira, Profª
+[Infantil]Aureliano Rodrigues
+[Infantil]Antonio Amábile
+[Infantil]Antonio Amábile
+[Infantil]Anna Rusconi
+[Infantil]Ana Rosa Judice Moreira Zanussi de Oliveira, Profª
+[Infantil]Aluisio de Almeida
+[Infantil]Alcir Guedes Ribeiro, Jornalista
+[Infantil]Alberto Grosso
+[Infantil]Adail Odin Arruda, Profº
+[Infantil]Achilles Kloeckner, Frei
+[Infantil]Abney Medeiros Carneiro, Drª

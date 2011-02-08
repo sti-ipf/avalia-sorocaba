@@ -29,94 +29,37 @@ module UniFreire
         doc.image next_page_file
                 
         
-        files = UniFreire::Graphics::Indicadores.create(72, 11,"500x400")
-        x = 0
-        y = 20.3
-        graphics_in_line = 0
-        graphics_in_page = 0
-        files.each do |file|
-          if (x % 2) == 0 || x == 0
-            doc.image file, :x => 0.5, :y => y, :zoom => 46
-          else
-            doc.image file, :x => 10.5, :y => y, :zoom => 46          
-          end
-          x += 1
-          graphics_in_line +=1
-          graphics_in_page +=1
-          
-          y -= 7 if (x % 2) == 0
-          
-          if (x % 6) == 0 
-            doc.showpage
-            y = 20.3
-          end
-          
-        end
-
-        doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
-                    :logfile => "/tmp/sorocaba.log"
-        return
+        files = UniFreire::Graphics::ResultadosIndicadores.create(72, 11,"500x400")
         
-
-#        axis_x = [2,10.5] * graphics_hash.size
-#        graphics_hash.keys.sort.each_with_index do |key,i|
-#          g = graphics_hash[key]
-#          file = g.save_temporary
-#           #page break
-#          if (i % 10) == 0 && i != 0
-#            top = 27.3
-#            doc.next_page
-#          end
-
-#          #next graphic row
-#          if (i % 2) == 0 && i != 0
-#            top-=5
-#          end
-#          doc.image file, :x => axis_x.shift, :y => top, :zoom => 50
-#        end
+        show_graphics(files, doc)
+        
         doc.showpage
         doc.image next_page_file
         doc.showpage
         doc.image next_page_file
-
+        
+        UniFreire::Graphics::GeralDimensao.create_report_data(72)
         #Dimensoes
-        (1..11).each do |dim|
-          g = UniFreire::Graphics::GeralDimensao.new(@institution_id, dim,"650x265")
-          # p g
-          g.marker_font_size = 14
-          file = g.save_temporary
-          y = dim == 1 ? 13.5 : 15.5
-          doc.image file, :x => 2.5, :y => y, :zoom => 65
+        (1..11).each do |dimension_id|
+          y = 13
+          file = UniFreire::Graphics::GeralDimensao.create(72, dimension_id,'960x400')
+
+          doc.image file, :x => 2.5, :y => y, :zoom => 46
           doc.showpage
           doc.image next_page_file
 
-
-          graphics_hash = UniFreire::Graphics::GraficosIndicadores.new(@institution_id,dim,"450x215").graphics
-          top = 19.3
-          axis_x = [2,10.5] * graphics_hash.size
-          graphics_hash.keys.sort.each_with_index do |key,i|
-              g = graphics_hash[key]
-              file = g.save_temporary
-              next if file.nil?
-               #page break
-              if ( i % 8) == 0 && i != 0
-                top = 27.3
-                doc.next_page
-              end
-
-              #next graphic row
-              if (i % 2) == 0 && i != 0
-                top-=5
-              end
-              doc.image file, :x => axis_x.shift, :y => top, :zoom => 50
-
-          end
-
-          if dim != 11
-            doc.showpage
-            doc.image next_page_file
-          end
+###
+          files = UniFreire::Graphics::Indicadores.create(72, dimension_id,"500x400")
+          
+          show_graphics(files, doc)
+          doc.showpage
+###
         end
+        
+        doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
+                  :logfile => "/tmp/sorocaba.log"
+        return
+        
         puts "Generating #{@inc_page} pages..."
         doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
                     :logfile => "/tmp/sorocaba.log"
@@ -135,6 +78,38 @@ module UniFreire
       def page_file(pg_no)
         File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
       end
+    private
+    
+      def show_graphics(files, doc)  
+        x = 1
+        y = 20.3
+        graphics_in_line = 0
+        graphics_in_page = 0
+        
+        files.each do |file|
+          if (x % 2) == 0
+            doc.image file, :x => 10.5, :y => y, :zoom => 46
+          elsif x == 11
+            doc.image file, :x => 2, :y => y, :zoom => 46          
+          else
+            doc.image file, :x => 2, :y => y, :zoom => 46
+          end
+          y -= 7 if (x % 2) == 0          
+          x += 1
+          graphics_in_line +=1
+          graphics_in_page +=1
+          
+          
+          if (x % 7) == 0 
+            doc.showpage
+            x = 1
+            y = 20.3
+          end
+          
+        end
+
+      end
+      
     end
   end
 end

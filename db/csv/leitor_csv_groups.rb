@@ -7,7 +7,7 @@ ActiveRecord::Base.establish_connection(
   :host => "localhost",
   :username => "root",
   :password => "root",
-  :database => "ipf")
+  :database => "unifreire_sorocaba")
 
 
 class Institution < ActiveRecord::Base

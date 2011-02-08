@@ -20,5 +20,5 @@ CREATE TABLE comparable_answers (
 ENGINE = MyISAM;
 
 ---Este campo foi criado depois
----ALTER TABLE `ipf`.`comparable_answers` ADD COLUMN `old_segment_name` VARCHAR(200) NULL  AFTER `answer_date` ;
+---ALTER TABLE `comparable_answers` ADD COLUMN `old_segment_name` VARCHAR(200) NULL  AFTER `answer_date` ;
 
