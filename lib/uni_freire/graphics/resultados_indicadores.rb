@@ -8,18 +8,18 @@ module UniFreire
 
         (1..11).each do |dimension_id|
           result = connection.execute "
-            SELECT CONCAT(dimension,'.',indicator) as i, year, AVG(score) AS media 
-            FROM   comparable_answers 
+            SELECT CONCAT(dimension,'.',indicator) as i, year, AVG(score) AS media
+            FROM   comparable_answers
             WHERE  institution_id = #{institution_id} AND dimension = #{dimension_id}
-            GROUP  BY indicator, year; 
+            GROUP  BY indicator, year;
             "
-          graphic = 
+          graphic =
             if dimension_id == 11
               UniFreire::Graphics::Generator.new(:size => '960x400', :title => "Dimensão #{dimension_id}")
             else
               UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
             end
-          colors={"2008"=>0,"2009"=>1,"2010"=>2,"color"=>Generator::COLORS[:three]}
+          colors={"legend" => ["2008","2009","2010"],"color"=>Generator::COLORS[:three]}
           graphics << graphic.generate(result,colors)
         end
         graphics

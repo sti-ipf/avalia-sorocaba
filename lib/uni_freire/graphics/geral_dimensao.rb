@@ -10,7 +10,7 @@ module UniFreire
         connection.execute "
           delete from report_data where institution_id = #{institution_id}
           "
-          
+
 # Calculo da media da UE
         connection.execute "
           insert into report_data select institution_id,'média da UE',1,segment_name,avg(score) as media,dimension,indicator,question
@@ -45,27 +45,28 @@ module UniFreire
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
 
       end
-      
+
       def self.create(institution_id, dimension_id, size, title=nil)
         connection = ActiveRecord::Base.connection
         result = connection.execute "
-          SELECT segment_name, 
-                 sum_type, 
-                 AVG(score) AS media 
-          FROM   report_data 
+          SELECT segment_name,
+                 sum_type,
+                 AVG(score) AS media
+          FROM   report_data
           WHERE  institution_id = #{institution_id}
                  AND dimension = #{dimension_id}
-          GROUP  BY segment_name, 
-                    item_order 
+          GROUP  BY segment_name,
+                    item_order
         "
 
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :colors => UniFreire::Graphics::Generator::COLORS[:five])
-        colors={"média da UE"=>0,"média da Ed. Infantil"=>1,
-        "média do Ensino Fundamental"=>2, "média do agrupamento"=>3,
-        "média da região" =>4 ,"color"=>Generator::COLORS[:five]}
+        colors={"legend" => ["média da UE","média da Ed. Infantil",
+        "média do Ensino Fundamental", "média do agrupamento",
+        "média da região"] ,"color"=>Generator::COLORS[:five]}
         graphic.generate(result,colors)
       end
-      
+
     end
   end
 end
+

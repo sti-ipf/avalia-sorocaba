@@ -19,6 +19,10 @@ ActiveRecord::Schema.define(:version => 20110204020413) do
     t.date    "data"
     t.string  "level_name",     :limit => 100
     t.string  "segment_name",   :limit => 100
+    t.integer "dimensao"
+    t.integer "questao"
+    t.integer "indicador"
+    t.string  "ano",            :limit => 45
   end
 
   add_index "all_answers", ["data"], :name => "all_answers_data"
@@ -62,6 +66,22 @@ ActiveRecord::Schema.define(:version => 20110204020413) do
     t.datetime "updated_at"
   end
 
+  create_table "comparable_answers", :force => true do |t|
+    t.integer "external_id",                     :null => false
+    t.integer "institution_id",                  :null => false
+    t.string  "number",           :limit => 200, :null => false
+    t.string  "original_number",  :limit => 200, :null => false
+    t.integer "score",                           :null => false
+    t.string  "level_name",       :limit => 200
+    t.string  "segment_name",     :limit => 200
+    t.integer "dimension",                       :null => false
+    t.integer "indicator",                       :null => false
+    t.integer "question",                        :null => false
+    t.integer "year",                            :null => false
+    t.date    "answer_date",                     :null => false
+    t.string  "old_segment_name", :limit => 200
+  end
+
   create_table "dados_2008", :id => false, :force => true do |t|
     t.integer "external_id"
     t.integer "id_instituicao"
@@ -91,9 +111,7 @@ ActiveRecord::Schema.define(:version => 20110204020413) do
   end
 
   create_table "groups", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "name", :limit => 250
   end
 
   create_table "institutions", :force => true do |t|
@@ -102,6 +120,8 @@ ActiveRecord::Schema.define(:version => 20110204020413) do
     t.datetime "updated_at"
     t.integer  "id_2009"
     t.integer  "id_2008"
+    t.integer  "region_id"
+    t.string   "group_id",   :limit => 45
   end
 
   create_table "institutions_service_levels", :id => false, :force => true do |t|
@@ -120,6 +140,21 @@ ActiveRecord::Schema.define(:version => 20110204020413) do
   create_table "questions_surveys", :id => false, :force => true do |t|
     t.integer "question_id"
     t.integer "surveys_id"
+  end
+
+  create_table "regions", :force => true do |t|
+    t.string "name", :limit => 250
+  end
+
+  create_table "report_data", :id => false, :force => true do |t|
+    t.integer "institution_id",               :null => false
+    t.string  "sum_type",       :limit => 50
+    t.string  "item_order",     :limit => 50
+    t.string  "segment_name",   :limit => 50
+    t.float   "score"
+    t.integer "dimension"
+    t.integer "indicator"
+    t.integer "question"
   end
 
   create_table "segments", :force => true do |t|
