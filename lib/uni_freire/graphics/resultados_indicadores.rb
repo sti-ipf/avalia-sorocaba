@@ -2,7 +2,7 @@ module UniFreire
   module Graphics
     class ResultadosIndicadores
       
-      def self.create(institution_id, dimension_id, size, title=nil)
+      def self.create(institution_id, size, title=nil)
         connection = ActiveRecord::Base.connection
         graphics = []
 

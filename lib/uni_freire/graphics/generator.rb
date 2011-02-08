@@ -2,7 +2,7 @@ module UniFreire
   module Graphics
     class Generator < Gruff::Bar
 
-      TMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
+      TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
       COLORS = {
           :three => %w(#004586 #ff420e #ffd320),
           :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
@@ -69,7 +69,7 @@ module UniFreire
 
       def target_file(chart_name)
         filename = chart_name << '.jpg'
-        File.join(TMP_DIRECTORY,filename)
+        File.join(TEMP_DIRECTORY,filename)
       end
 
       #salva o gráfico baseado num nome ou o id do objeto
