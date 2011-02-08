@@ -91,9 +91,9 @@ select segment_name,question,sum_type,avg(score) as media from report_data where
 
 
 ####################################################################
-      Query para pegar o número de indicador
+      Query para pegar a quantidade de indicadores
 ####################################################################
 select count(*) from
-(select indicador from all_answers
-where dimensao=1 and id_instituicao=72 group by indicador) a;
+(select indicator from comparable_answers
+where dimension=1 and institution_id=72 group by indicator) a;
 

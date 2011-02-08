@@ -24,28 +24,56 @@ module UniFreire
         # Serie Historica
         doc.image next_page_file
         file = UniFreire::Graphics::ResultadosDimensoes.create(72, '960x400')
-        doc.image file, :x => 1.6, :y => 9.5, :zoom => 50
+        doc.image file, :x => 1.6, :y => 9.5, :zoom => 46
         doc.showpage
         doc.image next_page_file
-        file = UniFreire::Graphics::ResultadosIndicadores.new(72, 1,"450x215").graphics
+                
         
-        top = 22.3
-        axis_x = [2,10.5] * graphics_hash.size
-        graphics_hash.keys.sort.each_with_index do |key,i|
-          g = graphics_hash[key]
-          file = g.save_temporary
-           #page break
-          if (i % 10) == 0 && i != 0
-            top = 27.3
-            doc.next_page
+        files = UniFreire::Graphics::Indicadores.create(72, 11,"500x400")
+        x = 0
+        y = 20.3
+        graphics_in_line = 0
+        graphics_in_page = 0
+        files.each do |file|
+          if (x % 2) == 0 || x == 0
+            doc.image file, :x => 0.5, :y => y, :zoom => 46
+          else
+            doc.image file, :x => 10.5, :y => y, :zoom => 46          
           end
-
-          #next graphic row
-          if (i % 2) == 0 && i != 0
-            top-=5
+          x += 1
+          graphics_in_line +=1
+          graphics_in_page +=1
+          
+          y -= 7 if (x % 2) == 0
+          
+          if (x % 6) == 0 
+            doc.showpage
+            y = 20.3
           end
-          doc.image file, :x => axis_x.shift, :y => top, :zoom => 50
+          
         end
+
+        doc.render :pdf, :filename => File.expand_path("~/Desktop/reports/report_#{@institution_id}.pdf"), :debug => true, :quality => :prepress,
+                    :logfile => "/tmp/sorocaba.log"
+        return
+        
+
+#        axis_x = [2,10.5] * graphics_hash.size
+#        graphics_hash.keys.sort.each_with_index do |key,i|
+#          g = graphics_hash[key]
+#          file = g.save_temporary
+#           #page break
+#          if (i % 10) == 0 && i != 0
+#            top = 27.3
+#            doc.next_page
+#          end
+
+#          #next graphic row
+#          if (i % 2) == 0 && i != 0
+#            top-=5
+#          end
+#          doc.image file, :x => axis_x.shift, :y => top, :zoom => 50
+#        end
         doc.showpage
         doc.image next_page_file
         doc.showpage

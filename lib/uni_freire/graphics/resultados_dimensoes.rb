@@ -5,10 +5,10 @@ module UniFreire
       def self.create(institution_id, size, title=nil)
         connection = ActiveRecord::Base.connection
         result = connection.execute "
-          SELECT dimensao, ano, SUM(nota) / COUNT(*) AS media
-          FROM   all_answers 
-          WHERE  id_instituicao = #{institution_id}
-          GROUP  BY ano, dimensao; 
+          SELECT dimension, year, AVG(score) AS media
+          FROM   comparable_answers 
+          WHERE  institution_id = #{institution_id}
+          GROUP  BY dimension, year; 
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
         graphic.generate(result)

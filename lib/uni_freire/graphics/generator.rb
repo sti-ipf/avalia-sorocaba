@@ -12,12 +12,13 @@ module UniFreire
         :maximum_value    => 5,
         :margins          => 5,
         :top_margin       => 0,
-        :legend_font_size => 14,
-        :marker_font_size => 14,  
+        :legend_font_size => 20,
+        :marker_font_size => 18,  
         :legend_box_size  => 14,
-        :title_font_size  => 18,
+        :title_font_size  => 24,
         :bar_spacing      => 1
         }
+      SERIE, LEGEND, DATA = 0, 1, 2
 
       def initialize(params={})
         params = {:title => nil, :colors => COLORS[:three]}.merge(params)
@@ -41,36 +42,27 @@ module UniFreire
     private
     
       def build_graphic_with_data(db_result)
+        result,legends = result_as_hash(db_result)
         datasets = []
         series = []
-        legend = nil
-        data = []
+        data = {}
+        series_data = {}
+        actual_serie = nil
+        legends.each {|l| data[l] = []}
         
-        #r[0] = série | r[1] = legenda | r[2] = dado
-        db_result.each do |r| 
-          #inclui nova série se ela não tiver sido adicionada
-          series << r[0] if !series.include?(r[0]) 
-          legend ||= r[1]
-
-          #se a legenda igual a atual, armazena o dado, junto com os demais dados da legenda
-          if legend == r[1]
-            data << r[2].to_f.round
-          else
-            #datasets recebe todos os dados de uma legenda
-            datasets << [legend,data]
-
-            #dados são zerados, pois há uma nova legenda e uma sequencia nova de dados
-            data = []
-            legend = r[1]
-            data << r[2].to_f.round
+        result.each do |r|
+          ser=r[1]
+          legends.each do |leg|
+            ser[leg] = "0" if ser[leg].nil?
+            data[leg] << ser[leg].to_f
           end
         end
-        
-        # adiciona sequência da última legenda
-        datasets << [legend,data]
+        legends.each do |leg|
+          datasets << [leg,data[leg]]
+        end
         
         # adiciona nova sequência de dados vazia, para dá o espaçamento entre as séries
-        datasets << [" ", Array.new(series.size,0), "white"]
+        datasets << [" ", Array.new(result.size,0), "white"]
         
         #adiciona os datasets no gráfico
         datasets.each do |ds| 
@@ -79,16 +71,39 @@ module UniFreire
           # quando não definida irá seguir o theme do gráfico
           self.data(ds[0], ds[1], ds[2])
         end
-
         #adiciona os labels do gráfico de acordo com as series
-        label_indice = 0
-        series.each do |serie|
-          self.labels[label_indice] = "#{serie}"
-          label_indice += 1
+        label_index = 0
+        
+        result.each do |r|
+          self.labels[label_index] = "#{r[0]}"
+          label_index += 1
         end      
         
       end
       
+      def result_as_hash(db_result)
+        arr = []
+        legends = []
+        arr_serie = nil
+        cur_serie = nil
+        db_result.each do |r|
+          cur_serie ||= r[SERIE]
+          if cur_serie == r[SERIE]
+            arr_serie ||= [r[SERIE],{}]
+            arr_serie[1][r[LEGEND]]=r[DATA]
+          else
+            arr << arr_serie
+            arr_serie=[r[SERIE],{}] 
+            arr_serie[1][r[LEGEND]]=r[DATA]
+            cur_serie=r[SERIE]
+          end
+          legends << r[LEGEND] if !legends.include?(r[LEGEND])
+        end
+        arr << arr_serie
+        return arr,legends
+      end
+      
+   
       def target_file(chart_name)
         filename = chart_name << '.jpg'
         File.join(TMP_DIRECTORY,filename)
