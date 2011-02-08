@@ -1,7 +1,7 @@
 module UniFreire
   module Graphics
     class Indicadores
-      
+
       def self.create(institution_id, dimension_id, size, title=nil)
         connection = ActiveRecord::Base.connection
         indicators_result = connection.execute("select indicator from comparable_answers
@@ -22,7 +22,8 @@ module UniFreire
         end
         graphics
       end
-      
+
     end
   end
 end
+
