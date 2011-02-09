@@ -75,7 +75,11 @@ module UniFreire
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@institution_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
+
         Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
+
+        ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
+
         true
       end
 
