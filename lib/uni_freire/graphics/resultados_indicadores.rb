@@ -1,8 +1,8 @@
 module UniFreire
   module Graphics
     class ResultadosIndicadores
-      
-      def self.create(institution_id, size, title=nil)
+
+      def self.create(institution_id, size, legend, title=nil)
         connection = ActiveRecord::Base.connection
         graphics = []
 
@@ -19,8 +19,7 @@ module UniFreire
             else
               UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
             end
-          colors={"legend" => ["2008","2009","2010"],"color"=>Generator::COLORS[:three]}
-          graphics << graphic.generate(result,colors)
+          graphics << graphic.generate(result,legend)
         end
         graphics
       end

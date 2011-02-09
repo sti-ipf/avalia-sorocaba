@@ -3,10 +3,6 @@ module UniFreire
     class Generator < Gruff::Bar
 
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
-      COLORS = {
-          :three => %w(#004586 #ff420e #ffd320),
-          :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
-        }
       DEFAULT_PARAMS = {
         :minimum_value    => 0,
         :maximum_value    => 5,
@@ -16,16 +12,17 @@ module UniFreire
         :marker_font_size => 18,
         :legend_box_size  => 14,
         :title_font_size  => 24,
-        :bar_spacing      => 1, 
+        :bar_spacing      => 1,
         :sort             => false
         }
 
       def initialize(params={})
-        params = {:title => nil, :colors => COLORS[:three]}.merge(params)
+        params = {:title => nil}.merge(params)
         super(params[:size])
         self.title = params[:title] if !params[:title].nil?
+        self.marker_color = "black"
+        self.font_color = "black"
         self.theme = {
-          :colors => params[:colors],
           :marker_color => 'black',
           :font_color => 'black',
           :background_colors => 'white'
@@ -34,18 +31,17 @@ module UniFreire
       end
 
       #estrutura os dados para gerar o gráfico e salva no diretório temporário
-      def generate(db_result,colors)
+      def generate(db_result,legends)
         file_name=nil
-        build_graphic_with_data(db_result,colors)
+        build_graphic_with_data(db_result,legends)
         save(file_name)
       end
 
     private
 
-      def build_graphic_with_data(db_result,colors)
-        graph_data = DataParser.new(db_result,colors)
+      def build_graphic_with_data(db_result,legends)
+        graph_data = DataParser.new(db_result,legends)
         series = graph_data.series
-        legends = graph_data.legends
         datasets = graph_data.normalized_data
 
         # adiciona nova sequência de dados vazia, para dá o espaçamento entre as séries
