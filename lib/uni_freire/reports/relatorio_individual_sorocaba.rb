@@ -2,6 +2,7 @@ module UniFreire
   module Reports
     SIZE = {:default => '700x540', :wide => '1500x600'}
     class RelatorioIndividualSoracaba
+      require "fileutils"
       TEMPLATE_DIRECTORY=File.expand_path( File.join(RAILS_ROOT,"lib/uni_freire/reports/relatorio_individual_sorocaba/template"))
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
       PUBLIC_DIRECTORY = File.expand_path "#{RAILS_ROOT}/public"
@@ -61,7 +62,7 @@ module UniFreire
           doc.image file, :x => 1.6, :y => y[dimension_id], :zoom => 32
           doc.showpage
           doc.image next_page_file
-          
+
           files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:default], legend)
           show_graphics(files, doc)
 
@@ -74,6 +75,7 @@ module UniFreire
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@institution_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
+        Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
         true
       end
 
@@ -110,7 +112,7 @@ module UniFreire
           x += 1
           graphics_in_line +=1
           graphics_in_page +=1
-          
+
           if files.count > 6 && (x == 7) || (x == 13)
             doc.showpage
             y = 20.3
