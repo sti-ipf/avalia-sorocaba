@@ -63,7 +63,7 @@ module UniFreire
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
 
-# Calculo da media da regiao
+        # Calculo da media da regiao
         connection.execute "insert into report_data
           select #{institution_id},'#{AVG_REGIAO}',5,segment_name,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
