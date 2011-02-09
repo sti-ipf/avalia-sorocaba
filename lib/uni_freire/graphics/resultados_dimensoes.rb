@@ -11,7 +11,8 @@ module UniFreire
           GROUP  BY dimension, year;
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
-        graphic.generate(result,legend)
+        graphic.generate(result,legend,
+          "#{institution_id}_resultado_dimensoes")
       end
        #Generator::COLORS[:three][colors[l]]
     end

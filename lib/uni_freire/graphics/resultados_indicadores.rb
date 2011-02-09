@@ -19,7 +19,8 @@ module UniFreire
             else
               UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
             end
-          graphics << graphic.generate(result,legend)
+          graphics << graphic.generate(result,legend,
+                  "#{institution_id}_resultados_indicadores_#{dimension_id}")
         end
         graphics
       end

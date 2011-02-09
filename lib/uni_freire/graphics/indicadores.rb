@@ -12,12 +12,13 @@ module UniFreire
 
         indicators.each do |indicator_id|
           result = connection.execute "
-            select question,sum_type,avg(score) as media from report_data
+            select segment_name,sum_type,avg(score) as media from report_data
             where indicator = #{indicator_id} and institution_id=#{institution_id} and dimension=#{dimension_id}
-    				group by question, sum_type, item_order
+    				group by segment_name, sum_type, item_order
             "
           graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Indicador #{dimension_id}.#{indicator_id}")
-          graphics << graphic.generate(result,legend)
+          graphics << graphic.generate(result,legend,
+                   "#{institution_id}_dimensao_indicador_#{dimension_id}_#{indicator_id}")
         end
         graphics
       end

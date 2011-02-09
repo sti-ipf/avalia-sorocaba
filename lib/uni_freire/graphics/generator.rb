@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module UniFreire
   module Graphics
     class Generator < Gruff::Bar
@@ -33,8 +35,7 @@ module UniFreire
       end
 
       #estrutura os dados para gerar o gráfico e salva no diretório temporário
-      def generate(db_result,legends)
-        file_name=nil
+      def generate(db_result,legends,file_name=nil)
         build_graphic_with_data(db_result,legends)
         save(file_name)
       end
@@ -76,7 +77,6 @@ module UniFreire
         self.write target_file
         target_file
       end
-
     end
   end
 end

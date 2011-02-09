@@ -1,7 +1,7 @@
 module UniFreire
   module Graphics
     class GeralDimensao
-      
+
       AVG_UE="média da UE"
       AVG_INFANTIL="média da Ed. Infantil"
       AVG_FUNDAMENTAL="média do Ensino Fundamental"
@@ -44,7 +44,7 @@ module UniFreire
             group by segment_name,dimension,indicator,question;"
           legend << {:name=>AVG_INFANTIL,:color=>colors[1]}
         end
-        
+
         # Calculo da media do Ensino Fundamental
         if fundamental
           connection.execute "
@@ -85,7 +85,7 @@ module UniFreire
           GROUP  BY segment_name, item_order
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
-        graphic.generate(result,legend)
+        graphic.generate(result,legend,"#{institution_id}_geral_dimensao_#{dimension_id}")
       end
 
     end
