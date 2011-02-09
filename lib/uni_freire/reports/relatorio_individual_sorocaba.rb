@@ -63,15 +63,6 @@ module UniFreire
           doc.image next_page_file
           
           files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:default], legend)
-
-          y = 15 if dimension_id == 7
-          file = UniFreire::Graphics::GeralDimensao.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:wide],legend)
-          doc.image file, :x => 2.5, :y => y, :zoom => 46
-          doc.showpage
-          doc.image next_page_file
-
-          files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:default],legend)
-
           show_graphics(files, doc)
 
           if dimension_id != 11

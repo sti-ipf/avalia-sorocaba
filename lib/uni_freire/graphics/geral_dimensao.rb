@@ -1,12 +1,12 @@
 module UniFreire
   module Graphics
     class GeralDimensao
+      
       AVG_UE="média da UE"
       AVG_INFANTIL="média da Ed. Infantil"
       AVG_FUNDAMENTAL="média do Ensino Fundamental"
       AVG_REGIAO="média da região"
       AVG_AGRUPAMENTO="média do agrupamento"
-
 
       def self.create_report_data(institution_id,colors)
 
@@ -25,18 +25,16 @@ module UniFreire
             fundamental=true
           end
         end
-        connection.execute "
-          delete from report_data where institution_id = #{institution_id}
-          "
+        connection.execute "DELETE FROM report_data WHERE institution_id = #{institution_id}"
 
-# Calculo da media da UE
+        # Calculo da media da UE
         connection.execute "
           insert into report_data select institution_id,'#{AVG_UE}',1,segment_name,avg(score) as media,dimension,indicator,question
           from comparable_answers where institution_id= #{institution_id} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question;
           "
           legend << {:name=>AVG_UE,:color=>colors[0]}
 
-# Calculo da media da Ed. Infantil
+        # Calculo da media da Ed. Infantil
         if infantil
           connection.execute "insert into report_data
             select #{institution_id},'#{AVG_INFANTIL}',2,segment_name,avg(score) as media,dimension,indicator,question  from comparable_answers
@@ -44,9 +42,8 @@ module UniFreire
             group by segment_name,dimension,indicator,question;"
           legend << {:name=>AVG_INFANTIL,:color=>colors[1]}
         end
-
-
-# Calculo da media do Ensino Fundamental
+        
+        # Calculo da media do Ensino Fundamental
         if fundamental
           connection.execute "
             insert into report_data
@@ -56,8 +53,7 @@ module UniFreire
           legend << {:name=>AVG_FUNDAMENTAL,:color=>colors[2]}
         end
 
-# Calculo da media do agrupamento
-
+        # Calculo da media do agrupamento
         connection.execute "insert into report_data
           select #{institution_id},'#{AVG_AGRUPAMENTO}',4,segment_name,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
