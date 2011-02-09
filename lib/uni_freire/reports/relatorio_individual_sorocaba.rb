@@ -1,10 +1,11 @@
 module UniFreire
   module Reports
+    SIZE = {:default => '700x540', :wide => '1500x600'}
     class RelatorioIndividualSoracaba
       TEMPLATE_DIRECTORY=File.expand_path( File.join(RAILS_ROOT,"lib/uni_freire/reports/relatorio_individual_sorocaba/template"))
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
       PUBLIC_DIRECTORY = File.expand_path "#{RAILS_ROOT}/public"
-      SIZE = {:default => '500x400', :wide => '960x400'}
+      
       def initialize(institution_id)
         @institution_id = institution_id
         connection = ActiveRecord::Base.connection
@@ -29,13 +30,13 @@ module UniFreire
 
         # 1.2. Gráfico geral da série histórica dos resultados das dimensões
         doc.image next_page_file
-        file = UniFreire::Graphics::ResultadosDimensoes.create(@institution_id, SIZE[:wide])
-        doc.image file, :x => 1.6, :y => 9.5, :zoom => 46
+        file = UniFreire::Graphics::ResultadosDimensoes.create(@institution_id, UniFreire::Reports::SIZE[:wide])
+        doc.image file, :x => 1.6, :y => 9.5, :zoom => 32
         doc.showpage
         doc.image next_page_file
                 
         # 1.3. Gráficos da série histórica dos resultados dos indicadores
-        files = UniFreire::Graphics::ResultadosIndicadores.create(@institution_id, SIZE[:default])
+        files = UniFreire::Graphics::ResultadosIndicadores.create(@institution_id, UniFreire::Reports::SIZE[:default])
         
         show_graphics(files, doc)
         
@@ -43,30 +44,29 @@ module UniFreire
         doc.image next_page_file
         doc.showpage
         doc.image next_page_file
-        
+
         UniFreire::Graphics::GeralDimensao.create_report_data(@institution_id)
         # 2. Análise dos resultados por dimensões e indicadores
-        y = 13.5
+        y = [0, 13.5, 16, 16, 15, 15, 15, 15, 15, 15, 16, 15]
         (1..11).each do |dimension_id|
-          y = 15 if dimension_id == 7
-          file = UniFreire::Graphics::GeralDimensao.create(@institution_id, dimension_id, SIZE[:wide])
-          doc.image file, :x => 2.5, :y => y, :zoom => 46
+          file = UniFreire::Graphics::GeralDimensao.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:wide])
+          doc.image file, :x => 1.6, :y => y[dimension_id], :zoom => 32
           doc.showpage
           doc.image next_page_file
-
-          files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, SIZE[:default])
+          
+          files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:default])
           show_graphics(files, doc)
           
           if dimension_id != 11
             doc.showpage
             doc.image next_page_file
           end
-          y = 16
         end
         
         doc.render :pdf, :debug => true, :quality => :prepress, 
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@institution_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
+        true
       end
 
       def inc_page
@@ -92,20 +92,19 @@ module UniFreire
         
         files.each do |file|
           if (x % 2) == 0
-            doc.image file, :x => 10.5, :y => y, :zoom => 46
+            doc.image file, :x => 10.5, :y => y, :zoom => 32
           elsif x == 11
-            doc.image file, :x => 2, :y => y, :zoom => 46          
+            doc.image file, :x => 1.6, :y => y, :zoom => 32
           else
-            doc.image file, :x => 2, :y => y, :zoom => 46
+            doc.image file, :x => 2, :y => y, :zoom => 32
           end
           y -= 7 if (x % 2) == 0          
           x += 1
           graphics_in_line +=1
           graphics_in_page +=1
           
-          if (x % 7) == 0 && files.count > 6
+          if files.count > 6 && (x == 7) || (x == 13)
             doc.showpage
-            x = 1
             y = 20.3
           end
           

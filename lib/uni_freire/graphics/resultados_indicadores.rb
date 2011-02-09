@@ -15,7 +15,7 @@ module UniFreire
             "
           graphic =
             if dimension_id == 11
-              UniFreire::Graphics::Generator.new(:size => '960x400', :title => "Dimensão #{dimension_id}")
+              UniFreire::Graphics::Generator.new(:size => UniFreire::Reports::SIZE[:wide], :title => "Dimensão #{dimension_id}")
             else
               UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
             end
