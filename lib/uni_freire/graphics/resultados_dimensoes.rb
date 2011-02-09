@@ -2,7 +2,7 @@ module UniFreire
   module Graphics
     class ResultadosDimensoes
 
-      def self.create(institution_id, size, title=nil)
+      def self.create(institution_id, size, legend,title=nil)
         connection = ActiveRecord::Base.connection
         result = connection.execute "
           SELECT dimension, year, AVG(score) AS media
@@ -11,8 +11,7 @@ module UniFreire
           GROUP  BY dimension, year;
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
-        colors={"legend" => ["2008","2009","2010"],"color"=>Generator::COLORS[:three]}
-        graphic.generate(result,colors)
+        graphic.generate(result,legend)
       end
        #Generator::COLORS[:three][colors[l]]
     end

@@ -1,83 +1,98 @@
 module UniFreire
   module Graphics
     class GeralDimensao
+      AVG_UE="média da UE"
+      AVG_INFANTIL="média da Ed. Infantil"
+      AVG_FUNDAMENTAL="média do Ensino Fundamental"
+      AVG_REGIAO="média da região"
+      AVG_AGRUPAMENTO="média do agrupamento"
 
-      LEGENDS = ["média da UE","média da Ed. Infantil",
-        "média do Ensino Fundamental", "média do agrupamento", "média da região"]
-          
-      def self.create_report_data(institution_id)
+
+      def self.create_report_data(institution_id,colors)
+
+        legend=[]
         connection = ActiveRecord::Base.connection
-        institution = connection.execute("SELECT group_id, region_id FROM institutions WHERE id = 72").fetch_row
+        institution = connection.execute("select group_id, region_id from institutions where id = #{institution_id}").fetch_row
         group_id, region_id = institution[0], institution[1]
-        connection.execute "DELETE FROM report_data WHERE  institution_id = #{institution_id}"
-          
-        # Cálculo da média da UE
+        infantil,fundamental=false,false
+
+        service_levels = connection.execute("select service_level_id from institutions_service_levels where institution_id = #{institution_id}")
+        service_levels.each do |sl|
+          sl_id = sl[0].to_i
+          if sl_id == 2
+            infantil=true
+          elsif sl_id ==3 || sl_id ==4
+            fundamental=true
+          end
+        end
         connection.execute "
-          INSERT INTO report_data 
-          SELECT institution_id, '#{LEGENDS[0]}', 1, segment_name, AVG(score) AS media, 
-                 dimension, indicator, question 
-          FROM   comparable_answers 
-          WHERE  institution_id = #{institution_id} AND YEAR = 2010
-                 AND segment_name <> 'Alessandra' 
-          GROUP  BY segment_name, dimension, indicator, question; 
+          delete from report_data where institution_id = #{institution_id}
           "
-        # Cálculo da média da Ed. Infantil
+
+# Calculo da media da UE
         connection.execute "
-          INSERT INTO report_data 
-          SELECT #{institution_id}, '#{LEGENDS[1]}', 2, segment_name, 
-                 AVG(score) AS media, dimension, indicator, question 
-          FROM   comparable_answers 
-          WHERE  YEAR = 2010 AND segment_name <> 'Alessandra' AND level_name = 2 
-          GROUP  BY segment_name, dimension, indicator, question; 
+          insert into report_data select institution_id,'#{AVG_UE}',1,segment_name,avg(score) as media,dimension,indicator,question
+          from comparable_answers where institution_id= #{institution_id} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question;
           "
-        # Cálculo da média do Ensino Fundamental
-        connection.execute "
-          INSERT INTO report_data 
-          SELECT #{institution_id}, '#{LEGENDS[2]}', 3, segment_name, 
-                 AVG(score) AS media, dimension, indicator, question 
-          FROM   comparable_answers 
-          WHERE  YEAR = 2010 AND segment_name <> 'Alessandra' 
-                 AND level_name IN (3, 4) 
-          GROUP  BY segment_name, dimension, indicator, question; 
-          "
-        # Cálculo da média do agrupamento
-        connection.execute "
-          INSERT INTO report_data 
-          SELECT #{institution_id}, '#{LEGENDS[3]}', 4, segment_name, 
-                 AVG(score) AS media, dimension, indicator, question 
-          FROM   comparable_answers ca 
-                 INNER JOIN institutions i ON i.id = ca.institution_id 
-          WHERE  i.group_id = #{group_id} AND ca.YEAR = 2010 
-                 AND ca.segment_name <> 'Alessandra' 
-          GROUP  BY ca.segment_name, ca.dimension, ca.indicator, ca.question; 
-          "
-        # Cálculo da média da região
-        connection.execute "
-          INSERT INTO report_data 
-          SELECT #{institution_id}, '#{LEGENDS[4]}', 5, segment_name, 
-                 AVG(score) AS media, dimension, indicator, question 
-          FROM   comparable_answers ca 
-                 INNER JOIN institutions i ON i.id = ca.institution_id 
-          WHERE  i.region_id = #{region_id} AND ca.YEAR = 2010 
-                 AND ca.segment_name <> 'Alessandra' 
-          GROUP  BY ca.segment_name, ca.dimension, ca.indicator, ca.question; 
-          "
+          legend << {:name=>AVG_UE,:color=>colors[0]}
+
+# Calculo da media da Ed. Infantil
+        if infantil
+          connection.execute "insert into report_data
+            select #{institution_id},'#{AVG_INFANTIL}',2,segment_name,avg(score) as media,dimension,indicator,question  from comparable_answers
+            where year=2010  and segment_name <> 'Alessandra'  and level_name = 2
+            group by segment_name,dimension,indicator,question;"
+          legend << {:name=>AVG_INFANTIL,:color=>colors[1]}
+        end
+
+
+# Calculo da media do Ensino Fundamental
+        if fundamental
+          connection.execute "
+            insert into report_data
+            select #{institution_id},'#{AVG_FUNDAMENTAL}',3,segment_name,avg(score) as media,dimension,indicator,question  from comparable_answers
+             where year=2010  and segment_name <> 'Alessandra' and level_name in (3,4)
+            group by segment_name,dimension,indicator,question;"
+          legend << {:name=>AVG_FUNDAMENTAL,:color=>colors[2]}
+        end
+
+# Calculo da media do agrupamento
+
+        connection.execute "insert into report_data
+          select #{institution_id},'#{AVG_AGRUPAMENTO}',4,segment_name,avg(score) as media,dimension,indicator,question
+          from comparable_answers ca inner join institutions i on i.id=ca.institution_id
+          where i.group_id=#{group_id} and ca.year=2010  and ca.segment_name <> 'Alessandra'
+          group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
+        legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
+
+# Calculo da media da regiao
+        connection.execute "insert into report_data
+          select #{institution_id},'#{AVG_REGIAO}',5,segment_name,avg(score) as media,dimension,indicator,question
+          from comparable_answers ca inner join institutions i on i.id=ca.institution_id
+          where i.region_id=#{region_id} and ca.year=2010  and ca.segment_name <> 'Alessandra'
+          group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
+        legend << {:name=>AVG_REGIAO,:color=>colors[4]}
+        legend
       end
 
-      def self.create(institution_id, dimension_id, size, title=nil)
+      def self.create(institution_id, dimension_id, size, legend, title=nil)
         connection = ActiveRecord::Base.connection
         result = connection.execute "
-          SELECT segment_name, sum_type, AVG(score) AS media
+          SELECT segment_name,
+                 sum_type,
+                 AVG(score) AS media
           FROM   report_data
           WHERE  institution_id = #{institution_id}
                  AND dimension = #{dimension_id}
-          GROUP  BY segment_name, item_order
-          "
-        graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :colors => UniFreire::Graphics::Generator::COLORS[:five])
-        colors={"legend" => LEGENDS ,"color"=>Generator::COLORS[:five]}
-        graphic.generate(result,colors)
+          GROUP  BY segment_name,
+                    item_order
+        "
+
+        graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
+        graphic.generate(result,legend)
       end
 
     end
   end
 end
+

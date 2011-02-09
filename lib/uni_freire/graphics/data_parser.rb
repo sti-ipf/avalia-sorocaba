@@ -5,31 +5,27 @@ module UniFreire
       SERIE, LEGEND, DATA = 0, 1, 2
 
       attr_accessor :series_data, :legends, :normalized_data
-      def initialize(data,colors)
-        @colors=colors["color"]
+      def initialize(data,legends)
         @series_data = get_series_with_legends_and_data(data)
         @series_data = [] if @series_data.first.nil?
-        @legends = colors["legend"]
+        @legends = legends
         @normalized_data = normalize_data
       end
 
       def normalize_data
         legend_data = {}
         datasets = []
-        self.legends.each {|l| legend_data[l] = []}
+        self.legends.each {|l| legend_data[l[:name]] = []}
 
         self.series_data.each do |data|
           serie = data[1] #legendas com os dados
           self.legends.each do |legend|
-            serie[legend] = "0" if serie[legend].nil?
-            legend_data[legend] << serie[legend].to_f
+            serie[legend[:name]] = "0" if serie[legend[:name]].nil?
+            legend_data[legend[:name]] << serie[legend[:name]].to_f
           end
         end
-        i=0
         self.legends.each do |legend|
-          color=@colors[i]
-          datasets << [legend,legend_data[legend],color]
-          i=i+1
+          datasets << [legend[:name],legend_data[legend[:name]],legend[:color]]
         end
 
         datasets

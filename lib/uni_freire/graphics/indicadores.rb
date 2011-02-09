@@ -2,7 +2,7 @@ module UniFreire
   module Graphics
     class Indicadores
 
-      def self.create(institution_id, dimension_id, size, title=nil)
+      def self.create(institution_id, dimension_id, size, legend, title=nil)
         connection = ActiveRecord::Base.connection
         indicators_result = connection.execute("select indicator from comparable_answers
           where dimension=#{dimension_id} and institution_id=#{institution_id} group by indicator;")
@@ -16,11 +16,8 @@ module UniFreire
             where indicator = #{indicator_id} and institution_id=#{institution_id} and dimension=#{dimension_id}
     				group by question, sum_type, item_order
             "
-          graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}.#{indicator_id}", :colors => UniFreire::Graphics::Generator::COLORS[:five])
-          colors={"legend" => ["média da UE","média da Ed. Infantil",
-        "média do Ensino Fundamental", "média do agrupamento",
-        "média da região"] ,"color"=>Generator::COLORS[:five]}
-          graphics << graphic.generate(result,colors)
+          graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Indicador #{dimension_id}.#{indicator_id}")
+          graphics << graphic.generate(result,legend)
         end
         graphics
       end

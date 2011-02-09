@@ -29,7 +29,8 @@ Rails::Initializer.run do |config|
   config.gem "rmagick", :lib => "RMagick2"
   config.gem "rghost"
   config.gem "brazilian-rails", :version => "2.1.15"
-  
+  config.gem "resque"
+
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -50,5 +51,6 @@ Rails::Initializer.run do |config|
   # config.i18n.default_locale = :de
   config.load_paths << "/usr/lib/ruby/gems/1.8/gems/prawn-0.11.1.pre/lib/"
   config.load_paths << "#{RAILS_ROOT}/app/reports"
-  
+
 end
+
