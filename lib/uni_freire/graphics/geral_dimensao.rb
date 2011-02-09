@@ -14,6 +14,8 @@ module UniFreire
         connection = ActiveRecord::Base.connection
         institution = connection.execute("select group_id, region_id from institutions where id = #{institution_id}").fetch_row
         group_id, region_id = institution[0], institution[1]
+        group_id=0 if group_id.nil?
+        region_id=0 if region_id.nil?
         infantil,fundamental=false,false
 
         service_levels = connection.execute("select service_level_id from institutions_service_levels where institution_id = #{institution_id}")
