@@ -8,11 +8,13 @@ module UniFreire
         :maximum_value    => 5,
         :margins          => 5,
         :top_margin       => 0,
-        :legend_font_size => 20,
-        :marker_font_size => 18,
+        :legend_font_size => 18,
+        :marker_font_size => 16,
         :legend_box_size  => 14,
-        :title_font_size  => 24,
+        :title_font_size  => 22,
         :bar_spacing      => 1,
+        #:marker_count     => 6,
+        :legend_margin => 30,
         :sort             => false
         }
 

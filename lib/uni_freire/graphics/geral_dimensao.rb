@@ -82,10 +82,8 @@ module UniFreire
           FROM   report_data
           WHERE  institution_id = #{institution_id}
                  AND dimension = #{dimension_id}
-          GROUP  BY segment_name,
-                    item_order
+          GROUP  BY segment_name, item_order
         "
-
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
         graphic.generate(result,legend)
       end
