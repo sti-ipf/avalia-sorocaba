@@ -15,8 +15,8 @@ module UniFreire
         :legend_box_size  => 14,
         :title_font_size  => 22,
         :bar_spacing      => 1,
-        #:marker_count     => 6,
-        :legend_margin => 30,
+        :marker_count     => 10,
+        :legend_margin    => 10,
         :sort             => false
         }
 
@@ -61,6 +61,9 @@ module UniFreire
         #adiciona os labels do gráfico de acordo com as séries
         label_index = 0
         series.each do |serie|
+          total_length=12
+          total_length=20 if serie.length > 5 
+          serie = serie << " " * ((total_length - serie.length)/2)
           self.labels[label_index] = "#{serie}"
           label_index += 1
         end

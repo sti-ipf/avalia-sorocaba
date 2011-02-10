@@ -31,7 +31,7 @@ module UniFreire
 
         # Calculo da media da UE
         connection.execute "
-          insert into report_data select institution_id,'#{AVG_UE}',1,segment_name,avg(score) as media,dimension,indicator,question
+          insert into report_data select institution_id,'#{AVG_UE}',1,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers where institution_id= #{institution_id} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question;
           "
           legend << {:name=>AVG_UE,:color=>colors[0]}
@@ -39,7 +39,7 @@ module UniFreire
         # Calculo da media da Ed. Infantil
         if infantil
           connection.execute "insert into report_data
-            select #{institution_id},'#{AVG_INFANTIL}',2,segment_name,avg(score) as media,dimension,indicator,question  from comparable_answers
+            select #{institution_id},'#{AVG_INFANTIL}',2,segment_name,segment_order,avg(score) as media,dimension,indicator,question  from comparable_answers
             where year=2010  and segment_name <> 'Alessandra'  and level_name = 2
             group by segment_name,dimension,indicator,question;"
           legend << {:name=>AVG_INFANTIL,:color=>colors[1]}
@@ -49,7 +49,7 @@ module UniFreire
         if fundamental
           connection.execute "
             insert into report_data
-            select #{institution_id},'#{AVG_FUNDAMENTAL}',3,segment_name,avg(score) as media,dimension,indicator,question  from comparable_answers
+            select #{institution_id},'#{AVG_FUNDAMENTAL}',3,segment_name,segment_order,avg(score) as media,dimension,indicator,question  from comparable_answers
              where year=2010  and segment_name <> 'Alessandra' and level_name in (3,4)
             group by segment_name,dimension,indicator,question;"
           legend << {:name=>AVG_FUNDAMENTAL,:color=>colors[2]}
@@ -57,17 +57,28 @@ module UniFreire
 
         # Calculo da media do agrupamento
         connection.execute "insert into report_data
-          select #{institution_id},'#{AVG_AGRUPAMENTO}',4,segment_name,avg(score) as media,dimension,indicator,question
+          select #{institution_id},'#{AVG_AGRUPAMENTO}',4,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
           where i.group_id=#{group_id} and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
 
+        in_clause=[] 
+        if infantil
+          in_clause << 2
+        end
+        if fundamental
+          in_clause << 3
+          in_clause << 4
+        end
+        in_clause = in_clause.join(",")
         # Calculo da media da regiao
         connection.execute "insert into report_data
-          select #{institution_id},'#{AVG_REGIAO}',5,segment_name,avg(score) as media,dimension,indicator,question
+          select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
-          where i.region_id=#{region_id} and ca.year=2010  and ca.segment_name <> 'Alessandra'
+          inner join institutions_service_levels isl on isl.institution_id = i.id  
+          where i.region_id=#{region_id} and isl.service_level_id in (#{in_clause})
+          and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_REGIAO,:color=>colors[4]}
         legend
@@ -82,7 +93,7 @@ module UniFreire
           FROM   report_data
           WHERE  institution_id = #{institution_id}
                  AND dimension = #{dimension_id}
-          GROUP  BY segment_name, item_order
+          GROUP  BY segment_order, item_order
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
         graphic.generate(result,legend,"#{institution_id}_geral_dimensao_#{dimension_id}")

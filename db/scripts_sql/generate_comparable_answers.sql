@@ -19,3 +19,6 @@ CREATE TABLE comparable_answers (
 )
 ENGINE = MyISAM;
 
+ALTER TABLE `comparable_answers` ADD COLUMN `segment_order` INTEGER  AFTER `old_segment_name`;
+
+

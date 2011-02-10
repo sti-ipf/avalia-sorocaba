@@ -7,7 +7,7 @@ ActiveRecord::Base.establish_connection(
   :host => "localhost",
   :username => "root",
   :password => "root",
-  :database => "ipf")
+  :database => "unifreire_sorocaba")
 
 
 def generate_query(new_indicator, year, old_indicator)
@@ -66,13 +66,13 @@ dt.each_pair do |key, value|
   puts "Query:#{query}"
   ActiveRecord::Base.connection.execute(query) unless query.nil?
 
-  query = "update comparable_answers set old_segment_name=segment_name"
-  puts "Query:#{query}"
-  ActiveRecord::Base.connection.execute(query) unless query.nil?
+#  query = "update comparable_answers set old_segment_name=segment_name"
+#  puts "Query:#{query}"
+#  ActiveRecord::Base.connection.execute(query) unless query.nil?
 
-  query = "update comparable_answers set segment_name='Funcionários' where segment_name LIKE 'Funcion%'"
-  puts "Query:#{query}"
-  ActiveRecord::Base.connection.execute(query) unless query.nil?
+#  query = "update comparable_answers set segment_name='Funcionários' where segment_name LIKE 'Funcion%'"
+#  puts "Query:#{query}"
+#  ActiveRecord::Base.connection.execute(query) unless query.nil?
 
 end
 
