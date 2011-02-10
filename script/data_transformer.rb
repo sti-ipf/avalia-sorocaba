@@ -67,6 +67,9 @@ execute("insert into comparable_answers
                                           group by a.user_id, q.number;")
 
 
+execute("update comparable_answers set number=concat('1.5.',question),indicator=5 where dimension=1 and indicator=4 and year=2010")
+execute("update comparable_answers set number=concat('1.6.',question),indicator=6 where dimension=1 and indicator=5 and year=2010")
+
 execute("update comparable_answers set segment_name='Prof Infantil' where level_name=2 and segment_name like 'Profess%'")
 
 execute("update comparable_answers set segment_name='Prof Fund' where level_name in (3,4) and segment_name like 'Profess%'")
@@ -107,6 +110,7 @@ execute("CREATE TABLE report_data (
 
 #execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 
-execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
 execute("UPDATE institutions SET primary_service_level_id = 3 WHERE id IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
 execute("UPDATE institutions SET primary_service_level_id = 2 WHERE id NOT IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
+execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
+
