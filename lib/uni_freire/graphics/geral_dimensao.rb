@@ -63,29 +63,12 @@ module UniFreire
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
 
-<<<<<<< HEAD
-        in_clause=[]
-        if infantil
-          in_clause << 2
-        end
-        if fundamental
-          in_clause << 3
-          in_clause << 4
-        end
-        in_clause = in_clause.join(",")
-=======
->>>>>>> 9469a89e240e49ab48423496c8fccac73ca6f32b
         # Calculo da media da regiao
         connection.execute "insert into report_data
           select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
-<<<<<<< HEAD
-          inner join institutions_service_levels isl on isl.institution_id = i.id
-          where i.region_id=#{region_id} and isl.service_level_id in (#{in_clause})
-=======
           where i.region_id=#{region_id}
           and i.primary_service_level_id = #{primary_service_level_id}
->>>>>>> 9469a89e240e49ab48423496c8fccac73ca6f32b
           and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_REGIAO,:color=>colors[4]}
