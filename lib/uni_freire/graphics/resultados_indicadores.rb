@@ -10,7 +10,7 @@ module UniFreire
           result = connection.execute "
             SELECT CONCAT(dimension,'.',indicator) as i, year, AVG(score) AS media
             FROM   comparable_answers
-            WHERE  institution_id = #{institution_id} AND dimension = #{dimension_id}
+            WHERE  institution_id = #{institution_id} AND dimension = #{dimension_id} AND score > 0
             GROUP  BY indicator, year;
             "
           graphic =

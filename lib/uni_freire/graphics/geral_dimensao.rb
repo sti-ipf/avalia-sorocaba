@@ -63,7 +63,7 @@ module UniFreire
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
 
-        in_clause=[] 
+        in_clause=[]
         if infantil
           in_clause << 2
         end
@@ -76,7 +76,7 @@ module UniFreire
         connection.execute "insert into report_data
           select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
-          inner join institutions_service_levels isl on isl.institution_id = i.id  
+          inner join institutions_service_levels isl on isl.institution_id = i.id
           where i.region_id=#{region_id} and isl.service_level_id in (#{in_clause})
           and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
@@ -93,6 +93,7 @@ module UniFreire
           FROM   report_data
           WHERE  institution_id = #{institution_id}
                  AND dimension = #{dimension_id}
+                 AND score > 0
           GROUP  BY segment_order, item_order
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)

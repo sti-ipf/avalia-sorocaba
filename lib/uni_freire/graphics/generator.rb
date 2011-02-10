@@ -62,7 +62,7 @@ module UniFreire
         label_index = 0
         series.each do |serie|
           total_length=12
-          total_length=20 if serie.length > 5 
+          total_length=18 if serie.length > 5
           serie = serie << " " * ((total_length - serie.length)/2)
           self.labels[label_index] = "#{serie}"
           label_index += 1
