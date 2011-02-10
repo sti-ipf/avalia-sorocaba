@@ -58,7 +58,7 @@ namespace :generate do
   def get_institutions_that_has_answers()
     ActiveRecord::Base.connection.execute("select distinct ca.institution_id
                             from comparable_answers ca inner join institutions i
-                            on i.id=ca.institution_id order by institution_id")
+                            on i.id=ca.institution_id where ca.institution_id > 60 order by institution_id")
   end
 
 end

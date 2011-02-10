@@ -53,6 +53,7 @@ ActiveRecord::Base.connection.execute("insert into comparable_answers
                                              inner join segments s on s.id = u.segment_id
                                           group by a.user_id, q.number;")
 
+
 dt = YAML::load(File.open("config/data_transformations.yml"))
 dt.each_pair do |key, value|
   new_indicator = "#{key[7..key.size]}"
