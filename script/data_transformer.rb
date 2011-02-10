@@ -107,3 +107,6 @@ execute("CREATE TABLE report_data (
 
 #execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 
+execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
+execute("UPDATE institutions SET primary_service_level_id = 3 WHERE id IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
+execute("UPDATE institutions SET primary_service_level_id = 2 WHERE id NOT IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
