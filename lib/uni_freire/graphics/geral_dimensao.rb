@@ -12,8 +12,8 @@ module UniFreire
 
         legend=[]
         connection = ActiveRecord::Base.connection
-        institution = connection.execute("select group_id, region_id from institutions where id = #{institution_id}").fetch_row
-        group_id, region_id = institution[0], institution[1]
+        institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = #{institution_id}").fetch_row
+        group_id, region_id, primary_service_level_id = institution[0], institution[1], institution[2]
         group_id=0 if group_id.nil?
         region_id=0 if region_id.nil?
         infantil,fundamental=false,false
@@ -63,21 +63,12 @@ module UniFreire
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
 
-        in_clause=[] 
-        if infantil
-          in_clause << 2
-        end
-        if fundamental
-          in_clause << 3
-          in_clause << 4
-        end
-        in_clause = in_clause.join(",")
         # Calculo da media da regiao
         connection.execute "insert into report_data
           select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
-          inner join institutions_service_levels isl on isl.institution_id = i.id  
-          where i.region_id=#{region_id} and isl.service_level_id in (#{in_clause})
+          where i.region_id=#{region_id}
+          and i.primary_service_level_id = #{primary_service_level_id}
           and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_REGIAO,:color=>colors[4]}
