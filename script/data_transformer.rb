@@ -66,9 +66,8 @@ execute("insert into comparable_answers
                                              inner join segments s on s.id = u.segment_id
                                           group by a.user_id, q.number;")
 
-
-execute("update comparable_answers set number=concat('1.5.',question),indicator=5 where dimension=1 and indicator=4 and year=2010")
 execute("update comparable_answers set number=concat('1.6.',question),indicator=6 where dimension=1 and indicator=5 and year=2010")
+execute("update comparable_answers set number=concat('1.5.',question),indicator=5 where dimension=1 and indicator=4 and year=2010")
 
 execute("update comparable_answers set segment_name='Prof Infantil' where level_name=2 and segment_name like 'Profess%'")
 
