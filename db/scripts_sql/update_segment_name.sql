@@ -2,5 +2,10 @@
 ---ALTER TABLE `comparable_answers` ADD COLUMN `old_segment_name` VARCHAR(200) NULL  AFTER `answer_date` ;
 
 ---Atualizamos todos os nomes dos segmentos para agrupar os funcionarios
-update comparable_answers set old_segment_name=segment_name, segment_name="Funcionários" where segment_name LIKE "Funcion%"
+update comparable_answers set segment_order = 1 where segment_name="Gestores";
+update comparable_answers set segment_order = 2 where segment_name="Professores";
+update comparable_answers set segment_order = 3 where segment_name="Func. Apoio";
+update comparable_answers set segment_order = 4 where segment_name="Func. Aux. Educ.";
+update comparable_answers set segment_order = 5 where segment_name="Familiares";
+update comparable_answers set segment_order = 6 where segment_name="Educandos";
 
