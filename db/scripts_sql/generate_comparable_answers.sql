@@ -9,6 +9,7 @@ CREATE TABLE comparable_answers (
   score INTEGER  NOT NULL,
   level_name VARCHAR(200) ,
   segment_name VARCHAR(200) ,
+  segment_order INTEGER NOT NULL ,
   old_segment_name VARCHAR(200) ,
   dimension INTEGER  NOT NULL,
   indicator INTEGER  NOT NULL,
@@ -18,7 +19,4 @@ CREATE TABLE comparable_answers (
   PRIMARY KEY (id)
 )
 ENGINE = MyISAM;
-
-ALTER TABLE `comparable_answers` ADD COLUMN `segment_order` INTEGER  AFTER `old_segment_name`;
-
 

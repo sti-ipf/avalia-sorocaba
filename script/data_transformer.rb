@@ -7,7 +7,7 @@ ActiveRecord::Base.establish_connection(
   :host => "localhost",
   :username => "root",
   :password => "root",
-  :database => "unifreire_sorocaba")
+  :database => "ipf")
 
 
 def generate_query(new_indicator, year, old_indicator)
@@ -36,8 +36,20 @@ def generate_query(new_indicator, year, old_indicator)
     group by id_instituicao"
 end
 
-ActiveRecord::Base.connection.execute("truncate comparable_answers")
-ActiveRecord::Base.connection.execute("insert into comparable_answers
+def execute(query)
+  ActiveRecord::Base.connection.execute(query)
+end
+
+execute("drop table comparable_answers")
+
+execute("CREATE TABLE comparable_answers (id INTEGER NOT NULL AUTO_INCREMENT,
+  external_id INTEGER  NOT NULL, institution_id INTEGER  NOT NULL, number VARCHAR(200) NOT NULL,
+  original_number VARCHAR(200) NOT NULL, score INTEGER  NOT NULL, level_name VARCHAR(200) , segment_name VARCHAR(200) ,
+  segment_order INTEGER NOT NULL, old_segment_name VARCHAR(200) , dimension INTEGER  NOT NULL,
+  indicator INTEGER  NOT NULL, question INTEGER  NOT NULL, year INTEGER  NOT NULL, answer_date DATE  NOT NULL,
+  PRIMARY KEY (id)) ENGINE = MyISAM")
+
+execute("insert into comparable_answers
                                           (external_id, institution_id, number, original_number, score, level_name,
                                           segment_name, dimension, indicator, question, year, answer_date)
                                         select
@@ -54,26 +66,46 @@ ActiveRecord::Base.connection.execute("insert into comparable_answers
                                           group by a.user_id, q.number;")
 
 
+execute("update comparable_answers set segment_name='Prof. Infantil' where level_name=2 and segment_name like 'Profess%'")
+
+execute("update comparable_answers set segment_name='Prof. Fundamental' where level_name in (3,4) and segment_name like 'Profess%'")
+
+execute("update comparable_answers set segment_order = 1 where segment_name='Gestores'")
+execute("update comparable_answers set segment_order = 2 where segment_name='Prof. Infantil'")
+execute("update comparable_answers set segment_order = 3 where segment_name='Prof. Fundamental'")
+execute("update comparable_answers set segment_order = 4 where segment_name='Func. Apoio'")
+execute("update comparable_answers set segment_order = 5 where segment_name='Func. Aux. Educ.'")
+execute("update comparable_answers set segment_order = 6 where segment_name='Familiares'")
+execute("update comparable_answers set segment_order = 7 where segment_name='Educandos'")
+
+execute("drop table report_data")
+execute("drop table report_data")
+
 dt = YAML::load(File.open("config/data_transformations.yml"))
 dt.each_pair do |key, value|
   new_indicator = "#{key[7..key.size]}"
   query = generate_query(new_indicator, 2009, value[2009])
   puts "Indicator:#{new_indicator}, 2009:#{value[2009]}"
   puts "Query:#{query}"
-  ActiveRecord::Base.connection.execute(query) unless query.nil?
+  execute(query) unless query.nil?
 
   query = generate_query(new_indicator, 2008, value[2008])
   puts "Indicator:#{new_indicator}, 2008:#{value[2008]}"
   puts "Query:#{query}"
-  ActiveRecord::Base.connection.execute(query) unless query.nil?
-
-#  query = "update comparable_answers set old_segment_name=segment_name"
-#  puts "Query:#{query}"
-#  ActiveRecord::Base.connection.execute(query) unless query.nil?
-
-#  query = "update comparable_answers set segment_name='Funcionários' where segment_name LIKE 'Funcion%'"
-#  puts "Query:#{query}"
-#  ActiveRecord::Base.connection.execute(query) unless query.nil?
+  execute(query) unless query.nil?
 
 end
+
+execute("ALTER TABLE comparable_answers ADD INDEX 'institution' (institution_id ASC, dimension ASC)")
+execute("ALTER TABLE comparable_answers ADD INDEX 'institution_and_indicator' (institution_id ASC, dimension ASC, indicator ASC, year ASC")
+execute("ALTER TABLE comparable_answers ADD INDEX 'institution_and_segment_name' (institution_id ASC, year ASC, segment_name ASC, dimension ASC, indicator ASC, question ASC")
+
+#execute("drop table report_data")
+execute("CREATE TABLE 'report_data' (
+  institution_id int(11) NOT NULL, sum_type varchar(50) DEFAULT NULL, item_order varchar(50) DEFAULT NULL,
+  segment_name varchar(50) DEFAULT NULL, segment_order int(11) DEFAULT NULL, score float DEFAULT NULL,
+  dimension int(11) DEFAULT NULL, indicator int(11) DEFAULT NULL, question int(11) DEFAULT NULL
+) ENGINE=MyISAM")
+
+execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 

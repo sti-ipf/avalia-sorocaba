@@ -3,19 +3,6 @@
 #  Rodar antes de executar as queries para criar a tabela #
 ####################################################################
 
-CREATE TABLE `report_data` (
-  `institution_id` int(11) NOT NULL,
-  `sum_type` varchar(50) DEFAULT NULL,
-  `item_order` varchar(50) DEFAULT NULL,
-  `segment_name` varchar(50) DEFAULT NULL,
-  `segment_order` int(11) DEFAULT NULL,
-  `score` float DEFAULT NULL,
-  `dimension` int(11) DEFAULT NULL,
-  `indicator` int(11) DEFAULT NULL,
-  `question` int(11) DEFAULT NULL
-) ENGINE=MyISAM
-
-
 
 ####################################################################
 #1.2. Gráfico geral da série histórica dos resultados das dimensões#
