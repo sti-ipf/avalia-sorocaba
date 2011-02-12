@@ -10,7 +10,7 @@ module UniFreire
         :maximum_value    => 5,
         :margins          => 5,
         :top_margin       => 0,
-        :legend_font_size => 18,
+        :legend_font_size => 12,
         :marker_font_size => 16,
         :legend_box_size  => 14,
         :title_font_size  => 22,

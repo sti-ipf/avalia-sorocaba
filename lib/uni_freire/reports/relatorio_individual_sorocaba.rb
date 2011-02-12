@@ -8,7 +8,7 @@ module UniFreire
       PUBLIC_DIRECTORY = File.expand_path "#{RAILS_ROOT}/public"
       COLORS = {
           :three => %w(#004586 #ff420e #ffd320),
-          :five  => %w(#579d1c #83caff #74132c #004586 #ff420e)
+          :five  => %w(#579d1c #004586 #ff420e #83caff #74132c)
         }
 
       def initialize(institution_id)

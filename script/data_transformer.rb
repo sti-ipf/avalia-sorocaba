@@ -6,8 +6,8 @@ ActiveRecord::Base.establish_connection(
   :adapter => "mysql",
   :host => "localhost",
   :username => "root",
-  :password => "",
-  :database => "unifreire_sorocaba")
+  :password => "root",
+  :database => "ipf")
 
 def execute(query)
   ActiveRecord::Base.connection.execute(query)
