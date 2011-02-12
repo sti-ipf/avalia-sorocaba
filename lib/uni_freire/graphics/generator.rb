@@ -17,6 +17,7 @@ module UniFreire
         :bar_spacing      => 1,
         :marker_count     => 10,
         :legend_margin    => 10,
+        :no_data_message  => "Não há dados",
         :sort             => false
         }
 
