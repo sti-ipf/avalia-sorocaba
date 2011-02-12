@@ -64,7 +64,9 @@ module UniFreire
         series.each do |serie|
           total_length=12
           total_length=18 if serie.length > 5
-          serie = serie << " " * ((total_length - serie.length)/2)
+          spaces = ((total_length - serie.length)/2)
+          spaces = 0 if spaces < 0
+          serie = serie << " " * spaces
           self.labels[label_index] = "#{serie}"
           label_index += 1
         end
