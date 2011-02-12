@@ -17,21 +17,31 @@ module UniFreire
         @institution_name = connection.execute("
           SELECT name FROM institutions
           WHERE id = #{@institution_id}"
-          ).fetch_row[0].remover_acentos.gsub(/[^a-z0-9]+/i, '')
+          ).fetch_row[0].gsub(/[^a-z0-9' ']+/i, '')
+        @file_name = @institution_name.remover_acentos.gsub(' ', '_')
       end
 
       def report
         doc = RGhost::Document.new
+        doc.define_tags do
+          tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
+        end
         %W(capa_0002 contra_capa).each do |special_page|
           doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
           doc.next_page
         end
 
-        # salta 5 páginas
-        5.times do
+        # salta 7 páginas
+        7.times do |i|
           doc.image next_page_file
+          # adiciona nome da escola em cima do sumário
+          if i == 0
+            doc.moveto :x => 10.5, :y => 26.1
+            doc.show "#{@institution_name}", :with => :font1, :align => :show_center
+          end
           doc.next_page
         end
+
         legend=[]
         legend=[{:name => "2008",:color => COLORS[:three][0]},
                 {:name => "2009",:color => COLORS[:three][1]},
@@ -73,7 +83,7 @@ module UniFreire
         end
 
         doc.render :pdf, :debug => true, :quality => :prepress,
-          :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@institution_name}_#{@institution_id}.pdf"),
+          :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@file_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
 
         Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
