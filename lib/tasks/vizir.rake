@@ -19,7 +19,7 @@ namespace :generate do
     else
       id = args[:id]
       UniFreire::Reports::RelatorioIndividualSoracaba.new(id).report
-      puts "Geratório gerado na pasta public"
+      puts "Relatório gerado na pasta public"
     end
   end
 

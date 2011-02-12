@@ -6,46 +6,47 @@ ActiveRecord::Base.establish_connection(
   :adapter => "mysql",
   :host => "localhost",
   :username => "root",
-  :password => "root",
-  :database => "ipf")
-
-
-def generate_query(new_indicator, year, old_indicator)
-  ids = new_indicator.split(".")
-  if(old_indicator.class == Array)
-    indicators_get = old_indicator.join(" + ")
-    indicators_where = ""
-    old_indicator.each do |v|
-      indicators_where += "numero = '#{v}' or "
-    end
-    indicators_where = indicators_where[0 .. indicators_where.size - 5]
-  elsif(old_indicator.class == String && old_indicator != "")
-      indicators_get = old_indicator
-      indicators_where = "numero like '#{old_indicator}%'"
-  else
-    return nil
-  end
-  "insert into comparable_answers
-  (external_id, institution_id, number, original_number, score, level_name,
-  segment_name, dimension, indicator, question, year, answer_date)
-  select external_id, id_instituicao, '#{new_indicator}', '#{indicators_get}', avg(nota), null, null, #{ids[0]}, #{ids[1]}, 0, year(data), data
-    from dados_#{year}
-    where
-      year(data) = #{year}
-      and (#{indicators_where})
-      and nota > 0 and nota < 6
-    group by id_instituicao"
-end
+  :password => "",
+  :database => "unifreire_sorocaba")
 
 def execute(query)
   ActiveRecord::Base.connection.execute(query)
+end
+
+def import_old_data(year)
+  resps = execute("SELECT 
+                          i.id, r.id_dimensao, r.id_indicador, avg(r.grau_indicador), r.data_resp
+                          FROM 
+                            ipf_sorocaba_#{year}.portal_ipf_respostas_questoes r,
+                            unifreire_sorocaba.institutions i
+                         where 
+                            r.id_escola = i.id_#{year}
+                            and r.grau_indicador <> 6
+                          group by i.id, r.id_dimensao, r.id_indicador 
+                          order by i.id, r.id_dimensao, r.id_indicador")
+
+  dim = 0
+  ind = 1
+  resps.each do | resp|
+    if dim != resp[1]
+      dim = resp[1]
+      ind = 1
+    else
+      ind += 1
+    end
+    execute("insert into comparable_answers
+     (external_id, institution_id, number, original_number, score, level_name,
+     segment_name, dimension, indicator, question, year, answer_date)
+    values
+     (0, #{resp[0]}, '#{dim}.#{ind}', '#{dim}.#{ind}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, 0, #{year}, '#{resp[4]}')")
+  end
 end
 
 execute("drop table comparable_answers")
 
 execute("CREATE TABLE comparable_answers (id INTEGER NOT NULL AUTO_INCREMENT,
   external_id INTEGER  NOT NULL, institution_id INTEGER  NOT NULL, number VARCHAR(200) NOT NULL,
-  original_number VARCHAR(200) NOT NULL, score INTEGER  NOT NULL, level_name VARCHAR(200) , segment_name VARCHAR(200) ,
+  original_number VARCHAR(200) NOT NULL, score FLOAT  NOT NULL, level_name VARCHAR(200) , segment_name VARCHAR(200) ,
   segment_order INTEGER NOT NULL, old_segment_name VARCHAR(200) , dimension INTEGER  NOT NULL,
   indicator INTEGER  NOT NULL, question INTEGER  NOT NULL, year INTEGER  NOT NULL, answer_date DATE  NOT NULL,
   PRIMARY KEY (id)) ENGINE = MyISAM")
@@ -66,9 +67,8 @@ execute("insert into comparable_answers
                                              inner join segments s on s.id = u.segment_id
                                           group by a.user_id, q.number;")
 
-
-execute("update comparable_answers set number=concat('1.5.',question),indicator=5 where dimension=1 and indicator=4 and year=2010")
 execute("update comparable_answers set number=concat('1.6.',question),indicator=6 where dimension=1 and indicator=5 and year=2010")
+execute("update comparable_answers set number=concat('1.5.',question),indicator=5 where dimension=1 and indicator=4 and year=2010")
 
 execute("update comparable_answers set segment_name='Prof Infantil' where level_name=2 and segment_name like 'Profess%'")
 
@@ -82,20 +82,8 @@ execute("update comparable_answers set segment_order = 5 where segment_name='Fun
 execute("update comparable_answers set segment_order = 6 where segment_name='Familiares'")
 execute("update comparable_answers set segment_order = 7 where segment_name='Educandos'")
 
-dt = YAML::load(File.open("config/data_transformations.yml"))
-dt.each_pair do |key, value|
-  new_indicator = "#{key[7..key.size]}"
-  query = generate_query(new_indicator, 2009, value[2009])
-  puts "Indicator:#{new_indicator}, 2009:#{value[2009]}"
-  puts "Query:#{query}"
-  execute(query) unless query.nil?
-
-  query = generate_query(new_indicator, 2008, value[2008])
-  puts "Indicator:#{new_indicator}, 2008:#{value[2008]}"
-  puts "Query:#{query}"
-  execute(query) unless query.nil?
-
-end
+import_old_data(2008)
+import_old_data(2009)
 
 #execute("ALTER TABLE comparable_answers ADD INDEX institution (institution_id ASC, dimension ASC)")
 #execute("ALTER TABLE comparable_answers ADD INDEX institution_and_indicator (institution_id ASC, dimension ASC, indicator ASC, year ASC")
