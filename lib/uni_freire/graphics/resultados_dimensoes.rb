@@ -10,7 +10,7 @@ module UniFreire
           WHERE  institution_id = #{institution_id} AND score > 0
           GROUP  BY dimension, year;
         "
-        graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
+        graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :marker_font_size => 12)
         graphic.generate(result,legend,
           "#{institution_id}_resultado_dimensoes")
       end
