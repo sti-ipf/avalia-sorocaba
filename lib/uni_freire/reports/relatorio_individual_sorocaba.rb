@@ -27,8 +27,8 @@ module UniFreire
           doc.next_page
         end
 
-        # salta 5 páginas
-        5.times do
+        # salta 7 páginas
+        7.times do
           doc.image next_page_file
           doc.next_page
         end
