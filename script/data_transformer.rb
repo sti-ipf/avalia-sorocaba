@@ -14,15 +14,15 @@ def execute(query)
 end
 
 def import_old_data(year)
-  resps = execute("SELECT 
+  resps = execute("SELECT
                           i.id, r.id_dimensao, r.id_indicador, avg(r.grau_indicador), r.data_resp
-                          FROM 
+                          FROM
                             ipf_sorocaba_#{year}.portal_ipf_respostas_questoes r,
                             unifreire_sorocaba.institutions i
-                         where 
+                         where
                             r.id_escola = i.id_#{year}
                             and r.grau_indicador <> 6
-                          group by i.id, r.id_dimensao, r.id_indicador 
+                          group by i.id, r.id_dimensao, r.id_indicador
                           order by i.id, r.id_dimensao, r.id_indicador")
 
   dim = 0
@@ -39,11 +39,6 @@ def import_old_data(year)
      segment_name, dimension, indicator, question, year, answer_date)
     values
      (0, #{resp[0]}, '#{dim}.#{ind}', '#{dim}.#{ind}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, 0, #{year}, '#{resp[4]}')")
-    puts "insert into comparable_answers
-     (external_id, institution_id, number, original_number, score, level_name,
-     segment_name, dimension, indicator, question, year, answer_date)
-    values
-     (0, #{resp[0]}, '#{dim}.#{ind}', '#{dim}.#{ind}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, 0, #{year}, '#{resp[4]}')" 
   end
 end
 
@@ -77,11 +72,11 @@ execute("update comparable_answers set number=concat('1.5.',question),indicator=
 
 execute("update comparable_answers set segment_name='Prof Infantil' where level_name=2 and segment_name like 'Profess%'")
 
-execute("update comparable_answers set segment_name='Prof Fund' where level_name in (3,4) and segment_name like 'Profess%'")
+execute("update comparable_answers set segment_name='Prof Fund. \ne Médio' where level_name in (3,4) and segment_name like 'Profess%'")
 
 execute("update comparable_answers set segment_order = 1 where segment_name='Gestores'")
 execute("update comparable_answers set segment_order = 2 where segment_name='Prof Infantil'")
-execute("update comparable_answers set segment_order = 3 where segment_name='Prof Fund'")
+execute("update comparable_answers set segment_order = 3 where segment_name='Prof Fund/Médio'")
 execute("update comparable_answers set segment_order = 4 where segment_name='Func Apoio'")
 execute("update comparable_answers set segment_order = 5 where segment_name='Func Aux Educ'")
 execute("update comparable_answers set segment_order = 6 where segment_name='Familiares'")

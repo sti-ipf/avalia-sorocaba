@@ -4,7 +4,7 @@ module UniFreire
 
       AVG_UE="média da UE"
       AVG_INFANTIL="média da Ed. Infantil"
-      AVG_FUNDAMENTAL="média do Ensino Fundamental"
+      AVG_FUNDAMENTAL="média do Ensino Fund. e Médio"
       AVG_REGIAO="média da região"
       AVG_AGRUPAMENTO="média do agrupamento"
 
