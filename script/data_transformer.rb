@@ -72,11 +72,11 @@ execute("update comparable_answers set number=concat('1.5.',question),indicator=
 
 execute("update comparable_answers set segment_name='Prof Infantil' where level_name=2 and segment_name like 'Profess%'")
 
-execute("update comparable_answers set segment_name='Prof Fund. \ne Médio' where level_name in (3,4) and segment_name like 'Profess%'")
+execute("update comparable_answers set segment_name='Prof Fund \n e Médio' where level_name in (3,4) and segment_name like 'Profess%'")
 
 execute("update comparable_answers set segment_order = 1 where segment_name='Gestores'")
 execute("update comparable_answers set segment_order = 2 where segment_name='Prof Infantil'")
-execute("update comparable_answers set segment_order = 3 where segment_name='Prof Fund/Médio'")
+execute("update comparable_answers set segment_order = 3 where segment_name='Prof Fund \n e Médio'")
 execute("update comparable_answers set segment_order = 4 where segment_name='Func Apoio'")
 execute("update comparable_answers set segment_order = 5 where segment_name='Func Aux Educ'")
 execute("update comparable_answers set segment_order = 6 where segment_name='Familiares'")
