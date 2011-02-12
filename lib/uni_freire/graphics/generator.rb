@@ -11,7 +11,6 @@ module UniFreire
         :margins          => 5,
         :top_margin       => 0,
         :legend_font_size => 18,
-        :marker_font_size => 16,
         :legend_box_size  => 14,
         :title_font_size  => 22,
         :bar_spacing      => 1,
@@ -22,9 +21,10 @@ module UniFreire
         }
 
       def initialize(params={})
-        params = {:title => nil}.merge(params)
+        params = {:title => nil, :marker_font_size => 16}.merge(params)
         super(params[:size])
         self.title = params[:title] if !params[:title].nil?
+        self.marker_font_size = params[:marker_font_size]
         self.marker_color = "black"
         self.font_color = "black"
         self.theme = {

@@ -96,7 +96,7 @@ module UniFreire
                  AND score > 0
           GROUP  BY segment_order, item_order
         "
-        graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title)
+        graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :marker_font_size => 12)
         graphic.generate(result,legend,"#{institution_id}_geral_dimensao_#{dimension_id}")
       end
 
