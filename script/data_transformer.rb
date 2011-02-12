@@ -7,7 +7,7 @@ ActiveRecord::Base.establish_connection(
   :host => "localhost",
   :username => "root",
   :password => "root",
-  :database => "ipf")
+  :database => "unifreire_sorocaba")
 
 def execute(query)
   ActiveRecord::Base.connection.execute(query)
@@ -39,6 +39,11 @@ def import_old_data(year)
      segment_name, dimension, indicator, question, year, answer_date)
     values
      (0, #{resp[0]}, '#{dim}.#{ind}', '#{dim}.#{ind}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, 0, #{year}, '#{resp[4]}')")
+    puts "insert into comparable_answers
+     (external_id, institution_id, number, original_number, score, level_name,
+     segment_name, dimension, indicator, question, year, answer_date)
+    values
+     (0, #{resp[0]}, '#{dim}.#{ind}', '#{dim}.#{ind}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, 0, #{year}, '#{resp[4]}')" 
   end
 end
 
@@ -82,6 +87,7 @@ execute("update comparable_answers set segment_order = 5 where segment_name='Fun
 execute("update comparable_answers set segment_order = 6 where segment_name='Familiares'")
 execute("update comparable_answers set segment_order = 7 where segment_name='Educandos'")
 
+puts "Vai importar dados antigos"
 import_old_data(2008)
 import_old_data(2009)
 
