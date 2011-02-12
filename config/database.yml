@@ -1,0 +1,43 @@
+# SQLite version 3.x
+#   gem install sqlite3-ruby (not necessary on OS X Leopard)
+#unifreire_sorocaba
+development:
+  adapter: mysql
+  host: localhost
+  database: unifreire_sorocaba #ipf
+  username: root
+  password: root
+  encoding: utf8
+
+sorocaba2009:
+  adapter: mysql
+  host: localhost
+  database: sorocaba2009
+  username: root
+  password: root
+
+sorocaba2008:
+  adapter: mysql
+  host: localhost
+  database: cedecapaulofreire
+  username: root
+  password: root
+
+#  development:
+#    adapter: mysql
+#    host: localhost
+#    encoding: utf8
+#    database: paulo1_sorocaba
+#    username: sorocaba
+#    password: ipfs9550
+#    socket: /tmp/mysql.sock
+
+#production:
+#  adapter: mysql
+#  host: localhost
+#  encoding: utf8
+#  database: paulo1_sorocaba
+#  username: sorocaba
+#  password: ipfs9550
+#  socket: /tmp/mysql.sock
+
