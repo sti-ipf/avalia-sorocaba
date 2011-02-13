@@ -15,10 +15,11 @@ module UniFreire
             "
           graphic =
             if dimension_id == 11
-              UniFreire::Graphics::Generator.new(:size => UniFreire::Reports::SIZE[:wide], 
+              UniFreire::Graphics::Generator.new(:size => UniFreire::Reports::SIZE[:wide],
                 :title => "Dimensão #{dimension_id}", :marker_font_size => 12)
             else
-              UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}")
+              UniFreire::Graphics::Generator.new(:size => size, :title => "Dimensão #{dimension_id}",
+                                    :no_data_message=> "Não há dados para a dimensão #{dimension_id}")
             end
           graphics << graphic.generate(result,legend,
                   "#{institution_id}_resultados_indicadores_#{dimension_id}")
