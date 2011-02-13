@@ -7,7 +7,9 @@ ActiveRecord::Base.establish_connection(
   :host => "localhost",
   :username => "root",
   :password => "root",
-  :database => "unifreire_sorocaba")
+  :database => "unifreire_sorocaba",
+  :encoding => "utf8"
+  )
 
 def execute(query)
   ActiveRecord::Base.connection.execute(query)
@@ -89,6 +91,11 @@ import_old_data(2009)
 #execute("ALTER TABLE comparable_answers ADD INDEX institution (institution_id ASC, dimension ASC)")
 #execute("ALTER TABLE comparable_answers ADD INDEX institution_and_indicator (institution_id ASC, dimension ASC, indicator ASC, year ASC")
 #execute("ALTER TABLE comparable_answers ADD INDEX institution_and_segment_name (institution_id ASC, year ASC, segment_name ASC, dimension ASC, indicator ASC, question ASC")
+
+execute ("truncate institutions_service_levels")
+execute ("insert into institutions_service_levels select id,2 from institutions where group_id in(61,62,63)")
+execute ("insert into institutions_service_levels select id,3 from institutions where group_id in(62,63,64,65,66)")
+execute ("insert into institutions_service_levels select id,4 from institutions where group_id in(66)")
 
 execute("drop table report_data")
 execute("CREATE TABLE report_data (
