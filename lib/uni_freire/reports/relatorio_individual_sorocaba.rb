@@ -27,10 +27,9 @@ module UniFreire
           tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
           tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
         end
-        %W(capa_0002 contra_capa).each do |special_page|
-          doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
-          doc.next_page
-        end
+        
+        doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
+        doc.next_page
 
         # salta 7 páginas
         7.times do |i|
@@ -81,6 +80,9 @@ module UniFreire
             doc.image next_page_file(doc)
           end
         end
+        
+        doc.next_page
+        doc.image File.expand_path("expediente.eps", TEMPLATE_DIRECTORY)
 
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@file_name}_#{@institution_id}.pdf"),
@@ -137,7 +139,7 @@ module UniFreire
       end
       
       def add_index(doc)
-        @index ||= 3
+        @index ||= 2
         doc.show "#{@index}", :with => :index, :align => :page_right
         @index += 1
       end
