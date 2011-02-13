@@ -25,6 +25,7 @@ module UniFreire
         doc = RGhost::Document.new
         doc.define_tags do
           tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
+          tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
         end
         %W(capa_0002 contra_capa).each do |special_page|
           doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
@@ -33,10 +34,10 @@ module UniFreire
 
         # salta 7 páginas
         7.times do |i|
-          doc.image next_page_file
+          doc.image next_page_file(doc)
           # adiciona nome da escola em cima do sumário
           if i == 0
-            doc.moveto :x => 10.5, :y => 26.1
+            doc.moveto :x => 10.5, :y => 26.4
             doc.show "#{@institution_name}", :with => :font1, :align => :show_center
           end
           doc.next_page
@@ -48,37 +49,36 @@ module UniFreire
                 {:name => "2010",:color => COLORS[:three][2]}]
 
         # 1.2. Gráfico geral da série histórica dos resultados das dimensões
-        doc.image next_page_file
+        doc.image next_page_file(doc)
         file = UniFreire::Graphics::ResultadosDimensoes.create(@institution_id, UniFreire::Reports::SIZE[:wide],legend)
         doc.image file, :x => 1.6, :y => 9.5, :zoom => 32
         doc.showpage
-        doc.image next_page_file
+        doc.image next_page_file(doc)
 
         # 1.3. Gráficos da série histórica dos resultados dos indicadores
         files = UniFreire::Graphics::ResultadosIndicadores.create(@institution_id, UniFreire::Reports::SIZE[:default],legend)
-
         show_graphics(files, doc)
-
+        
         doc.showpage
-        doc.image next_page_file
+        doc.image next_page_file(doc)
         doc.showpage
-        doc.image next_page_file
+        doc.image next_page_file(doc)
 
         legend=UniFreire::Graphics::GeralDimensao.create_report_data(@institution_id,COLORS[:five])
         # 2. Análise dos resultados por dimensões e indicadores
-        y = [0, 13.5, 16, 16, 15, 15, 15, 15, 15, 15, 16, 15]
+        y = [0, 15, 15.5, 16.5, 15.5, 15.5, 15.5, 14.5, 15.5, 15.5, 16.5, 15.5]
         (1..11).each do |dimension_id|
           file = UniFreire::Graphics::GeralDimensao.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:wide], legend)
           doc.image file, :x => 1.6, :y => y[dimension_id], :zoom => 32
           doc.showpage
-          doc.image next_page_file
+          doc.image next_page_file(doc)
 
           files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:default], legend)
           show_graphics(files, doc)
 
           if dimension_id != 11
             doc.showpage
-            doc.image next_page_file
+            doc.image next_page_file(doc)
           end
         end
 
@@ -89,21 +89,7 @@ module UniFreire
         Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
 
         ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
-
         true
-      end
-
-      def inc_page
-        @inc_page ||= 0
-        @inc_page += 1
-      end
-
-      def next_page_file
-        page_file(inc_page)
-      end
-
-      def page_file(pg_no)
-        File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
       end
 
     private
@@ -129,10 +115,31 @@ module UniFreire
 
           if files.count > 6 && (x == 7) || (x == 13)
             doc.showpage
+            add_index(doc)
             y = 20.3
           end
 
         end
+      end
+      
+      def inc_page
+        @inc_page ||= 0
+        @inc_page += 1
+      end
+
+      def next_page_file(doc)
+        page_file(inc_page, doc)
+      end
+
+      def page_file(pg_no, doc)
+        add_index(doc)
+        File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
+      end
+      
+      def add_index(doc)
+        @index ||= 3
+        doc.show "#{@index}", :with => :index, :align => :page_right
+        @index += 1
       end
 
     end
