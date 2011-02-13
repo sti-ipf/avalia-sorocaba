@@ -26,6 +26,7 @@ module UniFreire
         doc.define_tags do
           tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
           tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
+          tag :indexwhite, :name => 'Helvetica', :size => 8, :color => '#FFFFFF'
         end
         
         doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
@@ -83,7 +84,8 @@ module UniFreire
         
         doc.next_page
         doc.image File.expand_path("expediente.eps", TEMPLATE_DIRECTORY)
-
+        doc.show "#{@index}", :with => :indexwhite, :align => :page_right
+        
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@file_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
