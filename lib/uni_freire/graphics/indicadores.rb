@@ -17,7 +17,8 @@ module UniFreire
     				group by segment_order, sum_type, item_order
             "
           if result.num_rows > 0
-            graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Indicador #{dimension_id}.#{indicator_id}")
+            graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Indicador #{dimension_id}.#{indicator_id}",
+                    :no_data_message=> "\n Não há dados \n para o \n indicador #{dimension_id}.#{indicator_id}")
             graphics << graphic.generate(result,legend,
                    "#{institution_id}_dimensao_indicador_#{dimension_id}_#{indicator_id}")
           end

@@ -16,7 +16,6 @@ module UniFreire
         :bar_spacing      => 1,
         :marker_count     => 10,
         :legend_margin    => 10,
-        :no_data_message  => "Não há dados",
         :sort             => false
         }
 
@@ -24,6 +23,7 @@ module UniFreire
         params = {:title => nil, :marker_font_size => 16}.merge(params)
         super(params[:size])
         self.title = params[:title] if !params[:title].nil?
+        self.no_data_message = params[:no_data_message] if !params[:no_data_message].nil?
         self.marker_font_size = params[:marker_font_size]
         self.marker_color = "black"
         self.font_color = "black"
