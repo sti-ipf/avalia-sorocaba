@@ -97,7 +97,7 @@ module UniFreire
           GROUP  BY segment_order, item_order
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :marker_font_size => 12,
-                                :no_data_message=> "Não há dados para esta dimensão")
+                                :no_data_message=> "\n Não há dados \npara esta \n dimensão")
         graphic.generate(result,legend,"#{institution_id}_geral_dimensao_#{dimension_id}")
       end
 

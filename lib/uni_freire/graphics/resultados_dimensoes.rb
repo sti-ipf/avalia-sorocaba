@@ -11,7 +11,7 @@ module UniFreire
           GROUP  BY dimension, year;
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :marker_font_size => 12,
-                                    :no_data_message=> "Não há dados para esta instituição")
+                                    :no_data_message=> "\nNão há dados \n para esta \n instituição")
         graphic.generate(result,legend,
           "#{institution_id}_resultado_dimensoes")
       end
