@@ -8,17 +8,9 @@ module UniFreire
       AVG_REGIAO="média da região"
       AVG_AGRUPAMENTO="média do agrupamento"
 
-      def self.create_report_data(institution_id,colors)
-
-        legend=[]
-        connection = ActiveRecord::Base.connection
-        institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = #{institution_id}").fetch_row
-        group_id, region_id, primary_service_level_id = institution[0], institution[1], institution[2]
-        group_id=0 if group_id.nil?
-        region_id=0 if region_id.nil?
+      def self.check_if_is_infantil_fundamental(institution_id)
         infantil,fundamental=false,false
-
-        service_levels = connection.execute("select service_level_id from institutions_service_levels where institution_id = #{institution_id}")
+        service_levels = ActiveRecord::Base.connection.execute("select service_level_id from institutions_service_levels where institution_id = #{institution_id}")
         service_levels.each do |sl|
           sl_id = sl[0].to_i
           if sl_id == 2
@@ -27,6 +19,21 @@ module UniFreire
             fundamental=true
           end
         end
+        return infantil,fundamental
+      end
+
+
+      def self.create_report_data(institution_id,colors)
+
+        legend=[]
+        connection = ActiveRecord::Base.connection
+        institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = #{institution_id}").fetch_row
+        group_id, region_id, primary_service_level_id = institution[0], institution[1], institution[2]
+        group_id=0 if group_id.nil?
+        region_id=0 if region_id.nil?
+
+        infantil,fundamental=check_if_is_infantil_fundamental(institution_id)
+
         connection.execute "DELETE FROM report_data WHERE institution_id = #{institution_id}"
 
         # Calculo da media da UE
@@ -73,18 +80,23 @@ module UniFreire
         end
         in_clause = in_clause.join(",")
         # Calculo da media da regiao
-        connection.execute "insert into report_data
-          select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
-          from comparable_answers ca inner join institutions i on i.id=ca.institution_id
-          where i.region_id=#{region_id}
-          and i.primary_service_level_id  in (#{in_clause})
-          and ca.year=2010  and ca.segment_name <> 'Alessandra'
-          group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
-        legend << {:name=>AVG_REGIAO,:color=>colors[4]}
+#        connection.execute "insert into report_data
+#          select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
+#          from comparable_answers ca inner join institutions i on i.id=ca.institution_id
+#          where i.region_id=#{region_id}
+#          and i.primary_service_level_id  in (#{in_clause})
+#          and ca.year=2010  and ca.segment_name <> 'Alessandra'
+#          group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
+#        legend << {:name=>AVG_REGIAO,:color=>colors[4]}
+
+        connection.execute("delete from report_data where segment_order=2") if !infantil
+        connection.execute("delete from report_data where segment_order=3") if !fundamental
+
         legend
       end
 
       def self.create(institution_id, dimension_id, size, legend, title=nil)
+
         connection = ActiveRecord::Base.connection
         result = connection.execute "
           SELECT segment_name,

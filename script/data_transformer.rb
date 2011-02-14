@@ -23,7 +23,6 @@ def import_old_data(year)
                             unifreire_sorocaba.institutions i
                          where
                             r.id_escola = i.id_#{year}
-                            and r.grau_indicador <> 6
                           group by i.id, r.id_dimensao, r.id_indicador
                           order by i.id, r.id_dimensao, r.id_indicador")
 
@@ -91,6 +90,8 @@ import_old_data(2009)
 #execute("ALTER TABLE comparable_answers ADD INDEX institution (institution_id ASC, dimension ASC)")
 #execute("ALTER TABLE comparable_answers ADD INDEX institution_and_indicator (institution_id ASC, dimension ASC, indicator ASC, year ASC")
 #execute("ALTER TABLE comparable_answers ADD INDEX institution_and_segment_name (institution_id ASC, year ASC, segment_name ASC, dimension ASC, indicator ASC, question ASC")
+
+execute("update comparable_answers set score = 0 where score=6")
 
 execute ("truncate institutions_service_levels")
 execute ("insert into institutions_service_levels select id,2 from institutions where group_id in(61,62,63)")
