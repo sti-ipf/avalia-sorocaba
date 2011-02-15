@@ -16,30 +16,36 @@ def execute(query)
 end
 
 def import_old_data(year)
+
   resps = execute("SELECT
-                          i.id, r.id_dimensao, r.id_indicador, avg(r.grau_indicador), r.data_resp
+                          i.id, r.id_dimensao, r.id_indicador, r.grau_indicador, r.data_resp, r.id_questao
                           FROM
                             ipf_sorocaba_#{year}.portal_ipf_respostas_questoes r,
                             unifreire_sorocaba.institutions i
                          where
                             r.id_escola = i.id_#{year}
-                          group by i.id, r.id_dimensao, r.id_indicador
                           order by i.id, r.id_dimensao, r.id_indicador")
 
   dim = 0
   ind = 1
+  curr_ind=0
   resps.each do | resp|
+#    puts "D:#{resp[1]} - I:#{resp[2]} - Q:#{resp[5]}"
+#    puts "dim:#{dim} - ind:#{ind} - curr_ind=#{curr_ind}"
     if dim != resp[1]
       dim = resp[1]
       ind = 1
-    else
+      curr_ind=resp[2]
+    elsif curr_ind != resp[2]
       ind += 1
+      curr_ind=resp[2]
     end
+#    puts "POS -> dim:#{dim} - ind:#{ind} - curr_ind=#{curr_ind}"
     execute("insert into comparable_answers
      (external_id, institution_id, number, original_number, score, level_name,
      segment_name, dimension, indicator, question, year, answer_date)
     values
-     (0, #{resp[0]}, '#{dim}.#{ind}', '#{dim}.#{ind}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, 0, #{year}, '#{resp[4]}')")
+     (0, #{resp[0]}, '#{dim}.#{ind}.#{resp[5]}', '#{dim}.#{ind}.#{resp[5]}', #{resp[3]}, NULL, NULL, #{dim}, #{ind}, #{resp[5]}, #{year}, '#{resp[4]}')")
   end
 end
 
@@ -57,7 +63,7 @@ execute("insert into comparable_answers
                                           segment_name, dimension, indicator, question, year, answer_date)
                                         select
                                           a.id, u.institution_id, q.number, q.number,
-                                          substr(concat(RPAD(a.created_at,25,' '),one+(two*2)+(three*3)+(four*4)+(five*5)),26) as nota,
+                                          substr(max(concat(RPAD(a.created_at,25,' '),one+(two*2)+(three*3)+(four*4)+(five*5))),26) as nota,
                                           u.service_level_id,s.name, substr(q.number,1,LOCATE('.',q.number)-1) as dimensao,
                                           substr(q.number,LOCATE('.',q.number)+1,LOCATE('.',q.number,
                                           LOCATE('.',q.number)+1) - 1 - LOCATE('.',q.number) ) as indicador,
