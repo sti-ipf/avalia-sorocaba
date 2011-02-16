@@ -33,6 +33,19 @@ namespace :generate do
     puts "Todos os relatórios foram gerados"
   end
 
+  task:set, :id do |t,args|
+    puts "Vai Gerar Relatório para um conjunto"
+    if args[:id].nil?
+      puts "É preciso fornecer o ID da instituição"
+    else
+      ids = args[:id].split(",")
+      ids.each do |id|
+        puts "Gerando o relatório para a instituição #{id}"
+        UniFreire::Reports::RelatorioIndividualSoracaba.new(id).report
+        puts "Relatório gerado na pasta public"
+      end
+    end
+  end
   namespace :resque do
     task:one, :id do |t,args|
       puts "Vai Gerar Relatório via Resque"
@@ -41,7 +54,7 @@ namespace :generate do
       else
         id = args[:id]
         Resque.enqueue(Generationq,id)
-        puts "Geratório enviado para o Resque"
+        puts "Relatório enviado para o Resque"
       end
     end
 
@@ -58,7 +71,7 @@ namespace :generate do
   def get_institutions_that_has_answers()
     ActiveRecord::Base.connection.execute("select distinct ca.institution_id
                             from comparable_answers ca inner join institutions i
-                            on i.id=ca.institution_id where ca.institution_id > 60 order by institution_id")
+                            on i.id=ca.institution_id order by institution_id")
   end
 
 end
