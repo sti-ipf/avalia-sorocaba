@@ -28,7 +28,7 @@ module UniFreire
           tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
           tag :indexwhite, :name => 'Helvetica', :size => 8, :color => '#FFFFFF'
         end
-        
+
         doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
         doc.next_page
 
@@ -58,7 +58,7 @@ module UniFreire
         # 1.3. Gráficos da série histórica dos resultados dos indicadores
         files = UniFreire::Graphics::ResultadosIndicadores.create(@institution_id, UniFreire::Reports::SIZE[:default],legend)
         show_graphics(files, doc)
-        
+
         doc.showpage
         doc.image next_page_file(doc)
         doc.showpage
@@ -81,18 +81,18 @@ module UniFreire
             doc.image next_page_file(doc)
           end
         end
-        
+
         doc.next_page
         doc.image File.expand_path("expediente.eps", TEMPLATE_DIRECTORY)
         doc.show "#{@index}", :with => :indexwhite, :align => :page_right
-        
+
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@file_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
 
         Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
 
-        ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
+        #ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
         true
       end
 
@@ -125,7 +125,7 @@ module UniFreire
 
         end
       end
-      
+
       def inc_page
         @inc_page ||= 0
         @inc_page += 1
@@ -139,7 +139,7 @@ module UniFreire
         add_index(doc)
         File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
       end
-      
+
       def add_index(doc)
         @index ||= 2
         doc.show "#{@index}", :with => :index, :align => :page_right

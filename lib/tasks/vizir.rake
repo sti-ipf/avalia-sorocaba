@@ -38,14 +38,18 @@ namespace :generate do
     if args[:id].nil?
       puts "É preciso fornecer o ID da instituição"
     else
+      puts args[:id]
+      puts args
       ids = args[:id].split(",")
-      ids.each do |id|
-        puts "Gerando o relatório para a instituição #{id}"
-        UniFreire::Reports::RelatorioIndividualSoracaba.new(id).report
+      puts ids
+      ids.each do |cur_id|
+        puts "Gerando o relatório para a instituição #{cur_id}"
+        UniFreire::Reports::RelatorioIndividualSoracaba.new(cur_id).report
         puts "Relatório gerado na pasta public"
       end
     end
   end
+
   namespace :resque do
     task:one, :id do |t,args|
       puts "Vai Gerar Relatório via Resque"
