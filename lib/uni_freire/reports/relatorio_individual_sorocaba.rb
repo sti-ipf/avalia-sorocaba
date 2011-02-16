@@ -26,14 +26,13 @@ module UniFreire
         doc.define_tags do
           tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
           tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
-          tag :indexwhite, :name => 'Helvetica', :size => 8, :color => '#FFFFFF'
         end
         
         doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
         doc.next_page
 
         # salta 7 páginas
-        7.times do |i|
+        8.times do |i|
           doc.image next_page_file(doc)
           # adiciona nome da escola em cima do sumário
           if i == 0
@@ -82,9 +81,11 @@ module UniFreire
           end
         end
         
-        doc.next_page
-        doc.image File.expand_path("expediente.eps", TEMPLATE_DIRECTORY)
-        doc.show "#{@index}", :with => :indexwhite, :align => :page_right
+        %w(anexo1 expediente).each do |special_page|
+          doc.next_page
+          doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
+          doc.show "#{@index}", :with => :index, :align => :page_right if special_page == "anexo1"
+        end
         
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@file_name}_#{@institution_id}.pdf"),
