@@ -67,6 +67,16 @@ namespace :generate do
       puts "Todos os relatórios estão na fila"
     end
   end
+  
+  namespace :geral do
+
+    task:one do
+      puts "Vai Gerar Relatório"
+      UniFreire::Reports::RelatorioGeralSorocaba.new.report
+      puts "Relatório gerado na pasta public"
+    end
+    
+  end
 
   def get_institutions_that_has_answers()
     ActiveRecord::Base.connection.execute("select distinct ca.institution_id

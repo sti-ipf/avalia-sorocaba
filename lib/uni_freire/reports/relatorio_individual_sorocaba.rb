@@ -31,7 +31,7 @@ module UniFreire
         doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
         doc.next_page
 
-        # salta 7 páginas
+        # salta 8 páginas
         8.times do |i|
           doc.image next_page_file(doc)
           # adiciona nome da escola em cima do sumário
