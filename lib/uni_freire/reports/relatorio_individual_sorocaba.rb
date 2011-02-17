@@ -26,8 +26,9 @@ module UniFreire
         doc.define_tags do
           tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
           tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
+          tag :indexwhite, :name => 'Helvetica', :size => 8, :color => '#FFFFFF'
         end
-        
+
         doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
         doc.next_page
 
@@ -57,7 +58,7 @@ module UniFreire
         # 1.3. Gráficos da série histórica dos resultados dos indicadores
         files = UniFreire::Graphics::ResultadosIndicadores.create(@institution_id, UniFreire::Reports::SIZE[:default],legend)
         show_graphics(files, doc)
-        
+
         doc.showpage
         doc.image next_page_file(doc)
         doc.showpage
@@ -126,7 +127,7 @@ module UniFreire
 
         end
       end
-      
+
       def inc_page
         @inc_page ||= 0
         @inc_page += 1
@@ -140,7 +141,7 @@ module UniFreire
         add_index(doc)
         File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
       end
-      
+
       def add_index(doc)
         @index ||= 2
         doc.show "#{@index}", :with => :index, :align => :page_right

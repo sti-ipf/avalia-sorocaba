@@ -99,14 +99,18 @@ module UniFreire
 
         connection = ActiveRecord::Base.connection
         result = connection.execute "
-          SELECT segment_name,
-                 sum_type,
+          SELECT segment_name,sum_type,AVG(media) as new_media from
+          (SELECT segment_name,
+                 item_order,
+                 segment_order,
+                 sum_type, indicator,
                  AVG(score) AS media
           FROM   report_data
           WHERE  institution_id = #{institution_id}
                  AND dimension = #{dimension_id}
                  AND score > 0
-          GROUP  BY segment_order, item_order
+          GROUP  BY segment_order, item_order,indicator) a
+          GROUP BY segment_order, item_order
         "
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :marker_font_size => 12,
                                 :no_data_message=> "\n Não há dados \npara esta \n dimensão")
