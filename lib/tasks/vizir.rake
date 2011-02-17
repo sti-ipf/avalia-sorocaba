@@ -71,7 +71,7 @@ namespace :generate do
       puts "Todos os relatórios estão na fila"
     end
   end
-  
+
   namespace :geral do
 
     task:one do
@@ -79,7 +79,7 @@ namespace :generate do
       UniFreire::Reports::RelatorioGeralSorocaba.new.report
       puts "Relatório gerado na pasta public"
     end
-    
+
   end
 
   def get_institutions_that_has_answers()
