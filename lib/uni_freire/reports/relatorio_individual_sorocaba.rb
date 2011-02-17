@@ -81,13 +81,13 @@ module UniFreire
             doc.image next_page_file(doc)
           end
         end
-        
+
         %w(anexo1 expediente).each do |special_page|
           doc.next_page
           doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
-          doc.show "#{@index}", :with => :index, :align => :page_right if special_page == "anexo1"
+          #doc.show "#{@index}", :with =>, :align => :page_right if special_page == "anexo1"
         end
-        
+
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_#{@file_name}_#{@institution_id}.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")

@@ -74,6 +74,8 @@ execute("insert into comparable_answers
                                              inner join segments s on s.id = u.segment_id
                                           group by a.user_id, q.number;")
 
+execute("update comparable_answers set year=2010 where year=2011")
+
 execute("update comparable_answers set number=concat('1.6.',question),indicator=6 where dimension=1 and indicator=5 and year=2010")
 execute("update comparable_answers set number=concat('1.5.',question),indicator=5 where dimension=1 and indicator=4 and year=2010")
 
@@ -88,6 +90,9 @@ execute("update comparable_answers set segment_order = 4 where segment_name='Fun
 execute("update comparable_answers set segment_order = 5 where segment_name='Func Aux Educ'")
 execute("update comparable_answers set segment_order = 6 where segment_name='Familiares'")
 execute("update comparable_answers set segment_order = 7 where segment_name='Educandos'")
+
+
+
 
 puts "Vai importar dados antigos"
 import_old_data(2008)
@@ -113,7 +118,37 @@ execute("CREATE TABLE report_data (
 
 #execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 
+
+#execute("drop table institutions_year_history")
+execute ("CREATE  TABLE institutions_year_history (
+  institution_id INT NOT NULL ,
+  level_type INT NOT NULL,
+  year INT NULL)")
+
+
+execute("insert into institutions_year_history select id,2,2008 from institutions where id in (66,16,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,276,35,53,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
+58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78)")
+execute("insert into institutions_year_history select id,2,2009 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,276,35,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
+58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
+execute("insert into institutions_year_history select id,2,2010 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,276,35,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
+58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
+
+execute("insert into institutions_year_history select id,3,2008 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
+execute("insert into institutions_year_history select id,3,2009 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
+execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
+
+
+execute("ALTER TABLE institutions ADD COLUMN infantil_type INTEGER AFTER group_id;")
+#Infantil Integral
+execute("UPDATE institutions SET infantil_type = 3 WHERE id IN (16,89,22,45,46,49,50,52,56,17,68,30,21,34,25,27,60,61,11,83,88,15,33,75,77,67,33)")
+#Infantil Parcial
+execute("UPDATE institutions SET infantil_type = 2 WHERE id IN (81,118,62,18,19,24,29,31,9,38,39,90,85,12,35,53,55,57,154,243, 271,360,
+                      58,168,285,361,64,70,71,47,32,37,20,84,74,76,78)")
+#Integral + Parcial
+execute("UPDATE institutions SET infantil_type = 1 WHERE id IN (66,41,44,87,36,132,48,14,51,59,63,65,72,54,69,86,73,79)")
+
+
+execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
 execute("UPDATE institutions SET primary_service_level_id = 3 WHERE id IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
 execute("UPDATE institutions SET primary_service_level_id = 2 WHERE id NOT IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
-execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
 
