@@ -93,15 +93,22 @@ module UniFreire
 
       def print_historico_geral(doc,hash_report,legend,graph_pos,data_pos)
         doc.image next_page_file(doc)
-        file = UniFreire::Graphics::HistoricoGeralDimensao.create(UniFreire::Reports::SIZE[:wide],legend,REPORT_TYPES[:infantil])
+        file = UniFreire::Graphics::HistoricoGeralDimensao.create(UniFreire::Reports::SIZE[:wide],legend,hash_report)
         doc.image file, :x => 1.6, :y => graph_pos, :zoom => 32
 
         doc.moveto :x => 8.4, :y => data_pos
-        doc.show "X", :with => :font1, :align => :show_center
+        doc.show get_institutions_for_year("2008",hash_report[:number]), :with => :font1, :align => :show_center
         doc.moveto :x => 12.6, :y => data_pos
-        doc.show "X", :with => :font1, :align => :show_center
+        doc.show get_institutions_for_year("2010",hash_report[:number]), :with => :font1, :align => :show_center
         doc.moveto :x => 16.9, :y => data_pos
-        doc.show "X", :with => :font1, :align => :show_center
+        doc.show get_institutions_for_year("2010",hash_report[:number]), :with => :font1, :align => :show_center
+      end
+
+      def get_institutions_for_year(year ,institution_type)
+          connection = ActiveRecord::Base.connection
+          connection.execute("
+          SELECT count(*) FROM institutions_year_history where year = #{year} and level_type=#{institution_type}"
+          ).fetch_row[0]
       end
 
       def show_graphics(files, doc)
