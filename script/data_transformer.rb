@@ -138,6 +138,13 @@ execute("insert into institutions_year_history select id,3,2009 from institution
 execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 
 
+execute("update comparable_answers set institution_id=159 where institution_id=276")
+execute("update comparable_answers set institution_id=58 where institution_id in (168,285,361)")
+execute("update comparable_answers set institution_id=57 where institution_id in (154,243,271,360)")
+execute("update comparable_answers set institution_id=123 where institution_id in (218,245)")
+execute("delete from institutions_year_history where institution_id in (276,168,285,361,154,243,271,360,218,245)")
+
+
 execute("ALTER TABLE institutions ADD COLUMN infantil_type INTEGER AFTER group_id;")
 #Infantil Integral
 execute("UPDATE institutions SET infantil_type = 3 WHERE id IN (16,89,22,45,46,49,50,52,56,17,68,30,21,34,25,27,60,61,11,83,88,15,33,75,77,67,33)")
