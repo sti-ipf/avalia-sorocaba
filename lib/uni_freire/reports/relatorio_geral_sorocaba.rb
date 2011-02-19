@@ -58,6 +58,15 @@ module UniFreire
         graph_positions_fundamental=[18.5,6,18.5,5.5,18.5,5,18.4,6.1,0,19.2,8]
         print_historico_indicadores(doc,REPORT_TYPES[:fundamental],graph_positions_fundamental,legend)
 
+        legend = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_data(REPORT_TYPES)
+        print_geral_resultado_infantil_fundamental(doc,legend)
+
+        doc.image next_page_file(doc)
+        doc.next_page
+
+        legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
+        print_geral_resultado_infantil(doc,legend)
+
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
@@ -77,16 +86,16 @@ module UniFreire
       def print_historico_indicadores(doc,hash_report,graph_positions,legend)
         graph_count = 0
         11.times do |i|
+          puts "Fazendo historico da dimensao #{i}"
           if i+1 != hash_report[:invalid_dimensions].to_i
-            if graph_count == 0
-              #começa nova página
-              doc.next_page
-              doc.image next_page_file(doc)
-            end
+            doc.image next_page_file(doc) if graph_count == 0
             file = UniFreire::Graphics::HistoricoGeralIndicador.create(i+1, UniFreire::Reports::SIZE[:wide],legend,hash_report)
             doc.image file, :x => 2, :y => graph_positions[i], :zoom => 32
             graph_count += 1
-            graph_count = 0 if graph_count > 1
+            if graph_count > 1
+              doc.next_page
+              graph_count = 0
+            end
           end
         end
       end
@@ -102,7 +111,49 @@ module UniFreire
         doc.show get_institutions_for_year("2010",hash_report[:number]), :with => :font1, :align => :show_center
         doc.moveto :x => 16.9, :y => data_pos
         doc.show get_institutions_for_year("2010",hash_report[:number]), :with => :font1, :align => :show_center
+
+        doc.next_page
       end
+
+      def print_geral_resultado_infantil_fundamental(doc,legend)
+        11.times do |t|
+          dimension = t + 1
+            graph_position=19.5
+            graph_position=17 if dimension==1
+            graph_position=19 if ((dimension==7) || (dimension==9))
+
+            doc.image next_page_file(doc)
+
+            file = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_dimension(dimension,UniFreire::Reports::SIZE[:wide],legend)
+            doc.image file, :x => 1.6, :y => graph_position, :zoom => 32
+
+            files = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
+            show_graphics(files, doc,dimension)
+        end
+      end
+
+      def print_geral_resultado_infantil(doc,legend)
+        11.times do |t|
+          dimension = t + 1
+          if dimension != 7
+            graph_position=19.5
+            graph_position=17 if dimension==1
+            graph_position=19 if ((dimension==7) || (dimension==9))
+
+            doc.image next_page_file(doc)
+
+            file = UniFreire::Graphics::GeralResultadoInfantil.create_dimension(dimension,UniFreire::Reports::SIZE[:wide],legend)
+            doc.image file, :x => 1.6, :y => graph_position, :zoom => 32
+
+            files = UniFreire::Graphics::GeralResultadoInfantil.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
+            show_graphics(files, doc,dimension)
+          end
+
+        end
+      end
+
+
+
 
       def get_institutions_for_year(year ,institution_type)
           connection = ActiveRecord::Base.connection
@@ -111,17 +162,27 @@ module UniFreire
           ).fetch_row[0]
       end
 
-      def show_graphics(files, doc)
+      def show_graphics(files, doc,dimension)
         x = 1
-        y = 20.3
+        first_page=true
         graphics_in_line = 0
         graphics_in_page = 0
 
+        y=8.5
+        y=10.5 if dimension > 1
+
         files.each do |file|
+          if files.count > 4 && (((x == 5) && first_page) || (x == 7) || (x == 13))
+            doc.next_page
+            doc.image next_page_file(doc)
+            y = 20.3
+          end
+          if x > 4 && first_page
+            x = 1
+            first_page=false
+          end
           if (x % 2) == 0
             doc.image file, :x => 10.5, :y => y, :zoom => 32
-          elsif x == 11
-            doc.image file, :x => 1.6, :y => y, :zoom => 32
           else
             doc.image file, :x => 2, :y => y, :zoom => 32
           end
@@ -129,14 +190,8 @@ module UniFreire
           x += 1
           graphics_in_line +=1
           graphics_in_page +=1
-
-          if files.count > 6 && (x == 7) || (x == 13)
-            doc.showpage
-            add_index(doc)
-            y = 20.3
-          end
-
         end
+        doc.next_page
       end
 
       def inc_page
