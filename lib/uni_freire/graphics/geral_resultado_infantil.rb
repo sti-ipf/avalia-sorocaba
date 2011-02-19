@@ -35,7 +35,7 @@ module UniFreire
 
       def self.create_data(hash_reports)
         legend=[]
-        colors = %w(#004586 #ff420e #ffd320)
+        colors = %w(#ff9966 #66cc66 #ffff66)
         connection = ActiveRecord::Base.connection
 
         connection.execute "DELETE FROM report_data WHERE institution_id = 0 "
