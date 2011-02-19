@@ -2,11 +2,12 @@ module UniFreire
   module Graphics
     class TableGenerator
       AVG_REGIAO="média da região"
-      def self.generate
+      TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
+      def self.generate(institution_id)
         connection = ActiveRecord::Base.connection
-        infantil,fundamental=check_if_is_infantil_fundamental(121)
+        infantil,fundamental=check_if_is_infantil_fundamental(institution_id)
         
-        institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = 121").fetch_row
+        institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = #{institution_id}").fetch_row
         group_id, region_id, primary_service_level_id = institution[0], institution[1], institution[2]
         
         in_clause=[]
@@ -21,25 +22,45 @@ module UniFreire
         
         # Calculo da media da regiao
         connection.execute "insert into report_data
-          select 121,'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
+          select #{institution_id},'#{AVG_REGIAO}',5,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
           where i.region_id=#{region_id}
           and i.primary_service_level_id  in (#{in_clause})
           and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
           
-        connection.execute "update report_data set segment_name='Funcionários', segment_order=4 and institution_id = 121 where segment_name like 'Func%'"
-        connection.execute "update report_data set segment_name='Professores', segment_order=2 and institution_id = 121 where segment_name like 'Prof%'"
+        connection.execute "update report_data set segment_name='Funcionários', segment_order=4 and institution_id = #{institution_id} where segment_name like 'Func%'"
+        connection.execute "update report_data set segment_name='Professores', segment_order=2 and institution_id = #{institution_id} where segment_name like 'Prof%'"
         
         result = connection.execute "
           SELECT CONCAT(dimension,'.',indicator) AS i, segment_name, 
             sum_type, AVG(score) AS media
           FROM report_data
-          WHERE score > 0 AND institution_id= 121 AND sum_type IN ('média da UE', 'média da região')
+          WHERE score > 0 AND institution_id= #{institution_id} AND sum_type IN ('média da UE', 'média da região')
           GROUP BY i, segment_name, sum_type
           ORDER BY 0+i, segment_order"
         data = parser_result(result)
         build_html(data)
+        
+        html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'))
+        kit = PDFKit.new(html_file)
+        kit.to_pdf
+        pdf_file = File.join(TEMP_DIRECTORY,'quadro.pdf')
+        eps_file = File.join(TEMP_DIRECTORY,'quadro')
+        kit.to_file(pdf_file)
+        
+        (1..2).each do |i|
+        `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
+        end
+    #    rm pdf_file, :verbose => false
+
+        files = []
+        Dir.glob(File.join(TEMP_DIRECTORY,"quadro*.eps")).each do |file_name|
+          files << file_name
+        end
+        
+        puts files.sort!.inspect
+        files
       end
       
       def self.parser_result(result)
@@ -51,6 +72,7 @@ module UniFreire
       end
       
       def self.build_html(data)
+        header = ''
         html_code = <<HEREDOC
           <!DOCTYPE html> 
           <html lang='pt-BR'> 
@@ -61,6 +83,10 @@ module UniFreire
             table {border:1px solid black; border-collapse: collapse;}
             tr {border:1px solid black;}
             td {border:1px solid black; width:15px;padding:2px; text-align:center;}
+            table {}
+            @media print {
+              table { page-break-after: always;} 
+            }
           </style>
           
           </head> 
@@ -69,11 +95,14 @@ module UniFreire
               <tr>
                 <td> </td>
 HEREDOC
+        header << '<tr> <td>  </td>'
         @header1 = get_info(data, 1, 3)
         @header1.each do |d|
           html_code << "<td colspan = 2> #{d} </td>"
+          header << "<td colspan = 2> #{d} </td>"
         end
         html_code << '</tr> <tr> <td> </td>'
+        header << '</tr> <tr> <td> </td>'
         
         @header2 = %w(UE Região)
         @header1.size.times do |i|
@@ -81,16 +110,32 @@ HEREDOC
             <td> #{@header2[0]} </td>
             <td> #{@header2[1]} </td>
 HEREDOC
+
+          header << <<HEREDOC
+            <td> #{@header2[0]} </td>
+            <td> #{@header2[1]} </td>
+HEREDOC
+
         end
         html_code << '</tr>'
-        
+        header << '</tr>'
+        fix_order = ''
         @indicadores = get_info(data, 0)
         @indicadores.each do |i|
+          html_code << "</table><table>#{header}" if i == "7.1"
+          if i.include?("11")
+            if i.size == 5
+              fix_order << "<tr> <td> #{i} </td>"
+              @data = get_info_from_indicator(data, i)
+              @data.each {|d| fix_order << "<td> #{d} </td>"}
+              next 
+            end
+          end
           html_code << "<tr> <td> #{i} </td>"
           @data = get_info_from_indicator(data, i)
           @data.each {|d| html_code << "<td> #{d} </td>"}
         end
-        
+        html_code << fix_order
         html_code << '</tr>'
         
         html_code << <<HEREDOC
@@ -99,7 +144,7 @@ HEREDOC
           </html>         
 HEREDOC
         
-        html_file = File.new('quadro.html', 'w+')
+        html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'), 'w+')
         html_file.puts html_code
         html_file.close
       end

@@ -81,6 +81,13 @@ module UniFreire
             doc.image next_page_file(doc)
           end
         end
+        
+        files = UniFreire::Graphics::TableGenerator.generate(@institution_id)
+        files.each do |file|
+          doc.image file
+          add_index(doc)
+          doc.next_page if file != files.last
+        end
 
         %w(anexo1 expediente).each do |special_page|
           doc.next_page
@@ -94,7 +101,7 @@ module UniFreire
 
         Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
 
-        ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
+       # ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
         true
       end
 
