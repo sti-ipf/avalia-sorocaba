@@ -67,6 +67,19 @@ module UniFreire
         legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
         print_geral_resultado_infantil(doc,legend)
 
+        doc.image next_page_file(doc)
+        doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
+
+        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::INFANTIL_FUNDAMENTAL_INTEGRAL,true)
+        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::INFANTIL_FUNDAMENTAL_PARCIAL,true)
+        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::FUNDAMENTAL_PARCIAL,false)
+        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::FUNDAMENTAL_INTEGRAL,false)
+        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::FUNDAMENTAL_MEDIO,false)
+
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
@@ -136,8 +149,8 @@ module UniFreire
         11.times do |t|
           dimension = t + 1
           if dimension != 7
-            graph_position=19.5
-            graph_position=17 if dimension==1
+            graph_position=19
+            graph_position=17.8 if dimension==1
             graph_position=19 if ((dimension==7) || (dimension==9))
 
             doc.image next_page_file(doc)
@@ -152,6 +165,34 @@ module UniFreire
         end
       end
 
+      def print_agrupamento (doc,group_id,show_dimension_nine)
+        legend = UniFreire::Graphics::GeralResultadoAgrupamentos.create_data(group_id,REPORT_TYPES)
+        print_geral_resultado_agrupamentos(doc,legend,group_id,show_dimension_nine)
+        doc.image next_page_file(doc)
+        doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
+
+      end
+
+      def print_geral_resultado_agrupamentos(doc,legend,group_id,show_dimension_nine)
+        11.times do |t|
+          dimension = t + 1
+          if (dimension!=9 || show_dimension_nine)
+            graph_position=19
+            graph_position=17.6 if dimension==1
+            graph_position=18.3 if ((dimension==7) || (dimension==9))
+
+            doc.image next_page_file(doc)
+
+            file = UniFreire::Graphics::GeralResultadoAgrupamentos.create_dimension(group_id, dimension,UniFreire::Reports::SIZE[:wide],legend)
+            doc.image file, :x => 1.6, :y => graph_position, :zoom => 32
+
+            files = UniFreire::Graphics::GeralResultadoAgrupamentos.create_indicators(group_id, dimension,UniFreire::Reports::SIZE[:default],legend)
+            show_graphics(files, doc,dimension)
+          end
+        end
+      end
 
 
 
@@ -205,7 +246,7 @@ module UniFreire
 
       def page_file(pg_no, doc)
         add_index(doc)
-        File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
+        File.join(TEMPLATE_DIRECTORY,"pg_#{pg_no}.eps")
       end
 
       def add_index(doc)
