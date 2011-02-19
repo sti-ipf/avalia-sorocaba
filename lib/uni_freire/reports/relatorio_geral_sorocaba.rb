@@ -61,6 +61,12 @@ module UniFreire
         legend = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_data(REPORT_TYPES)
         print_geral_resultado_infantil_fundamental(doc,legend)
 
+        doc.image next_page_file(doc)
+        doc.next_page
+
+        legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
+        print_geral_resultado_infantil(doc,legend)
+
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
           :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
@@ -112,20 +118,41 @@ module UniFreire
       def print_geral_resultado_infantil_fundamental(doc,legend)
         11.times do |t|
           dimension = t + 1
-          graph_position=19.5
-          graph_position=17 if dimension==1
-          graph_position=19 if ((dimension==7) || (dimension==9))
+            graph_position=19.5
+            graph_position=17 if dimension==1
+            graph_position=19 if ((dimension==7) || (dimension==9))
 
-          doc.image next_page_file(doc)
+            doc.image next_page_file(doc)
 
-          file = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_dimension(dimension,UniFreire::Reports::SIZE[:wide],legend)
-          doc.image file, :x => 1.6, :y => graph_position, :zoom => 32
+            file = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_dimension(dimension,UniFreire::Reports::SIZE[:wide],legend)
+            doc.image file, :x => 1.6, :y => graph_position, :zoom => 32
 
-          files = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
-          show_graphics(files, doc,dimension)
+            files = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
+            show_graphics(files, doc,dimension)
+        end
+      end
+
+      def print_geral_resultado_infantil(doc,legend)
+        11.times do |t|
+          dimension = t + 1
+          if dimension != 7
+            graph_position=19.5
+            graph_position=17 if dimension==1
+            graph_position=19 if ((dimension==7) || (dimension==9))
+
+            doc.image next_page_file(doc)
+
+            file = UniFreire::Graphics::GeralResultadoInfantil.create_dimension(dimension,UniFreire::Reports::SIZE[:wide],legend)
+            doc.image file, :x => 1.6, :y => graph_position, :zoom => 32
+
+            files = UniFreire::Graphics::GeralResultadoInfantil.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
+            show_graphics(files, doc,dimension)
+          end
 
         end
       end
+
+
 
 
       def get_institutions_for_year(year ,institution_type)

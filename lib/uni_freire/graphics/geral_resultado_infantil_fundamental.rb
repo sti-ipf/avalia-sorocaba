@@ -33,8 +33,8 @@ module UniFreire
               where isl.service_level_id = 3 and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question"
         legend << {:name=>FUNDAMENTAL_DATA,:color=>colors[1]}
 
-        connection.execute "update report_data set segment_name='Funcionários', segment_order=4 and institution_id = 0  where segment_name like 'Func%'"
-        connection.execute "update report_data set segment_name='Professores', segment_order=2 and institution_id = 0 where segment_name like 'Prof%'"
+        connection.execute "update report_data set segment_name='Funcionários', segment_order=4  where segment_name like 'Func%' and institution_id = 0 "
+        connection.execute "update report_data set segment_name='Professores', segment_order=2 where segment_name like 'Prof%' and institution_id = 0 "
         connection.execute "delete from report_data where segment_name = 'Educandos' and institution_id = 0 and item_order=2"
 
         remove_invalid_indicators_and_dimensions(hash_reports)
@@ -105,6 +105,7 @@ module UniFreire
       end
 
       def self.remove_invalid_indicators_and_dimensions(hash_reports)
+
         connection=ActiveRecord::Base.connection
         hash_reports.each_pair do |key,hash|
           connection.execute("delete from report_data where dimension=#{hash[:invalid_dimensions]}
@@ -119,6 +120,7 @@ module UniFreire
             i+=1
           end
         end
+
       end
 
     end
