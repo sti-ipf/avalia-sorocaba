@@ -3,6 +3,7 @@ module UniFreire
     class TableGenerator
       AVG_REGIAO="média da região"
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
+      
       def self.generate(institution_id)
         connection = ActiveRecord::Base.connection
         infantil,fundamental=check_if_is_infantil_fundamental(institution_id)
@@ -40,28 +41,13 @@ module UniFreire
           GROUP BY i, segment_name, sum_type
           ORDER BY 0+i, segment_order"
         data = parser_result(result)
-        build_html(data)
-        
+        build_html(data)        
         html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'))
-        kit = PDFKit.new(html_file)
-        kit.to_pdf
-        pdf_file = File.join(TEMP_DIRECTORY,'quadro.pdf')
-        eps_file = File.join(TEMP_DIRECTORY,'quadro')
-        kit.to_file(pdf_file)
-        
-        (1..2).each do |i|
-        `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
-        end
-    #    rm pdf_file, :verbose => false
-
-        files = []
-        Dir.glob(File.join(TEMP_DIRECTORY,"quadro*.eps")).each do |file_name|
-          files << file_name
-        end
-        
-        puts files.sort!.inspect
-        files
+        eps_files = convert_to_eps(html_file)
+        eps_files
       end
+
+private
       
       def self.parser_result(result)
         data = []
@@ -189,6 +175,31 @@ HEREDOC
           info[i] = "-" if info[i].nil?
         end
         info
+      end
+      
+      def self.convert_to_eps(html_file)
+        pdf_file = convert_html_to_pdf(html_file)
+        eps_file = File.join(TEMP_DIRECTORY,'quadro')        
+        (1..2).each do |i|
+        `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
+        end
+        rm pdf_file, :verbose => false
+        get_eps_files_generated
+      end
+      
+      def self.convert_html_to_pdf(html_file)
+        kit = PDFKit.new(html_file)
+        kit.to_pdf
+        pdf_file = File.join(TEMP_DIRECTORY,'quadro.pdf')
+        kit.to_file(pdf_file)
+        pdf_file
+      end
+      
+      def self.get_eps_files_generated
+        files = []
+        eps_file_pattern = File.join(TEMP_DIRECTORY,"quadro*.eps")
+        Dir.glob(eps_file_pattern).each {|file_name| files << file_name}
+        files.sort!
       end
       
     end
