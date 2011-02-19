@@ -3,7 +3,7 @@ module UniFreire
     SIZE = {:default => '700x540', :wide => '1500x600'}
     class RelatorioIndividualSoracaba
       require "fileutils"
-      TEMPLATE_DIRECTORY=File.expand_path( File.join(RAILS_ROOT,"lib/uni_freire/reports/relatorio_individual_sorocaba/template"))
+      TEMPLATE_DIRECTORY= File.expand_path "#{RAILS_ROOT}/lib/uni_freire/reports/relatorio_individual_sorocaba/template"
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
       PUBLIC_DIRECTORY = File.expand_path "#{RAILS_ROOT}/public"
       COLORS = {
