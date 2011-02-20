@@ -3,7 +3,7 @@ module UniFreire
     SIZE = {:default => '700x540', :wide => '1500x600'}
     class RelatorioIndividualSoracaba
       require "fileutils"
-      TEMPLATE_DIRECTORY=File.expand_path( File.join(RAILS_ROOT,"lib/uni_freire/reports/relatorio_individual_sorocaba/template"))
+      TEMPLATE_DIRECTORY= File.expand_path "#{RAILS_ROOT}/lib/uni_freire/reports/relatorio_individual_sorocaba/template"
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
       PUBLIC_DIRECTORY = File.expand_path "#{RAILS_ROOT}/public"
       COLORS = {
@@ -34,7 +34,12 @@ module UniFreire
 
         # salta 8 páginas
         8.times do |i|
-          doc.image next_page_file(doc)
+          # não adiciona numeração no sumário
+          if i == 0 || i == 1
+            doc.image next_page_file(doc, false)
+          else
+            doc.image next_page_file(doc)
+          end
           # adiciona nome da escola em cima do sumário
           if i == 0
             doc.moveto :x => 10.5, :y => 26.4
@@ -81,7 +86,7 @@ module UniFreire
             doc.image next_page_file(doc)
           end
         end
-        
+
         files = UniFreire::Graphics::TableGenerator.generate(@institution_id)
         files.each do |file|
           doc.image file
@@ -140,18 +145,18 @@ module UniFreire
         @inc_page += 1
       end
 
-      def next_page_file(doc)
-        page_file(inc_page, doc)
+      def next_page_file(doc, index=true)
+        page_file(inc_page, doc, index)
       end
 
-      def page_file(pg_no, doc)
-        add_index(doc)
+      def page_file(pg_no, doc, index=true)
+        add_index(doc, index)
         File.join(TEMPLATE_DIRECTORY,"pg_%04d.eps" % pg_no)
       end
 
-      def add_index(doc)
+      def add_index(doc, index=true)
         @index ||= 2
-        doc.show "#{@index}", :with => :index, :align => :page_right
+        doc.show "#{@index}", :with => :index, :align => :page_right if index
         @index += 1
       end
 
