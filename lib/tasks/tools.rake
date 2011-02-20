@@ -7,7 +7,7 @@ namespace :tools do
       desc "Receives a pdf file to create a template, usage (absolute path) FILE=/tmp/myfile.pdf"
       #you should have pdftopdf and pdftk in your vm
       task :one_page do
-        abort "FILE and PAGE is mandatody" if ENV['FILE'].nil?  || ENV['PAGE'].nil?
+        abort "FILE and PAGE are mandatody" if ENV['FILE'].nil? || ENV['PAGE'].nil?
         source_file = if (Pathname.new ENV['FILE']).absolute?
                         ENV['FILE']
                       else
@@ -20,6 +20,7 @@ namespace :tools do
       end
       
       task :many_pages do
+        abort "FILE, PAGE_START and PAGE_END are mandatody" if ENV['FILE'].nil? || ENV['PAGE_START'].nil? || ENV['PAGE_END'].nil?
         source_file = if (Pathname.new ENV['FILE']).absolute?
                         ENV['FILE']
                       else
@@ -27,11 +28,14 @@ namespace :tools do
                       end
         page_start =  ENV['PAGE_START'].to_i
         page_end   =  ENV['PAGE_END'].to_i
-        abort "FILE is mandatody" unless source_file
-        
+
         (page_start..page_end).each do |i|
           eps_file = File.join(TEMPLATE_DIRECTORY,"pg_00")
-          page_number = "0#{i}" if i.size == 1
+          page_number = if i.size == 1
+                         "0#{i}" 
+                        else
+                          i 
+                        end
           `pdftops -eps -f #{i} -l #{i} #{source_file} #{eps_file}#{page_number}.eps 1> /dev/null 2> /dev/null`
         end
 

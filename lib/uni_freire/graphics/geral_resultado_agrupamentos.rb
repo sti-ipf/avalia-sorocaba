@@ -36,12 +36,12 @@ module UniFreire
 
       def self.create_data(group, hash_reports)
         legend=[]
-        colors = %w(#004586 #ff420e #ffd320)
+
         connection = ActiveRecord::Base.connection
 
         connection.execute "DELETE FROM report_data WHERE institution_id = 0 "
 
-        legend << execute_insert_query(group,colors[0])
+        legend << execute_insert_query(group,"#669933")
 
         connection.execute "update report_data set segment_name='Funcionários', segment_order=4   where segment_name like 'Func%' and institution_id = 0"
         connection.execute "update report_data set segment_name='Professores', segment_order=2  where segment_name like 'Prof%' and institution_id = 0"

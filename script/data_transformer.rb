@@ -119,6 +119,53 @@ execute("CREATE TABLE report_data (
 #execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 
 
+execute("update comparable_answers set institution_id=159 where institution_id=276")
+execute("update comparable_answers set institution_id=58 where institution_id in (168,285,361)")
+execute("update comparable_answers set institution_id=57 where institution_id in (154,243,271,360)")
+execute("update comparable_answers set institution_id=123 where institution_id in (218,245)")
+execute("delete from institutions_year_history where institution_id in (276,168,285,361,154,243,271,360,218,245)")
+
+
+execute("CREATE  TABLE `supervisor` (
+  `id` INT NOT NULL ,
+  `name` VARCHAR(250) NULL )")
+
+execute("insert into supervisors (id, name) values
+  (0, 'Edmara'),
+  (1, 'Elaine'),
+  (2, 'Paula'),
+  (3, 'Sônia'),
+  (4, 'Gilsemara'),
+  (5, 'Ana Rosa'),
+  (6, 'Aparecida'),
+  (7, 'Antonio Carlos'),
+  (8, 'Jessimeire'),
+  (9, 'Cristina'),
+  (10, 'Cláudia'),
+  (11, 'Márcia'),
+  (12, 'Everton'),
+  (13, 'Fábio'),
+  (14, 'Sara')")
+
+execute("ALTER TABLE institutions ADD COLUMN supervisor_id INTEGER AFTER group_id")
+
+execute("update institutions set supervisor_id = 0 where id in (104,70,106,85,105,89,50)")
+execute("update institutions set supervisor_id = 1 where id in (101,74,15,54,56,128,122)")
+execute("update institutions set supervisor_id = 2  where id in (107,24,78,79,30,45,123,133)")
+execute("update institutions set supervisor_id = 3 where id in (19,20,32,51,114,46,56,120)")# 56 <jorge luiz esta em dois grupos>
+execute("update institutions set supervisor_id = 4 where id in (19,20,32,51,114,46,56,120)")
+execute("update institutions set supervisor_id = 5 where id in (69,62,41,132,25,75,93,121)")
+execute("update institutions set supervisor_id = 6 where id in (66,48,31,58,14,91,113)")
+execute("update institutions set supervisor_id = 7 where id in (98,21,73,36,124,102)")
+execute("update institutions set supervisor_id = 8 where id in (90,47,57,64,77,67,126,109)")
+execute("update institutions set supervisor_id = 9 where id in (18,53,44,33,65,130,111,112)")
+execute("update institutions set supervisor_id = 10 where id in (108,63,12,88,92,125,99)")
+execute("update institutions set supervisor_id = 11 where id in (81,39,55,37,28,22,60,127)")
+execute("update institutions set supervisor_id = 12 where id in (118,35,34,11,61,83,129,119)")
+execute("update institutions set supervisor_id = 13 where id in (38,100,9,96,17,103)")
+execute("update institutions set supervisor_id = 14 where id in (131,29,76,71,68,59,94)")
+
+
 #execute("drop table institutions_year_history")
 execute ("CREATE  TABLE institutions_year_history (
   institution_id INT NOT NULL ,
@@ -132,17 +179,9 @@ execute("insert into institutions_year_history select id,2,2009 from institution
 58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
 execute("insert into institutions_year_history select id,2,2010 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
 58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
-
 execute("insert into institutions_year_history select id,3,2008 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 execute("insert into institutions_year_history select id,3,2009 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
-
-
-execute("update comparable_answers set institution_id=159 where institution_id=276")
-execute("update comparable_answers set institution_id=58 where institution_id in (168,285,361)")
-execute("update comparable_answers set institution_id=57 where institution_id in (154,243,271,360)")
-execute("update comparable_answers set institution_id=123 where institution_id in (218,245)")
-execute("delete from institutions_year_history where institution_id in (276,168,285,361,154,243,271,360,218,245)")
 
 
 execute("ALTER TABLE institutions ADD COLUMN infantil_type INTEGER AFTER group_id;")
