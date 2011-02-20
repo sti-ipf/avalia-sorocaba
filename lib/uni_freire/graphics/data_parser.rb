@@ -37,6 +37,14 @@ module UniFreire
         series
       end
 
+      def self.as_array(result)
+        data = []
+        result.each do |r|
+          data << r
+        end
+        data
+      end
+
     private
       def get_series_with_legends_and_data(data)
         series = []

@@ -87,7 +87,7 @@ module UniFreire
           end
         end
 
-        files = UniFreire::Graphics::TableGenerator.generate(@institution_id)
+        files = UniFreire::Graphics::QuadroRegiao.generate(@institution_id)
         files.each do |file|
           doc.image file
           doc.next_page if file != files.last

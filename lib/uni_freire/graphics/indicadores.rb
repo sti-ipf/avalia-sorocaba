@@ -14,7 +14,7 @@ module UniFreire
           result = connection.execute "
             select segment_name,sum_type,avg(score) as media from report_data
             where indicator = #{indicator_id}  AND score > 0 and institution_id=#{institution_id} and dimension=#{dimension_id}
-    				group by segment_order, sum_type, item_order
+            group by segment_order, sum_type, item_order
             "
           if result.num_rows > 0
             graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Indicador #{dimension_id}.#{indicator_id}",
