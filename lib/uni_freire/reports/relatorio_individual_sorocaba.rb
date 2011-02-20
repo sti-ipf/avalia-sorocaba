@@ -94,7 +94,7 @@ module UniFreire
           add_index(doc) if file == files.last
         end
 
-        %w(anexo1 expediente).each do |special_page|
+        %w(anexo1 anexo2 anexo3_1 anexo3_2 expediente).each do |special_page|
           doc.next_page
           doc.image File.expand_path("#{special_page}.eps", TEMPLATE_DIRECTORY)
           #doc.show "#{@index}", :with =>, :align => :page_right if special_page == "anexo1"
