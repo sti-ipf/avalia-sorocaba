@@ -173,7 +173,6 @@ HEREDOC
         return infantil,fundamental
       end
 
-
       def self.convert_to_eps(html_file)
         pdf_file = convert_html_to_pdf(html_file)
         eps_file = File.join(TEMP_DIRECTORY,'quadro')
