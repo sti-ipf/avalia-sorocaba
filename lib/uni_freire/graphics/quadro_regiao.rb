@@ -119,14 +119,27 @@ private
             table {border:1px solid black; border-collapse: collapse;}
             tr {border:1px solid black;}
             td {border:1px solid black; padding:2px; text-align:center;}
-            table {}
+            .break_page {}
+            h5{font-size:12px;}
+            h4{font-size:12px;}
+            li{font-size:11px; width:87%; text-align: justify;}
+            .note{margin-top: 15px;font-size:11px; width:87%; text-align: justify;}
             @media print {
-              table { page-break-after: always;}
+              .break_page { page-break-after: always;}
             }
           </style>
 
           </head>
           <body>
+          <h4>3. ANÁLISE DOS RESULTADOS PELA REGIÃO</h4>
+          <h5>3.1. Questões problematizadoras para reflexão</h5>
+          <ul>
+          <li>
+            A partir dos resultados das regiões geográficas do município, o que podemos observar?
+            Existe alguma correlação entre os resultados obtidos e as escolas localizadas em
+            determinada região? Que elementos podem ter contribuído para este resultado?
+          </li>
+          </ul>
             <table width='100%'>
               <tr>
                 <td "#{INDICATOR_HEADER_COLOR}"> </td>
@@ -164,7 +177,7 @@ HEREDOC
         data.each {|d| @indicadores << d.keys.first}
         @indicadores
         @indicadores.each do |i|
-          html_code << "</table><table width=100%>#{header}" if i == "7.1"
+          html_code << "</table> <div class=\"break_page\"> </div> <table width=100%>#{header}" if i == "7.1"
           html_code << "<tr> <td #{INDICATOR_HEADER_COLOR}> #{i} </td>"
           @data = get_info_from_indicator(data, i, @header1)
           i=0
@@ -178,6 +191,11 @@ HEREDOC
 
         html_code << <<HEREDOC
             </table>
+            <div class="note">
+            <b>Observação:</b> A coluna da região refere-se ao cálculo da média das unidades educacionais que estão na mesma
+            região com o mesmo nível (Educação Infantil e Ensino Fundamental e Médio) . As escolas cujas médias da região
+            aparece em branco referem-se aos casos em que não há outras unidades com o seu perfil.
+            </div>
           </body>
           </html>
 HEREDOC
@@ -246,7 +264,7 @@ HEREDOC
         (1..2).each do |i|
         `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
         end
-        `rm #{pdf_file}`
+        #`rm #{pdf_file}`
         get_eps_files_generated
       end
 
