@@ -131,10 +131,10 @@ private
               <tr>
                 <td "#{INDICATOR_HEADER_COLOR}"> </td>
 HEREDOC
-        header << "<tr> <td #{INDICATOR_HEADER_COLOR}>  </td>"        
+        header << "<tr> <td #{INDICATOR_HEADER_COLOR}>  </td>"
         if educandos
           @header1 = %w(Gestores Professores Funcionários Familiares Educandos)
-        else
+      else
           @header1 = %w(Gestores Professores Funcionários Familiares)
         end
         @header1.each do |d|
@@ -164,10 +164,15 @@ HEREDOC
         data.each {|d| @indicadores << d.keys.first}
         @indicadores
         @indicadores.each do |i|
-          html_code << "</table><table>#{header}" if i == "7.1"
-          html_code << "<tr> <td> #{i} </td>"
+          html_code << "</table><table width=100%>#{header}" if i == "7.1"
+          html_code << "<tr> <td #{INDICATOR_HEADER_COLOR}> #{i} </td>"
           @data = get_info_from_indicator(data, i, @header1)
-          @data.each {|d| html_code << "<td> #{d} </td>"}
+          i=0
+          styles=[UE_COLOR,REGION_COLOR]
+          @data.each do |d|
+            html_code << "<td #{styles[i % 2]}> #{d} </td>"
+            i+=1
+          end
         end
         html_code << '</tr>'
 
@@ -231,9 +236,6 @@ HEREDOC
               end
             end
           end
-        end
-        10.times do |i|
-          info[i] = '-' if info[i].nil?
         end
         info
       end
