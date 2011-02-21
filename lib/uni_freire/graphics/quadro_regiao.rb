@@ -122,8 +122,8 @@ private
             .break_page {}
             h5{font-size:12px;}
             h4{font-size:12px;}
-            li{font-size:11px; width:89%}
-            .note{margin-top: 15px;font-size:11px; width:89%}
+            li{font-size:11px; width:87%; text-align: justify;}
+            .note{margin-top: 15px;font-size:11px; width:87%; text-align: justify;}
             @media print {
               .break_page { page-break-after: always;}
             }
