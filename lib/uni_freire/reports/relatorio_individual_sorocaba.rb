@@ -47,7 +47,6 @@ module UniFreire
           end
           doc.next_page
         end
-
         legend=[]
         legend=[{:name => "2008",:color => COLORS[:three][0]},
                 {:name => "2009",:color => COLORS[:three][1]},
@@ -81,8 +80,8 @@ module UniFreire
           files = UniFreire::Graphics::Indicadores.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:default], legend)
           show_graphics(files, doc)
 
+          doc.showpage
           if dimension_id != 11
-            doc.showpage
             doc.image next_page_file(doc)
           end
         end

@@ -3,6 +3,12 @@ module UniFreire
     class QuadroRegiao
       AVG_REGIAO="média da região"
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
+      INDICATOR_HEADER_COLOR = " width='8%' bgcolor='8f7f63'"
+      SEGMENT_HEADER_COLOR = " width='18%' bgcolor='8f7f63'"
+      UE_HEADER_COLOR = " width='9%' bgcolor='c7bbA5'"
+      UE_COLOR = " bgcolor='defa70'"
+      REGION_HEADER_COLOR = " width='9%' bgcolor='c7bbA5'"
+      REGION_COLOR = " bgcolor='ffcd73'"
 
       def self.generate(institution_id)
         connection = ActiveRecord::Base.connection
@@ -112,7 +118,7 @@ private
           <style type="text/css">
             table {border:1px solid black; border-collapse: collapse;}
             tr {border:1px solid black;}
-            td {border:1px solid black; width:15px;padding:2px; text-align:center;}
+            td {border:1px solid black; padding:2px; text-align:center;}
             .break_page {}
             h5{font-size:12px;}
             h4{font-size:12px;}
@@ -134,33 +140,33 @@ private
             determinada região? Que elementos podem ter contribuído para este resultado?
           </li>
           </ul>
-            <table>
+            <table width='100%'>
               <tr>
-                <td> </td>
+                <td "#{INDICATOR_HEADER_COLOR}"> </td>
 HEREDOC
-        header << '<tr> <td>  </td>'
+        header << "<tr> <td #{INDICATOR_HEADER_COLOR}>  </td>"
         if educandos
           @header1 = %w(Gestores Professores Funcionários Familiares Educandos)
-        else
+      else
           @header1 = %w(Gestores Professores Funcionários Familiares)
         end
         @header1.each do |d|
-          html_code << "<td colspan = 2> #{d} </td>"
-          header << "<td colspan = 2> #{d} </td>"
+          html_code << "<td colspan = 2 #{SEGMENT_HEADER_COLOR}> #{d} </td>"
+          header << "<td colspan = 2 #{SEGMENT_HEADER_COLOR}> #{d} </td>"
         end
-        html_code << '</tr> <tr> <td> </td>'
-        header << '</tr> <tr> <td> </td>'
+        html_code << "</tr> <tr> <td #{INDICATOR_HEADER_COLOR}> </td>"
+        header << "</tr> <tr> <td #{INDICATOR_HEADER_COLOR}> </td>"
 
         @header2 = %w(UE Região)
         @header1.size.times do |i|
           html_code << <<HEREDOC
-            <td> #{@header2[0]} </td>
-            <td> #{@header2[1]} </td>
+            <td #{UE_HEADER_COLOR}> #{@header2[0]} </td>
+            <td #{REGION_HEADER_COLOR}> #{@header2[1]} </td>
 HEREDOC
 
           header << <<HEREDOC
-            <td> #{@header2[0]} </td>
-            <td> #{@header2[1]} </td>
+            <td #{UE_HEADER_COLOR}> #{@header2[0]} </td>
+            <td #{REGION_HEADER_COLOR}> #{@header2[1]} </td>
 HEREDOC
 
         end
@@ -171,10 +177,15 @@ HEREDOC
         data.each {|d| @indicadores << d.keys.first}
         @indicadores
         @indicadores.each do |i|
-          html_code << "</table><div class=\"break_page\"> </div> <table>#{header}" if i == "7.1"
-          html_code << "<tr> <td> #{i} </td>"
+          html_code << "</table> <div class=\"break_page\"> </div> <table width=100%>#{header}" if i == "7.1"
+          html_code << "<tr> <td #{INDICATOR_HEADER_COLOR}> #{i} </td>"
           @data = get_info_from_indicator(data, i, @header1)
-          @data.each {|d| html_code << "<td> #{d} </td>"}
+          i=0
+          styles=[UE_COLOR,REGION_COLOR]
+          @data.each do |d|
+            html_code << "<td #{styles[i % 2]}> #{d} </td>"
+            i+=1
+          end
         end
         html_code << '</tr>'
 
