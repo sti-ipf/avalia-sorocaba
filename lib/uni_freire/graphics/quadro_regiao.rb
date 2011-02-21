@@ -39,7 +39,7 @@ module UniFreire
           FROM report_data
           WHERE score > 0 AND institution_id= #{institution_id} AND sum_type IN ('média da UE', 'média da região')
           GROUP BY i, segment_name, sum_type
-          ORDER BY 0+i, segment_order"
+          ORDER BY 0+i, segment_name, segment_order, sum_type DESC"
         data = UniFreire::Graphics::DataParser.as_array(result)
         build_html(data)
         html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'))
@@ -104,13 +104,13 @@ HEREDOC
           if i.include?("11")
             if i.size == 5
               fix_order << "<tr> <td> #{i} </td>"
-              @data = get_info_from_indicator(data, i)
+              @data = get_info_from_indicator(data, i, @header1)
               @data.each {|d| fix_order << "<td> #{d} </td>"}
               next
             end
           end
           html_code << "<tr> <td> #{i} </td>"
-          @data = get_info_from_indicator(data, i)
+          @data = get_info_from_indicator(data, i, @header1)
           @data.each {|d| html_code << "<td> #{d} </td>"}
         end
         html_code << fix_order
@@ -156,17 +156,46 @@ HEREDOC
         info
       end
 
-      def self.get_info_from_indicator(data, indicator)
-        info = []
+      def self.get_info_from_indicator(data, indicator, header)
+        @info = []
+        @i = 0
+        @expected_info_order ||= create_expected_info_order(header)
+        segment_name = nil
         data.each do |d|
           if d[0] == indicator
-            info << d[3][0..2]
+            add_data_in_correct_position(d)
+            @i += 1
+            if indicator == "9.1"
+              puts @info.inspect
+              puts @i
+            end
           end
         end
         10.times do |i|
-          info[i] = "-" if info[i].nil?
+          @info[i] = '-' if @info[i].nil?
         end
-        info
+        @info
+      end
+
+      def self.add_data_in_correct_position(d)
+        if @expected_info_order[@i][0] == d[1] && @expected_info_order[@i][1] == d[2]
+          d[3].size > 1? media = d[3].to_f.round(1) : media = d[3]
+          @info << media
+        else
+          @info << '-'
+          @i += 1
+          add_data_in_correct_position(d)
+        end
+      end
+
+      def self.create_expected_info_order(header)
+        array = []
+        header.each do |h|
+          ['média da UE','média da região'].each do |m|
+            array << [h, m]
+          end
+        end
+        array
       end
 
       def self.convert_to_eps(html_file)
@@ -175,7 +204,7 @@ HEREDOC
         (1..2).each do |i|
         `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
         end
-        rm pdf_file, :verbose => false
+        `rm #{pdf_file}`
         get_eps_files_generated
       end
 
