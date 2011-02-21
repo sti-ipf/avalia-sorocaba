@@ -10,13 +10,46 @@ module UniFreire
           institution_id, segment_name,avg(score) as media
           from report_data
           where score > 0 AND segment_name not in ('Média Geral') and sum_type = 'média da UE'
-          group by institution_id,  0+di, segment_order, item_order
+          group by institution_id, segment_name, 0+di, item_order
           "
         data = UniFreire::Graphics::DataParser.as_array(result)
-        build_html(data)
+        data = parser(data)
+        data.last[1]["Gestores"].each do |d|
+          puts d.inspect
+        end
+        #build_html(data)
       end
 
 private
+
+      def self.parser(data)
+        array_final = []
+        array_temp  = Array.new(2)
+        hash_temp   = {}
+        data.each do |d|
+          institution_id ||= d[1]
+          segment_name ||= d[2]
+          hash_temp[segment_name] ||= []
+          if institution_id == d[1]
+            array_temp[0] ||= d[1]
+            if segment_name == d[2]
+              d[3].size > 1? media = d[3].to_f.round(1) : media = d[3]
+              hash_temp[segment_name] << [d[0],media]
+            else
+              segment_name = d[2]
+              hash_temp[segment_name] = [d[0],d[3]]
+            end
+          else
+            array_temp[1] = hash_temp
+            array_final << array_temp
+            institution_id = d[1]
+            array_temp[0] = d[1]
+          end
+          array_temp[1] = hash_temp
+          array_final << array_temp
+        end
+        array_final
+      end
 
       def self.build_html(data)
         header = ''

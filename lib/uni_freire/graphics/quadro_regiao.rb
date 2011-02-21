@@ -10,6 +10,7 @@ module UniFreire
 
         institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = #{institution_id}").fetch_row
         group_id, region_id, primary_service_level_id = institution[0], institution[1], institution[2]
+        educandos = false
 
         in_clause=[]
         if infantil
@@ -18,6 +19,7 @@ module UniFreire
         if fundamental
           in_clause << 3
           in_clause << 4
+          educandos = true
         end
         in_clause = in_clause.join(",")
 
@@ -38,10 +40,10 @@ module UniFreire
             sum_type, AVG(score) AS media
           FROM report_data
           WHERE score > 0 AND institution_id= #{institution_id} AND sum_type IN ('média da UE', 'média da região')
-          GROUP BY i, segment_name, sum_type
-          ORDER BY 0+i, segment_name, segment_order, sum_type DESC"
+          GROUP BY dimension, indicator, segment_order, sum_type DESC"
         data = UniFreire::Graphics::DataParser.as_array(result)
-        build_html(data)
+        data = parser(data)
+        build_html(data, educandos)
         html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'))
         eps_files = convert_to_eps(html_file)
         eps_files
@@ -49,7 +51,57 @@ module UniFreire
 
 private
 
-      def self.build_html(data)
+      def self.parser(data)
+        array_final = []
+        hash_temp = {}
+        hash_segment_temp = {}
+        di = nil
+        segment_name = nil
+        data.each do |d|
+          di ||= d[0]
+          if di == d[0]
+            segment_name ||= d[1]
+            if segment_name == d[1]
+              hash_segment_temp[segment_name] ||= Array.new(2)
+              if d[2] == 'média da UE'
+                hash_segment_temp[segment_name][0] = d[3]
+              else
+                hash_segment_temp[segment_name][1] = d[3]
+              end
+            else
+              hash_segment_temp[segment_name][0] = '-' if hash_segment_temp[segment_name][0].nil?
+              hash_segment_temp[segment_name][1] = '-' if hash_segment_temp[segment_name][1].nil?
+              hash_temp[di] = hash_segment_temp
+              segment_name = d[1]
+              hash_segment_temp[segment_name] = Array.new(2)
+              if d[2] == 'média da UE'
+                hash_segment_temp[segment_name][0] = d[3]
+              else
+                hash_segment_temp[segment_name][1] = d[3]
+              end
+            end
+          else
+            hash_segment_temp[segment_name][0] = '-' if hash_segment_temp[segment_name][0].nil?
+            hash_segment_temp[segment_name][1] = '-' if hash_segment_temp[segment_name][1].nil?
+            hash_temp[di] = hash_segment_temp
+            array_final << hash_temp
+            hash_temp = {}
+            di = d[0]
+            hash_segment_temp = {}
+            segment_name = d[1]
+            hash_segment_temp[segment_name] = Array.new(2)
+            if d[2] == 'média da UE'
+              hash_segment_temp[segment_name][0] = d[3]
+            else
+              hash_segment_temp[segment_name][1] = d[3]
+            end
+          end
+        end
+        hash_temp[di] = hash_segment_temp
+        array_final << hash_temp
+      end
+
+      def self.build_html(data, educandos)
         header = ''
         html_code = <<HEREDOC
           <!DOCTYPE html>
@@ -74,7 +126,11 @@ private
                 <td> </td>
 HEREDOC
         header << '<tr> <td>  </td>'
-        @header1 = get_info(data, 1, 3)
+        if educandos
+          @header1 = %w(Gestores Professores Funcionários Familiares Educandos)
+        else
+          @header1 = %w(Gestores Professores Funcionários Familiares)
+        end
         @header1.each do |d|
           html_code << "<td colspan = 2> #{d} </td>"
           header << "<td colspan = 2> #{d} </td>"
@@ -98,22 +154,15 @@ HEREDOC
         html_code << '</tr>'
         header << '</tr>'
         fix_order = ''
-        @indicadores = get_info(data, 0)
+        @indicadores = []
+        data.each {|d| @indicadores << d.keys.first}
+        @indicadores
         @indicadores.each do |i|
           html_code << "</table><table>#{header}" if i == "7.1"
-          if i.include?("11")
-            if i.size == 5
-              fix_order << "<tr> <td> #{i} </td>"
-              @data = get_info_from_indicator(data, i, @header1)
-              @data.each {|d| fix_order << "<td> #{d} </td>"}
-              next
-            end
-          end
           html_code << "<tr> <td> #{i} </td>"
           @data = get_info_from_indicator(data, i, @header1)
           @data.each {|d| html_code << "<td> #{d} </td>"}
         end
-        html_code << fix_order
         html_code << '</tr>'
 
         html_code << <<HEREDOC
@@ -141,61 +190,46 @@ HEREDOC
         return infantil,fundamental
       end
 
-      def self.get_info(data, position, stop_at=nil)
+      def self.get_segment_names(data)
         info = []
-        first_data = nil
-        i = 0
         data.each do |d|
-          info << d[position] if !info.include?(d[position])
-          if !stop_at.nil?
-            first_data ||= d[position]
-            i += 1 if first_data == d[position]
-            break if i == stop_at
+          d.values.each do |v|
+            v.keys.each do |k|
+              info << k if !info.include?(k)
+            end
           end
         end
         info
       end
 
       def self.get_info_from_indicator(data, indicator, header)
-        @info = []
-        @i = 0
-        @expected_info_order ||= create_expected_info_order(header)
-        segment_name = nil
+        info = []
         data.each do |d|
-          if d[0] == indicator
-            add_data_in_correct_position(d)
-            @i += 1
-            if indicator == "9.1"
-              puts @info.inspect
-              puts @i
+          if d.keys.first == indicator
+            header.each do |h|
+              if d[indicator][h].nil?
+                2.times {info << '-'}
+              else
+                media_ue =  if d[indicator][h][0].size > 1
+                              d[indicator][h][0].to_f.round(1)
+                            else
+                              d[indicator][h][0]
+                            end
+                media_regiao =  if d[indicator][h][1].size > 1
+                              d[indicator][h][1].to_f.round(1)
+                            else
+                              d[indicator][h][1]
+                            end
+                info << media_ue
+                info << media_regiao
+              end
             end
           end
         end
         10.times do |i|
-          @info[i] = '-' if @info[i].nil?
+          info[i] = '-' if info[i].nil?
         end
-        @info
-      end
-
-      def self.add_data_in_correct_position(d)
-        if @expected_info_order[@i][0] == d[1] && @expected_info_order[@i][1] == d[2]
-          d[3].size > 1? media = d[3].to_f.round(1) : media = d[3]
-          @info << media
-        else
-          @info << '-'
-          @i += 1
-          add_data_in_correct_position(d)
-        end
-      end
-
-      def self.create_expected_info_order(header)
-        array = []
-        header.each do |h|
-          ['média da UE','média da região'].each do |m|
-            array << [h, m]
-          end
-        end
-        array
+        info
       end
 
       def self.convert_to_eps(html_file)
