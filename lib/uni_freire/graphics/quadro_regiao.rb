@@ -38,8 +38,8 @@ module UniFreire
           and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
 
-        connection.execute "update report_data set segment_name='Funcionários', segment_order=4 and institution_id = #{institution_id} where segment_name like 'Func%'"
-        connection.execute "update report_data set segment_name='Professores', segment_order=2 and institution_id = #{institution_id} where segment_name like 'Prof%'"
+        connection.execute "update report_data set segment_name='Funcionários', segment_order=4  where institution_id = #{institution_id} and segment_name like 'Func%'"
+        connection.execute "update report_data set segment_name='Professores', segment_order=2 where institution_id = #{institution_id} and segment_name like 'Prof%'"
 
         result = connection.execute "
           SELECT CONCAT(dimension,'.',indicator) AS i, segment_name,

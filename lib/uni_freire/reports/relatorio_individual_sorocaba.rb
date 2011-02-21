@@ -105,7 +105,7 @@ module UniFreire
 
         Dir["#{TEMP_DIRECTORY}/#{@institution_id}*"].each { |file| FileUtils.rm(file)}
 
-        ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
+        #ActiveRecord::Base.connection.execute("delete from report_data where institution_id=#{@institution_id}")
         true
       end
 
