@@ -16,6 +16,7 @@ module UniFreire
 
         institution = connection.execute("select group_id, region_id, primary_service_level_id from institutions where id = #{institution_id}").fetch_row
         group_id, region_id, primary_service_level_id = institution[0], institution[1], institution[2]
+        educandos = false
 
         in_clause=[]
         if infantil
@@ -24,6 +25,7 @@ module UniFreire
         if fundamental
           in_clause << 3
           in_clause << 4
+          educandos = true
         end
         in_clause = in_clause.join(",")
 
@@ -33,8 +35,8 @@ module UniFreire
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
           where i.region_id=#{region_id}
           and i.primary_service_level_id  in (#{in_clause})
-          and ca.year=2010  and ca.segment_name <> 'Alessandra' and ca.score > 0
-          group by ca.segment_order,ca.dimension,ca.indicator,ca.question;"
+          and ca.year=2010  and ca.segment_name <> 'Alessandra'
+          group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
 
         connection.execute "update report_data set segment_name='Funcionários', segment_order=4 and institution_id = #{institution_id} where segment_name like 'Func%'"
         connection.execute "update report_data set segment_name='Professores', segment_order=2 and institution_id = #{institution_id} where segment_name like 'Prof%'"
@@ -44,9 +46,10 @@ module UniFreire
             sum_type, AVG(score) AS media
           FROM report_data
           WHERE score > 0 AND institution_id= #{institution_id} AND sum_type IN ('média da UE', 'média da região')
-          GROUP BY dimension,indicator,segment_order, sum_type"
-        #data = UniFreire::Graphics::DataParser.as_array(result)
-        build_html(result)
+          GROUP BY dimension, indicator, segment_order, sum_type DESC"
+        data = UniFreire::Graphics::DataParser.as_array(result)
+        data = parser(data)
+        build_html(data, educandos)
         html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'))
         eps_files = convert_to_eps(html_file)
         eps_files
@@ -54,7 +57,57 @@ module UniFreire
 
 private
 
-      def self.build_html(result)
+      def self.parser(data)
+        array_final = []
+        hash_temp = {}
+        hash_segment_temp = {}
+        di = nil
+        segment_name = nil
+        data.each do |d|
+          di ||= d[0]
+          if di == d[0]
+            segment_name ||= d[1]
+            if segment_name == d[1]
+              hash_segment_temp[segment_name] ||= Array.new(2)
+              if d[2] == 'média da UE'
+                hash_segment_temp[segment_name][0] = d[3]
+              else
+                hash_segment_temp[segment_name][1] = d[3]
+              end
+            else
+              hash_segment_temp[segment_name][0] = '-' if hash_segment_temp[segment_name][0].nil?
+              hash_segment_temp[segment_name][1] = '-' if hash_segment_temp[segment_name][1].nil?
+              hash_temp[di] = hash_segment_temp
+              segment_name = d[1]
+              hash_segment_temp[segment_name] = Array.new(2)
+              if d[2] == 'média da UE'
+                hash_segment_temp[segment_name][0] = d[3]
+              else
+                hash_segment_temp[segment_name][1] = d[3]
+              end
+            end
+          else
+            hash_segment_temp[segment_name][0] = '-' if hash_segment_temp[segment_name][0].nil?
+            hash_segment_temp[segment_name][1] = '-' if hash_segment_temp[segment_name][1].nil?
+            hash_temp[di] = hash_segment_temp
+            array_final << hash_temp
+            hash_temp = {}
+            di = d[0]
+            hash_segment_temp = {}
+            segment_name = d[1]
+            hash_segment_temp[segment_name] = Array.new(2)
+            if d[2] == 'média da UE'
+              hash_segment_temp[segment_name][0] = d[3]
+            else
+              hash_segment_temp[segment_name][1] = d[3]
+            end
+          end
+        end
+        hash_temp[di] = hash_segment_temp
+        array_final << hash_temp
+      end
+
+      def self.build_html(data, educandos)
         header = ''
         html_code = <<HEREDOC
           <!DOCTYPE html>
@@ -78,9 +131,12 @@ private
               <tr>
                 <td "#{INDICATOR_HEADER_COLOR}"> </td>
 HEREDOC
-        header << "<tr> <td #{INDICATOR_HEADER_COLOR}>  </td>"
-        #@header1 = get_info(data, 1, 3)
-        @header1 = ["Gestores","Professores","Funcionários","Familiares"]
+        header << "<tr> <td #{INDICATOR_HEADER_COLOR}>  </td>"        
+        if educandos
+          @header1 = %w(Gestores Professores Funcionários Familiares Educandos)
+        else
+          @header1 = %w(Gestores Professores Funcionários Familiares)
+        end
         @header1.each do |d|
           html_code << "<td colspan = 2 #{SEGMENT_HEADER_COLOR}> #{d} </td>"
           header << "<td colspan = 2 #{SEGMENT_HEADER_COLOR}> #{d} </td>"
@@ -104,34 +160,17 @@ HEREDOC
         html_code << '</tr>'
         header << '</tr>'
         fix_order = ''
-
-        current_type = -1
-        current_segment = ""
-        current_indicator = ""
-        result.each do |r|
-          i = r[0]
-          segment_name = r[1]
-          sum_type = r[2]
-          score = r[3]
-          segment = {}
-          indicator= {}
-          if current_indicator != i
-            write_line_html(indicator) if !current_indicator.nil?
-            current_indicator = i
-            current_segment_name = segment_name
-            indicator = {}
-            segment = {}
-            segment[sum_type.to_s] = score
-          elsif current_segment_name != segment_name
-            indicator[segment_name]=segment if !current_segment_name.nil?
-            current_segment_name = segment_name
-            segment = {}
-            segment[sum_type.to_s] = score
-          else
-            segment[sum_type.to_s] = score
-          end
-
+        @indicadores = []
+        data.each {|d| @indicadores << d.keys.first}
+        @indicadores
+        @indicadores.each do |i|
+          html_code << "</table><table>#{header}" if i == "7.1"
+          html_code << "<tr> <td> #{i} </td>"
+          @data = get_info_from_indicator(data, i, @header1)
+          @data.each {|d| html_code << "<td> #{d} </td>"}
         end
+        html_code << '</tr>'
+
         html_code << <<HEREDOC
             </table>
           </body>
@@ -141,22 +180,6 @@ HEREDOC
         html_file = File.new(File.join(TEMP_DIRECTORY,'quadro.html'), 'w+')
         html_file.puts html_code
         html_file.close
-      end
-
-      def write_line_html (i,indicator,header_text,header_collection)
-        html_to_return = ""
-        html_to_return << "</table><table width='100%'>#{header}" if i == "7.1"
-        html_code << "<tr> <td #{INDICATOR_HEADER_COLOR}> #{i} </td>"
-        header_collection.each do |h|
-          ue_value = "-"; region_value = "-"
-          if !indicator[h].nil?
-            ue_value = indicator[h]["1"] if !indicator[h]["1"].nil?
-            region_value = if !indicator[h]["5"].nil?
-          end
-          html_code << "<td #{UE_COLOR}> #{ue_value} </td>"
-          html_code << "<td #{REGION_COLOR}> #{region_value} </td>"
-        end
-        html_code << "</tr>"
       end
 
       def self.check_if_is_infantil_fundamental(institution_id)
@@ -171,6 +194,48 @@ HEREDOC
           end
         end
         return infantil,fundamental
+      end
+
+      def self.get_segment_names(data)
+        info = []
+        data.each do |d|
+          d.values.each do |v|
+            v.keys.each do |k|
+              info << k if !info.include?(k)
+            end
+          end
+        end
+        info
+      end
+
+      def self.get_info_from_indicator(data, indicator, header)
+        info = []
+        data.each do |d|
+          if d.keys.first == indicator
+            header.each do |h|
+              if d[indicator][h].nil?
+                2.times {info << '-'}
+              else
+                media_ue =  if d[indicator][h][0].size > 1
+                              d[indicator][h][0].to_f.round(1)
+                            else
+                              d[indicator][h][0]
+                            end
+                media_regiao =  if d[indicator][h][1].size > 1
+                              d[indicator][h][1].to_f.round(1)
+                            else
+                              d[indicator][h][1]
+                            end
+                info << media_ue
+                info << media_regiao
+              end
+            end
+          end
+        end
+        10.times do |i|
+          info[i] = '-' if info[i].nil?
+        end
+        info
       end
 
       def self.convert_to_eps(html_file)
