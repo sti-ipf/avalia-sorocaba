@@ -3,33 +3,8 @@ module UniFreire
     class MapGenerator
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
 
-      def self.generate(institution_id)
-        connection = ActiveRecord::Base.connection
-        result = connection.execute "
-          select i.alias,new_segment_name,number,score
-          from comparable_answers ca
-          inner join institutions i on i.id=ca.institution_id
-          where year=2010 and i.infantil_type in (1,2,3)
-          group by i.alias, new_segment_order, dimension, indicator, question;
-          "
-        numbers_result = connection.execute "
-          select distinct number
-          from comparable_answers ca
-          inner join institutions i on i.id=ca.institution_id
-          where year=2010 and i.infantil_type in (1,2,3)
-          order by dimension,indicator,question
-        "
-        institutions_result = connection.execute "
-          select distinct i.alias
-          from comparable_answers ca
-          inner join institutions i on i.id=ca.institution_id
-          where year=2010 and i.infantil_type in (1,2,3)
-        	order by alias
-        "
-        data = UniFreire::Graphics::DataParser.as_hash(result)
-        numbers = UniFreire::Graphics::DataParser.as_array(numbers_result)
-        institutions = UniFreire::Graphics::DataParser.as_array(institutions_result)
-        build_html(data, numbers, institutions, 89)
+      def self.generate(data, numbers, institutions, columns_size)
+        build_html(data, numbers, institutions, columns_size)
         html_file = File.new(File.join(TEMP_DIRECTORY,'mapa.html'))
         eps_files = convert_to_eps(html_file)
         eps_files
@@ -86,6 +61,7 @@ module UniFreire
               text-align: center;
               vertical-align: middle;
               width: 20px;
+              height: 35px;
               margin: 0px;
               padding: 5px 1px;
               white-space: nowrap;
@@ -93,6 +69,7 @@ module UniFreire
               -moz-transform: rotate(-90deg);
               transform: rotate(-90deg);
             }
+            .space_betweet_tables{height:20px;}
             .break_page {}
             @media print {
               .break_page { page-break-after: always;}
@@ -144,10 +121,13 @@ HEREDOC
             break_page_count = 0
             first_table = "<table> #{first_header}"
             second_table = "<table> #{second_header}"
-            break
           end
         end
-        first_table << "</table>"
+        if break_page_count < 20 || institutions.count <= 40
+          first_table << "</table> <div class=\"space_betweet_tables\"></div>"
+        else
+          first_table << "</table> <div class=\"break_page\"> </div>"
+        end
         second_table << "</table>"
         html_code << first_table
         html_code << second_table
@@ -210,8 +190,8 @@ HEREDOC
 
       def self.convert_to_eps(html_file)
         pdf_file = convert_html_to_pdf(html_file)
-        eps_file = File.join(TEMP_DIRECTORY,'quadro')
-        (1..4).each do |i|
+        eps_file = File.join(TEMP_DIRECTORY,'mapa')
+        (1..10).each do |i|
         `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
         end
         #`rm #{pdf_file}`
