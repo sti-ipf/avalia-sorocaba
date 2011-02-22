@@ -17,7 +17,9 @@ module UniFreire
             avg(score) as media,dimension,indicator,question
             from comparable_answers ca INNER JOIN institutions i
             ON i.id = ca.institution_id
-            where i.infantil_type = #{num_type} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question
+            where i.infantil_type = #{num_type} and ca.score>0
+            and year=2010 and segment_name <> 'Alessandra'
+            group by segment_name,dimension,indicator,question
           "
         {:name=>data,:color=>color}
       end
@@ -27,7 +29,7 @@ module UniFreire
           insert into report_data
             select 0,'#{data}',#{order},'Média Geral',0,
               avg(score) as media,dimension,indicator,question
-            from report_data where item_order=#{order}
+            from report_data where item_order=#{order} and score>0
             group by dimension,indicator,question"
       end
 

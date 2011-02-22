@@ -20,7 +20,7 @@ module UniFreire
             avg(score) as media,dimension,indicator,question
             from comparable_answers ca INNER JOIN institutions_service_levels isl
             ON isl.institution_id = ca.institution_id
-            where isl.service_level_id = 2 and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question
+            where ca.score>0 and isl.service_level_id = 2 and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question
           "
         legend << {:name=>INFANTIL_DATA,:color=>colors[0]}
 
@@ -30,7 +30,7 @@ module UniFreire
               avg(score) as media,dimension,indicator,question
               from comparable_answers ca INNER JOIN institutions_service_levels isl
               ON isl.institution_id = ca.institution_id
-              where isl.service_level_id = 3 and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question"
+              where ca.score>0 and isl.service_level_id = 3 and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question"
         legend << {:name=>FUNDAMENTAL_DATA,:color=>colors[1]}
 
         connection.execute "update report_data set segment_name='Funcionários', segment_order=4  where segment_name like 'Func%' and institution_id = 0 "
@@ -43,14 +43,14 @@ module UniFreire
           insert into report_data
             select 0,'#{INFANTIL_DATA}',2,'Média Geral',0,
               avg(score) as media,dimension,indicator,question
-            from report_data where item_order=2
+            from report_data where item_order=2 and score>0
             group by dimension,indicator,question"
 
         connection.execute "
           insert into report_data
             select 0,'#{FUNDAMENTAL_DATA}',3,'Média Geral',0,
             avg(score) as media,dimension,indicator,question
-            from report_data where item_order=3
+            from report_data where item_order=3 and score > 0
             group by dimension,indicator,question"
         legend
       end

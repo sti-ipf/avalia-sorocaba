@@ -2,32 +2,25 @@ module UniFreire
   module Graphics
     class GeralResultadoAgrupamentos
 
-      TEXT="Ambiente Educativo"
-
-      # Id do agrupamento no banco de dados
-      INFANTIL_FUNDAMENTAL_INTEGRAL = 62
-      INFANTIL_FUNDAMENTAL_PARCIAL = 63
-      FUNDAMENTAL_PARCIAL = 64
-      FUNDAMENTAL_INTEGRAL = 65
-      FUNDAMENTAL_MEDIO = 66
-
       def self.execute_insert_query(num_type)
           ActiveRecord::Base.connection.execute "
           insert into report_data
-          select 0,'#{TEXT}',1,segment_name,segment_order,
+          select 0,'TEXT',1,segment_name,segment_order,
             avg(score) as media,dimension,indicator,question
             from comparable_answers ca INNER JOIN institutions i
             ON i.id = ca.institution_id
-            where i.group_id = #{num_type} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question
+            where i.group_id = #{num_type} and year=2010 and segment_name <> 'Alessandra'
+            and ca.score > 0
+            group by segment_name,dimension,indicator,question
           "
       end
 
       def self.execute_average_query()
           ActiveRecord::Base.connection.execute "
           insert into report_data
-            select 0,'#{TEXT}',1,'Média Geral',0,
+            select 0,'TEXT',1,'Média Geral',0,
               avg(score) as media,dimension,indicator,question
-            from report_data where item_order=1
+            from report_data where item_order=1 and score>0
             group by dimension,indicator,question"
       end
 
