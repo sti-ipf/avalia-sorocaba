@@ -117,7 +117,7 @@ execute ("insert into institutions_service_levels select id,2 from institutions 
 execute ("insert into institutions_service_levels select id,3 from institutions where group_id in(62,63,64,65,66)")
 execute ("insert into institutions_service_levels select id,4 from institutions where group_id in(66)")
 
-execute("drop table report_data")
+execute("drop table IF EXISTS report_data")
 execute("CREATE TABLE report_data (
   institution_id int(11) NOT NULL, sum_type varchar(50) DEFAULT NULL, item_order varchar(50) DEFAULT NULL,
   segment_name varchar(50) DEFAULT NULL, segment_order int(11) DEFAULT NULL, score float DEFAULT NULL,
@@ -126,15 +126,14 @@ execute("CREATE TABLE report_data (
 
 #execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 
-
 execute("update comparable_answers set institution_id=159 where institution_id=276")
 execute("update comparable_answers set institution_id=58 where institution_id in (168,285,361)")
 execute("update comparable_answers set institution_id=57 where institution_id in (154,243,271,360)")
 execute("update comparable_answers set institution_id=123 where institution_id in (218,245)")
 execute("delete from institutions_year_history where institution_id in (276,168,285,361,154,243,271,360,218,245)")
 
-
-execute("CREATE  TABLE `supervisor` (
+execute("drop table IF EXISTS supervisors")
+execute("CREATE  TABLE `supervisors` (
   `id` INT NOT NULL ,
   `name` VARCHAR(250) NULL )")
 
@@ -174,7 +173,7 @@ execute("update institutions set supervisor_id = 13 where id in (38,100,9,96,17,
 execute("update institutions set supervisor_id = 14 where id in (131,29,76,71,68,59,94)")
 
 
-#execute("drop table institutions_year_history")
+execute("drop table IF EXISTS institutions_year_history")
 execute ("CREATE  TABLE institutions_year_history (
   institution_id INT NOT NULL ,
   level_type INT NOT NULL,
@@ -192,7 +191,7 @@ execute("insert into institutions_year_history select id,3,2009 from institution
 execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 
 
-execute("ALTER TABLE institutions ADD COLUMN infantil_type INTEGER AFTER group_id;")
+execute("ALTER TABLE institutions ADD COLUMN IF NOT EXISTS infantil_type INTEGER AFTER group_id;")
 #Infantil Integral
 execute("UPDATE institutions SET infantil_type = 3 WHERE id IN (16,89,22,45,46,49,50,52,56,17,68,30,21,34,25,27,60,61,11,83,88,15,33,75,77,67,33)")
 #Infantil Parcial
@@ -202,7 +201,7 @@ execute("UPDATE institutions SET infantil_type = 2 WHERE id IN (81,118,62,18,19,
 execute("UPDATE institutions SET infantil_type = 1 WHERE id IN (66,41,44,87,36,132,48,14,51,59,63,65,72,54,69,86,73,79)")
 
 
-execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
+execute("ALTER TABLE institutions ADD COLUMN IF NOT EXISTS primary_service_level_id INTEGER AFTER group_id;")
 execute("UPDATE institutions SET primary_service_level_id = 3 WHERE id IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
 execute("UPDATE institutions SET primary_service_level_id = 2 WHERE id NOT IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
 

@@ -72,14 +72,7 @@ module UniFreire
         legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
         print_geral_resultado_infantil(doc,legend)
 
-        doc.image next_page_file(doc)
-        doc.next_page
-        doc.image next_page_file(doc)
-        doc.next_page
-        doc.image next_page_file(doc)
-        doc.next_page
-
-        print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true)
+        print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true,"mapa_infantil_fundamental_integral")
         print_agrupamento (doc,INFANTIL_FUNDAMENTAL_PARCIAL,true)
         print_agrupamento (doc,FUNDAMENTAL_PARCIAL,false)
         print_agrupamento (doc,FUNDAMENTAL_INTEGRAL,false)
@@ -173,11 +166,9 @@ module UniFreire
             files = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
             show_graphics(files, doc,dimension)
         end
-      end
-
-      def print_quadro_respostas
 
       end
+
 
       def print_geral_resultado_infantil(doc,legend)
         11.times do |t|
@@ -195,7 +186,15 @@ module UniFreire
             files = UniFreire::Graphics::GeralResultadoInfantil.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
             show_graphics(files, doc,dimension)
           end
-
+        end
+        doc.image next_page_file(doc)
+        doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
+        next_page_file(doc) #Pula página com mapa de notas
+        4.times do |i|
+          doc.image image_file("mapa_infantil_#{i + 1}",doc)
+          doc.next_page
         end
       end
 
@@ -281,6 +280,11 @@ module UniFreire
       def page_file(pg_no, doc)
         add_index(doc)
         File.join(TEMPLATE_DIRECTORY,"pg_#{pg_no}.eps")
+      end
+
+      def image_file(file,doc)
+        add_index(doc)
+        File.join(TEMPLATE_DIRECTORY,"#{file}.eps")
       end
 
       def add_index(doc)
