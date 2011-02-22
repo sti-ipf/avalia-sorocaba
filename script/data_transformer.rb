@@ -197,4 +197,19 @@ execute("UPDATE institutions SET infantil_type = 1 WHERE id IN (66,41,44,87,36,1
 execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
 execute("UPDATE institutions SET primary_service_level_id = 3 WHERE id IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
 execute("UPDATE institutions SET primary_service_level_id = 2 WHERE id NOT IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
+execute("ALTER TABLE comparable_answers CHANGE old_segment_name new_segment_name varchar(200);")
+execute("ALTER TABLE comparable_answers ADD COLUMN new_segment_order INTEGER AFTER answer_date;")
+execute("UPDATE comparable_answers set new_segment_name = segment_name;")
+execute("UPDATE comparable_answers set new_segment_order = segment_order;")
+execute("update comparable_answers set new_segment_name='Funcionários', new_segment_order=4  where new_segment_name like 'Func%';")
+execute("update comparable_answers set new_segment_name='Professores', new_segment_order=2 where new_segment_name like 'Prof%';")
+execute("ALTER TABLE institutions ADD COLUMN alias varchar(255) AFTER primary_service_level_id;")
+result = execute("select id from institutions")
+result.each do |r|
+  id = r[0]
+  i_alias = I18n.t("institutions.i#{id}")
+  if !i_alias.include?("translation missing")
+    execute("UPDATE institutions SET alias = '#{i_alias}' WHERE id = #{id}")
+  end
+end
 
