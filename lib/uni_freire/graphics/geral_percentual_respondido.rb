@@ -24,8 +24,6 @@ module UniFreire
             where i.group_id=#{group_type} and segment_name <> 'Alessandra'
             group by institution_id,segment_name) a
             group by institution_id) b").fetch_row[0].to_i
-            puts count
-            puts ((count.fdiv total) * 100).round(2).to_s << "%"
         {:count=>count, :percentual=>((count.fdiv total) * 100).round(2).to_s << "%"}
       end
     end

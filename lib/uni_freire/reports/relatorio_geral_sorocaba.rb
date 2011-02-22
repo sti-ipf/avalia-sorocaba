@@ -69,21 +69,21 @@ module UniFreire
 
         print_percentual_respondido(doc)
 
-        #legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
-        #print_geral_resultado_infantil(doc,legend)
+        legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
+        print_geral_resultado_infantil(doc,legend)
 
-        #doc.image next_page_file(doc)
-        #doc.next_page
-        #doc.image next_page_file(doc)
-        #doc.next_page
-        #doc.image next_page_file(doc)
-        #doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
+        doc.image next_page_file(doc)
+        doc.next_page
 
-        #print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true)
-        #print_agrupamento (doc,INFANTIL_FUNDAMENTAL_PARCIAL,true)
-        #print_agrupamento (doc,FUNDAMENTAL_PARCIAL,false)
-        #print_agrupamento (doc,FUNDAMENTAL_INTEGRAL,false)
-        #print_agrupamento (doc,FUNDAMENTAL_MEDIO,false)
+        print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true)
+        print_agrupamento (doc,INFANTIL_FUNDAMENTAL_PARCIAL,true)
+        print_agrupamento (doc,FUNDAMENTAL_PARCIAL,false)
+        print_agrupamento (doc,FUNDAMENTAL_INTEGRAL,false)
+        print_agrupamento (doc,FUNDAMENTAL_MEDIO,false)
 
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
