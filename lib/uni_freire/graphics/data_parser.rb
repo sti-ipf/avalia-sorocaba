@@ -54,7 +54,37 @@ module UniFreire
         data
       end
 
+      def self.numbers_with_media(numbers)
+        dimension = nil
+        new_numbers = []
+        new_number_control = true
+        numbers.each do |n|
+          actual_dimension = n.first.split('.')[0]
+          dimension ||= actual_dimension
+          new_numbers = add_new_number(new_numbers, dimension) if new_number_control
+          new_number_control = false
+          if actual_dimension == dimension
+            new_numbers << n
+          else
+            dimension = actual_dimension
+            new_numbers = add_new_number(new_numbers, dimension)
+            new_numbers << n
+          end
+        end
+        new_numbers
+      end
+
+      def self.map_with_dimension_media(result, numbers)
+        data = as_hash(result)
+        data
+      end
+
     private
+
+      def self.add_new_number(numbers, dimension)
+        numbers << "Dimensão #{dimension}"
+      end
+
       def get_series_with_legends_and_data(data)
         series = []
         legends = []
