@@ -49,6 +49,14 @@ def import_old_data(year)
   end
 end
 
+execute("update institutions set group_id=62 where id in(131,100)")
+execute("update institutions set group_id=63 where id in(106)")
+execute("update institutions set group_id=64 where id in(112)")
+execute("update institutions set group_id=64 where id in(112)")
+execute("update institutions set group_id=0 where id in (335,362,218,245)")
+
+
+
 execute("drop table comparable_answers")
 
 execute("CREATE TABLE comparable_answers (id INTEGER NOT NULL AUTO_INCREMENT,

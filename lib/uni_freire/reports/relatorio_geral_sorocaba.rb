@@ -6,6 +6,12 @@ module UniFreire
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
       PUBLIC_DIRECTORY = File.expand_path "#{RAILS_ROOT}/public"
 
+      INFANTIL_FUNDAMENTAL_INTEGRAL = 62
+      INFANTIL_FUNDAMENTAL_PARCIAL = 63
+      FUNDAMENTAL_PARCIAL = 64
+      FUNDAMENTAL_INTEGRAL = 65
+      FUNDAMENTAL_MEDIO = 66
+
       REPORT_TYPES = {
         :infantil=> {:number=>2,
                      :invalid_dimensions=>"7",
@@ -61,24 +67,23 @@ module UniFreire
         legend = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_data(REPORT_TYPES)
         print_geral_resultado_infantil_fundamental(doc,legend)
 
-        doc.image next_page_file(doc)
-        doc.next_page
+        print_percentual_respondido(doc)
 
-        legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
-        print_geral_resultado_infantil(doc,legend)
+        #legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
+        #print_geral_resultado_infantil(doc,legend)
 
-        doc.image next_page_file(doc)
-        doc.next_page
-        doc.image next_page_file(doc)
-        doc.next_page
-        doc.image next_page_file(doc)
-        doc.next_page
+        #doc.image next_page_file(doc)
+        #doc.next_page
+        #doc.image next_page_file(doc)
+        #doc.next_page
+        #doc.image next_page_file(doc)
+        #doc.next_page
 
-        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::INFANTIL_FUNDAMENTAL_INTEGRAL,true)
-        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::INFANTIL_FUNDAMENTAL_PARCIAL,true)
-        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::FUNDAMENTAL_PARCIAL,false)
-        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::FUNDAMENTAL_INTEGRAL,false)
-        print_agrupamento (doc,UniFreire::Graphics::GeralResultadoAgrupamentos::FUNDAMENTAL_MEDIO,false)
+        #print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true)
+        #print_agrupamento (doc,INFANTIL_FUNDAMENTAL_PARCIAL,true)
+        #print_agrupamento (doc,FUNDAMENTAL_PARCIAL,false)
+        #print_agrupamento (doc,FUNDAMENTAL_INTEGRAL,false)
+        #print_agrupamento (doc,FUNDAMENTAL_MEDIO,false)
 
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
@@ -128,6 +133,31 @@ module UniFreire
         doc.next_page
       end
 
+      def print_percentual_respondido(doc)
+        doc.image next_page_file(doc)
+        arr_results = []
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_infantil
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(INFANTIL_FUNDAMENTAL_INTEGRAL,84)
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(INFANTIL_FUNDAMENTAL_PARCIAL,42)
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_PARCIAL,36)
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_INTEGRAL,60)
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_MEDIO,32)
+        pos=[20.25,18.95,17.4, 16.45, 15.2, 13.6,12.65]
+        i=0
+        total=0
+        arr_results.each do |a|
+          doc.moveto :x => 17, :y => pos[i]
+          doc.show a[:percentual], :with => :font1, :align => :show_center
+          total += a[:count]
+          i+=1
+        end
+        doc.moveto :x => 17, :y => pos[i]
+        total_perc = ((total.fdiv 624) * 100).round(2).to_s << "%"
+        doc.show total_perc, :with => :font1, :align => :show_center
+        doc.next_page
+      end
+
+
       def print_geral_resultado_infantil_fundamental(doc,legend)
         11.times do |t|
           dimension = t + 1
@@ -143,6 +173,10 @@ module UniFreire
             files = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_indicators(dimension,UniFreire::Reports::SIZE[:default],legend)
             show_graphics(files, doc,dimension)
         end
+      end
+
+      def print_quadro_respostas
+
       end
 
       def print_geral_resultado_infantil(doc,legend)
