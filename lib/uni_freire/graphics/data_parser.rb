@@ -45,6 +45,15 @@ module UniFreire
         data
       end
 
+      def self.as_hash(result)
+        data = {}
+        result.each do |r|
+          data[r[0]] ||= []
+          data[r[0]] << {r[1]=>{r[2]=>r[3]}}
+        end
+        data
+      end
+
     private
       def get_series_with_legends_and_data(data)
         series = []
