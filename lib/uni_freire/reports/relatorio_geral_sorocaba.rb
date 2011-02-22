@@ -9,7 +9,7 @@ module UniFreire
       REPORT_TYPES = {
         :infantil=> {:number=>2,
                      :invalid_dimensions=>"7",
-                     :invalid_indicators=> [ [], [7], [1,2,3,5,6], [], [] ,[] ,[] ,[4,5] ,[] ,[] ,[] ]
+                     :invalid_indicators=> [ [], [7,8], [1,2,3,5,6], [], [] ,[] ,[] ,[4,5] ,[] ,[] ,[] ]
                      },
         :fundamental=> {:number=>3,
                         :invalid_dimensions=>"9",
@@ -254,6 +254,7 @@ module UniFreire
         doc.show "#{@index}", :with => :index, :align => :page_right
         @index += 1
       end
+
 
     end
   end

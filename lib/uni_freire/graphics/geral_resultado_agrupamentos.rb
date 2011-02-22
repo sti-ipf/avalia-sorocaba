@@ -11,7 +11,7 @@ module UniFreire
       FUNDAMENTAL_INTEGRAL = 65
       FUNDAMENTAL_MEDIO = 66
 
-      def self.execute_insert_query(num_type,color)
+      def self.execute_insert_query(num_type)
           ActiveRecord::Base.connection.execute "
           insert into report_data
           select 0,'#{TEXT}',1,segment_name,segment_order,
@@ -20,7 +20,6 @@ module UniFreire
             ON i.id = ca.institution_id
             where i.group_id = #{num_type} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question
           "
-        {:name=>TEXT,:color=>color}
       end
 
       def self.execute_average_query()
@@ -41,7 +40,7 @@ module UniFreire
 
         connection.execute "DELETE FROM report_data WHERE institution_id = 0 "
 
-        legend << execute_insert_query(group,"#669933")
+        execute_insert_query(group)
 
         connection.execute "update report_data set segment_name='Funcionários', segment_order=4   where segment_name like 'Func%' and institution_id = 0"
         connection.execute "update report_data set segment_name='Professores', segment_order=2  where segment_name like 'Prof%' and institution_id = 0"
@@ -57,8 +56,9 @@ module UniFreire
 
       def self.create_dimension( group, dimension, size, legend, title=nil)
         connection = ActiveRecord::Base.connection
+        value=I18n.t("dimension.d#{dimension}")
         result = connection.execute "
-          SELECT segment_name,sum_type,AVG(media) as new_media from
+          SELECT segment_name,'#{value}',AVG(media) as new_media from
             (SELECT segment_name, item_order, segment_order,
                  sum_type, indicator, AVG(score) AS media
           FROM   report_data
@@ -67,7 +67,9 @@ module UniFreire
           GROUP BY segment_order, item_order"
         graphic = UniFreire::Graphics::Generator.new(:size => size, :title => title, :marker_font_size => 12,
                                 :no_data_message=> "\n Não há dados \npara esta \n dimensão")
-        graphic.generate(result,legend,"geral_resultado_agrupamento_#{group}_dimensao_#{dimension}")
+        l=[]
+        l << {:color=>"#669933",:name=>I18n.t("dimension.d#{dimension}")}
+        graphic.generate(result,l,"geral_resultado_agrupamento_#{group}_dimensao_#{dimension}")
       end
 
       def self.create_indicators (group,dimension, size, legend, title=nil)
@@ -79,8 +81,9 @@ module UniFreire
         graphics = []
 
         indicators.each do |indicator_id|
+          value=I18n.t("indicator.i#{dimension}_#{indicator_id}")
           result = connection.execute "
-            SELECT segment_name,sum_type,AVG(media) as new_media from
+            SELECT segment_name,'#{value}',AVG(media) as new_media from
               (SELECT segment_name,
                  item_order,
                  segment_order,
@@ -92,12 +95,13 @@ module UniFreire
                  AND score > 0
               GROUP  BY segment_order, item_order,indicator) a
               GROUP BY segment_order, item_order"
-          puts indicator_id
           if result.num_rows > 0
-            puts "Achou"
             graphic = UniFreire::Graphics::Generator.new(:size => size, :title => "Indicador #{dimension}.#{indicator_id}",
                     :no_data_message=> "\n Não há dados \n para o \n indicador #{dimension}.#{indicator_id}")
-            graphics << graphic.generate(result,legend,
+            #legend[:color]
+            l=[]
+            l << {:color=>"#669933",:name=>I18n.t("indicator.i#{dimension}_#{indicator_id}")}
+            graphics << graphic.generate(result,l,
                    "resultado_agrupamento_#{group}_dimensao_indicador_#{dimension}_#{indicator_id}")
           end
         end
