@@ -40,7 +40,7 @@ module UniFreire
       def self.as_array(result)
         data = []
         result.each do |r|
-          data << r
+          data << r.first
         end
         data
       end
@@ -80,19 +80,50 @@ module UniFreire
         new_numbers
       end
 
-      def self.map_with_dimension_media(result, numbers)
+      def self.map_with_dimension_media(result, institutions, numbers)
         data = as_hash(result)
         funcs = %w(Gestores Professores Funcionários Familiares)
-        media_temp = []
+        hash_temp = {}
         actual_dimension = nil
-        dimension_i = nil
-        dimension = nil
+        institutions.each do |i|
+          funcs.each do |f|
+            numbers.each do |n|
+              if n.include?("Dimen")
+                actual_dimension = n
+                hash_temp[actual_dimension] = []
+                next
+              end
+              begin
+                value = data[i][f][n].to_f.round(1)
+                hash_temp[actual_dimension] << value if value != 0
+              rescue
+                next
+              end
+            end #numbers each
+            hash_temp.each do |k,v|
+              begin
+                data[i][f][k] = calc_dimension_media(v)
+              rescue
+                next
+              end
+            end
+            hash_temp = {}
+          end #funcs each
+        end #institutions each
+        data
       end
 
     private
 
       def self.add_new_number(numbers, dimension)
         numbers << "Dimensão #{dimension}"
+      end
+
+      def self.calc_dimension_media(v)
+        return nil if v.count == 0
+        media = 0
+        v.each {|d| media+=d}
+        media = (media/v.count).to_i
       end
 
       def get_series_with_legends_and_data(data)

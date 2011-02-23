@@ -3,10 +3,10 @@ module UniFreire
     class MapGenerator
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
 
-      def self.generate(data, numbers, institutions, columns_size)
-        build_html(data, numbers, institutions, columns_size)
+      def self.generate(data, numbers, institutions, columns_size, height="30px", file_name='mapa')
+        build_html(data, numbers, institutions, columns_size, height)
         html_file = File.new(File.join(TEMP_DIRECTORY,'mapa.html'))
-        eps_files = convert_to_eps(html_file)
+        eps_files = convert_to_eps(html_file,file_name)
         eps_files
       end
 
@@ -34,8 +34,9 @@ module UniFreire
         end
       end
 
-      def self.build_html(data, numbers, institutions, columns_size)
+      def self.build_html(data, numbers, institutions, columns_size, height)
         header = ''
+        margin_top = (height == "30px")? "0.9%" : "8px"
         html_code = <<HEREDOC
           <!DOCTYPE html>
           <html lang='pt-BR'>
@@ -58,16 +59,18 @@ module UniFreire
             .yellow{background-color:yellow}
             .green{background-color:green}
             .vertical_text{
-              text-align: center;
               vertical-align: middle;
-              width: 20px;
-              height: 35px;
-              margin: 0px;
-              padding: 5px 1px;
-              white-space: nowrap;
+              height: #{height};
+            }
+            .vertical_text span{
               -webkit-transform: rotate(-90deg);
               -moz-transform: rotate(-90deg);
               transform: rotate(-90deg);
+              margin-top: #{margin_top};
+              padding-bottom: 7px;
+              position: fixed;
+              white-space: nowrap;
+              width: 10px;
             }
             .space_betweet_tables{height:20px;}
             .break_page {}
@@ -80,7 +83,6 @@ module UniFreire
           <body>
 HEREDOC
 
-        # primeira linha com as dimensões e indicadores
         first_table = '<table>'
         second_table = '<table>'
         first_header = ''
@@ -88,23 +90,22 @@ HEREDOC
         [first_table, second_table, first_header, second_header].each {|s| s << "<tr> <td colspan = \"2\"> </td>"}
         numbers.size.times do |n|
           if n > columns_size
-            [second_table, second_header].each {|s| s << "<td class=\"vertical_text\"> #{numbers[n]} </td>"}
+            [second_table, second_header].each {|s| s << "<td class=\"vertical_text\"> <span>#{numbers[n]}</span> </td>"}
           else
-            [first_table, first_header].each {|s| s << "<td class=\"vertical_text\"> #{numbers[n]} </td>"}
+            [first_table, first_header].each {|s| s << "<td class=\"vertical_text\"> <span>#{numbers[n]}</span> </td>"}
           end
         end
         [first_table, second_table, first_header, second_header].each {|s| s << "</tr>"}
         @funcs = %w(Gestores Professores Funcionários Familiares)
         break_page_count = 0
         @break = false
-        institutions.each do |i|
+        institutions.each do |institution|
           break_page_count += 1
-          institution = i.first
           [first_table, second_table].each {|s| s << "<tr> <td rowspan = \"#{(@funcs.count+1)}\"> #{institution} </td>"}
           @funcs.each do |f|
             [first_table, second_table].each {|s| s << "<tr> <td> #{f} </td>"}
             numbers.size.times do |n|
-              number = numbers[n].first
+              number = numbers[n]
               if n > columns_size
                 second_table = add_data_in_table(data, institution, f, number, second_table)
               else
@@ -130,7 +131,7 @@ HEREDOC
         end
         second_table << "</table>"
         html_code << first_table
-        html_code << second_table
+        html_code << second_table if numbers.size > columns_size
         html_file = File.new(File.join(TEMP_DIRECTORY,'mapa.html'), 'w+')
         html_file.puts html_code
         html_file.close
@@ -153,16 +154,16 @@ HEREDOC
       end
 
       def self.get_css_class(value)
-        case value
-          when "1"
+        case value.to_i
+          when 1
             "red"
-          when "2"
+          when 2
             "orange"
-          when "3"
+          when 3
             "blue"
-          when "4"
+          when 4
             "yellow"
-          when "5"
+          when 5
             "green"
           else
             "white"
@@ -185,9 +186,9 @@ HEREDOC
       end
 
 
-      def self.convert_to_eps(html_file)
+      def self.convert_to_eps(html_file,file_name)
         pdf_file = convert_html_to_pdf(html_file)
-        eps_file = File.join(TEMP_DIRECTORY,'mapa')
+        eps_file = File.join(TEMP_DIRECTORY,file_name)
         (1..10).each do |i|
         `pdftops -eps -f #{i} -l #{i} #{pdf_file} #{eps_file}_#{i}.eps 1> /dev/null 2> /dev/null`
         end

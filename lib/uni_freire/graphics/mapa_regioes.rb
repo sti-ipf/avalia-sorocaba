@@ -5,7 +5,7 @@ module UniFreire
       def self.create(region_id)
         connection = ActiveRecord::Base.connection
         result = connection.execute "
-          SELECT i.alias,segment_name,concat(dimension,'.',indicator) as number, AVG(score) AS media
+          SELECT i.alias,segment_name,concat(dimension,'.',indicator) as number, ROUND(AVG(score)) AS media
           FROM comparable_answers ca
           INNER JOIN institutions i ON i.id = ca.institution_id
           WHERE i.region_id = #{region_id}
@@ -28,9 +28,9 @@ module UniFreire
         numbers = UniFreire::Graphics::DataParser.as_array(numbers_result)
         numbers = UniFreire::Graphics::DataParser.numbers_with_media(numbers)
         institutions = UniFreire::Graphics::DataParser.as_array(institutions_result)
-        data = UniFreire::Graphics::DataParser.map_with_dimension_media(result, numbers)
-        data
-#        UniFreire::Graphics::MapGenerator.generate(data, numbers, institutions, 89)
+        data = UniFreire::Graphics::DataParser.map_with_dimension_media(result, institutions, numbers)
+        file_name = "mapa_regiao_#{region_id}"
+        UniFreire::Graphics::MapGenerator.generate(data, numbers, institutions, 89, "40px", file_name)
       end
     end
   end
