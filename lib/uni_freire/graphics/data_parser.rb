@@ -65,7 +65,7 @@ module UniFreire
         new_numbers = []
         new_number_control = true
         numbers.each do |n|
-          actual_dimension = n.first.split('.')[0]
+          actual_dimension = n.split('.')[0]
           dimension ||= actual_dimension
           new_numbers = add_new_number(new_numbers, dimension) if new_number_control
           new_number_control = false
@@ -123,7 +123,8 @@ module UniFreire
         return nil if v.count == 0
         media = 0
         v.each {|d| media+=d}
-        media = (media/v.count).to_i
+        media = (media.to_f/v.count).to_f.round(1)
+        media = (media.to_i == media)? media.to_i : media
       end
 
       def get_series_with_legends_and_data(data)

@@ -28,7 +28,8 @@ module UniFreire
         data = UniFreire::Graphics::DataParser.as_hash(result)
         numbers = UniFreire::Graphics::DataParser.as_array(numbers_result)
         institutions = UniFreire::Graphics::DataParser.as_array(institutions_result)
-        UniFreire::Graphics::MapGenerator.generate(data, numbers, institutions, 89)
+        UniFreire::Graphics::MapGenerator.generate(:data => data, :numbers => numbers,
+          :institutions => institutions, :columns_size => 89, :file_name => "mapa_infantil")
       end
     end
   end

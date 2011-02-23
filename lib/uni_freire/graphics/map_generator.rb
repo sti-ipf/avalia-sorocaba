@@ -3,40 +3,21 @@ module UniFreire
     class MapGenerator
       TEMP_DIRECTORY = File.expand_path "#{RAILS_ROOT}/tmp"
 
-      def self.generate(data, numbers, institutions, columns_size, height="30px", file_name='mapa')
-        build_html(data, numbers, institutions, columns_size, height)
+      def self.generate(params={})
+        params = {:header_height => "30px", :file_name => "mapa", :with_colors => true,
+                  :institution_is_legend => true}.merge(params)
+        build_html(params[:data], params[:numbers], params[:institutions],
+                   params[:columns_size], params[:header_height],
+                   params[:with_colors], params[:institution_is_legend])
         html_file = File.new(File.join(TEMP_DIRECTORY,'mapa.html'))
-        eps_files = convert_to_eps(html_file,file_name)
-        eps_files
+        eps_files = convert_to_eps(html_file,params[:file_name])
       end
 
     private
-      def self.create_new_hash_segment_temp(number, d, hash_number_temp, hash_segment_temp, segment_name)
-        if number == d[2]
-          hash_number_temp[number] = d[3]
-          hash_segment_temp[segment_name] = hash_number_temp
-        else
-          number = d[2]
-          hash_number_temp[number] = d[3]
-          hash_segment_temp[segment_name] = hash_number_temp
-        end
-        hash_segment_temp
-      end
 
-      def self.create_new_segment(segment_name, d, number, hash_segment_temp, hash_number_temp)
-        if segment_name == d[1]
-          number ||= d[2]
-          hash_segment_temp = create_new_hash_segment_temp(number, d, hash_number_temp, hash_segment_temp)
-        else
-          segment_name = d[1]
-          number = d[2]
-          hash_segment_temp = create_new_hash_segment_temp(number, d, hash_number_temp, hash_segment_temp)
-        end
-      end
-
-      def self.build_html(data, numbers, institutions, columns_size, height)
+      def self.build_html(data, numbers, institutions, columns_size, height, with_colors, institution_is_legend)
         header = ''
-        margin_top = (height == "30px")? "0.9%" : "8px"
+        vertical_text_css = get_vertical_text_css(height)
         html_code = <<HEREDOC
           <!DOCTYPE html>
           <html lang='pt-BR'>
@@ -58,20 +39,7 @@ module UniFreire
             .blue{background-color:blue}
             .yellow{background-color:yellow}
             .green{background-color:green}
-            .vertical_text{
-              vertical-align: middle;
-              height: #{height};
-            }
-            .vertical_text span{
-              -webkit-transform: rotate(-90deg);
-              -moz-transform: rotate(-90deg);
-              transform: rotate(-90deg);
-              margin-top: #{margin_top};
-              padding-bottom: 7px;
-              position: fixed;
-              white-space: nowrap;
-              width: 10px;
-            }
+            #{vertical_text_css}
             .space_betweet_tables{height:20px;}
             .break_page {}
             @media print {
@@ -98,18 +66,23 @@ HEREDOC
         [first_table, second_table, first_header, second_header].each {|s| s << "</tr>"}
         @funcs = %w(Gestores Professores Funcionários Familiares)
         break_page_count = 0
-        @break = false
+        institution_legend_count = 0
         institutions.each do |institution|
           break_page_count += 1
-          [first_table, second_table].each {|s| s << "<tr> <td rowspan = \"#{(@funcs.count+1)}\"> #{institution} </td>"}
+          institution_legend_count += 1
+          if institution_is_legend
+            [first_table, second_table].each {|s| s << "<tr> <td rowspan = \"#{(@funcs.count+1)}\"> #{institution} </td>"}
+          else
+            [first_table, second_table].each {|s| s << "<tr> <td rowspan = \"#{(@funcs.count+1)}\"> #{institution_legend_count} </td>"}
+          end
           @funcs.each do |f|
             [first_table, second_table].each {|s| s << "<tr> <td> #{f} </td>"}
             numbers.size.times do |n|
               number = numbers[n]
               if n > columns_size
-                second_table = add_data_in_table(data, institution, f, number, second_table)
+                second_table = add_data_in_table(data, institution, f, number, second_table, with_colors)
               else
-                first_table = add_data_in_table(data, institution, f, number, first_table)
+                first_table = add_data_in_table(data, institution, f, number, first_table, with_colors)
               end
             end
             [second_table, first_table].each {|s| s << "</tr>"}
@@ -137,12 +110,13 @@ HEREDOC
         html_file.close
       end
 
-      def self.add_data_in_table(data, institution, f, number, table)
+      def self.add_data_in_table(data, institution, f, number, table, with_colors)
         number_filled = false
         begin
           value = data[institution][f][number]
           if !value.nil?
-            css_class = get_css_class(value)
+            value = (value.to_i == value.to_f)? value.to_i : value
+            css_class = get_css_class(value) if with_colors
             table << "<td class = \"#{css_class}\"> #{value} </td>"
             number_filled = true
             break
@@ -210,6 +184,45 @@ HEREDOC
         Dir.glob(eps_file_pattern).each {|file_name| files << file_name}
         files.sort!
       end
+
+      def self.get_vertical_text_css(height)
+        if height == "30px"
+          <<HEREDOC
+            .vertical_text{
+              text-align: center;
+              vertical-align: middle;
+              width: 20px;
+              height: #{height};
+              margin: 0px;
+              padding: 5px 1px;
+              white-space: nowrap;
+              -webkit-transform: rotate(-90deg);
+              -moz-transform: rotate(-90deg);
+              transform: rotate(-90deg);
+            }
+            .vertical_text span{
+              background-color:white;
+            }
+HEREDOC
+        else
+          <<HEREDOC
+            .vertical_text{
+              vertical-align: middle;
+              height: #{height};
+            }
+            .vertical_text span{
+              -webkit-transform: rotate(-90deg);
+              -moz-transform: rotate(-90deg);
+              transform: rotate(-90deg);
+              white-space: nowrap;
+              width: 10px;
+              float: left;
+              margin-top: 32px;
+            }
+HEREDOC
+        end
+      end
+
 
     end #MapGenerator
   end #Graphics
