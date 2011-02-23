@@ -24,7 +24,7 @@ module UniFreire
           from comparable_answers ca
           inner join institutions i on i.id=ca.institution_id
           where year=2010 and i.group_id = #{group_id}
-          order by alias
+          order by 0+alias
           "
         data = UniFreire::Graphics::DataParser.as_hash(result)
         numbers = UniFreire::Graphics::DataParser.as_array(numbers_result)

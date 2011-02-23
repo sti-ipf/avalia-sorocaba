@@ -116,8 +116,18 @@ namespace :generate do
   private
 
     def get_data(table)
-      data = []
       result = ActiveRecord::Base.connection.execute("SELECT id FROM #{table}")
+      parser_data(result)
+    end
+
+    def get_groups_without_infant
+      result = ActiveRecord::Base.connection.execute("
+        SELECT id FROM groups WHERE id NOT IN (61)")
+      parser_data(result)
+    end
+
+    def parser_data(result)
+      data = []
       result.each{|r| data << r[0]}
       data
     end
@@ -129,7 +139,7 @@ namespace :generate do
     end
 
     def generate_groups_map
-      groups = get_data("groups")
+      groups = get_groups_without_infant
       groups.each do |group_id|
         puts "Gerando mapa do grupo #{group_id}"
         UniFreire::Graphics::MapaGrupos.create(group_id)

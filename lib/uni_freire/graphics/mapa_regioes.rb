@@ -31,7 +31,8 @@ module UniFreire
         data = UniFreire::Graphics::DataParser.map_with_dimension_media(result, institutions, numbers)
         UniFreire::Graphics::MapGenerator.generate(:data => data, :numbers => numbers,
           :institutions => institutions, :columns_size => 89, :with_colors => false,
-          :header_height => "40px", :file_name => "mapa_regiao_#{region_id}")
+          :header_height => "40px", :institution_is_legend => false,
+          :file_name => "mapa_regiao_#{region_id}")
       end
     end
   end
