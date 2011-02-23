@@ -29,7 +29,7 @@ module UniFreire
           tag :indexwhite, :name => 'Helvetica', :size => 8, :color => '#FFFFFF'
         end
 
-        doc.image File.expand_path("capa_0002.eps", TEMPLATE_DIRECTORY)
+        doc.image File.expand_path("capa.eps", TEMPLATE_DIRECTORY)
         doc.next_page
 
         # salta 8 páginas
@@ -55,7 +55,7 @@ module UniFreire
         # 1.2. Gráfico geral da série histórica dos resultados das dimensões
         doc.image next_page_file(doc)
         file = UniFreire::Graphics::ResultadosDimensoes.create(@institution_id, UniFreire::Reports::SIZE[:wide],legend)
-        doc.image file, :x => 1.6, :y => 9.5, :zoom => 32
+        doc.image file, :x => 1.6, :y => 8, :zoom => 32
         doc.showpage
         doc.image next_page_file(doc)
 
@@ -70,7 +70,7 @@ module UniFreire
 
         legend=UniFreire::Graphics::GeralDimensao.create_report_data(@institution_id,COLORS[:five])
         # 2. Análise dos resultados por dimensões e indicadores
-        y = [0, 15, 15.5, 16.5, 15.5, 15.5, 15.5, 14.5, 15.5, 15.5, 16.5, 15.5]
+        y = [0, 15, 15.5, 16.5, 15.5, 15.5, 15.5, 14.5, 15.5, 15.5, 16.5, 15]
         (1..11).each do |dimension_id|
           file = UniFreire::Graphics::GeralDimensao.create(@institution_id, dimension_id, UniFreire::Reports::SIZE[:wide], legend)
           doc.image file, :x => 1.6, :y => y[dimension_id], :zoom => 32
@@ -88,9 +88,9 @@ module UniFreire
 
         files = UniFreire::Graphics::QuadroRegiao.generate(@institution_id)
         files.each do |file|
+          add_index(doc)
           doc.image file
           doc.next_page if file != files.last
-          add_index(doc) if file == files.last
         end
 
         %w(anexo1 anexo2 anexo3_1 anexo3_2 expediente).each do |special_page|

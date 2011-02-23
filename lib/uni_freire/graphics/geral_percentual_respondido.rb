@@ -9,9 +9,6 @@ module UniFreire
             where i.infantil_type in (1,2,3) and segment_name <> 'Alessandra'
             group by institution_id,segment_name) a
             group by institution_id) b").fetch_row[0].to_i
-            puts "*" * 100
-            puts count
-            puts ((count.fdiv 370) * 100).round(2).to_s << "%"
         {:count=>count, :percentual=>((count.fdiv 370) * 100).round(2).to_s << "%"}
 
       end

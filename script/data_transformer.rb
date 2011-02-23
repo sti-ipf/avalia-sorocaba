@@ -30,8 +30,6 @@ def import_old_data(year)
   ind = 1
   curr_ind=0
   resps.each do | resp|
-#    puts "D:#{resp[1]} - I:#{resp[2]} - Q:#{resp[5]}"
-#    puts "dim:#{dim} - ind:#{ind} - curr_ind=#{curr_ind}"
     if dim != resp[1]
       dim = resp[1]
       ind = 1
@@ -40,7 +38,6 @@ def import_old_data(year)
       ind += 1
       curr_ind=resp[2]
     end
-#    puts "POS -> dim:#{dim} - ind:#{ind} - curr_ind=#{curr_ind}"
     execute("insert into comparable_answers
      (external_id, institution_id, number, original_number, score, level_name,
      segment_name, dimension, indicator, question, year, answer_date)
@@ -49,14 +46,7 @@ def import_old_data(year)
   end
 end
 
-execute("update institutions set group_id=62 where id in(131,100)")
-execute("update institutions set group_id=63 where id in(106)")
-execute("update institutions set group_id=64 where id in(112)")
-execute("update institutions set group_id=0 where id in (335,362,218,245)")
-
-
-
-execute("drop table comparable_answers")
+execute("drop table IF EXISTS comparable_answers")
 
 execute("CREATE TABLE comparable_answers (id INTEGER NOT NULL AUTO_INCREMENT,
   external_id INTEGER  NOT NULL, institution_id INTEGER  NOT NULL, number VARCHAR(200) NOT NULL,
@@ -116,7 +106,7 @@ execute ("insert into institutions_service_levels select id,2 from institutions 
 execute ("insert into institutions_service_levels select id,3 from institutions where group_id in(62,63,64,65,66)")
 execute ("insert into institutions_service_levels select id,4 from institutions where group_id in(66)")
 
-execute("drop table report_data")
+execute("drop table IF EXISTS report_data")
 execute("CREATE TABLE report_data (
   institution_id int(11) NOT NULL, sum_type varchar(50) DEFAULT NULL, item_order varchar(50) DEFAULT NULL,
   segment_name varchar(50) DEFAULT NULL, segment_order int(11) DEFAULT NULL, score float DEFAULT NULL,
@@ -125,15 +115,66 @@ execute("CREATE TABLE report_data (
 
 #execute("ALTER TABLE report_data ADD INDEX 'index_on_institution_id_and_dimension' (institution_id ASC, dimension ASC)")
 
-
 execute("update comparable_answers set institution_id=159 where institution_id=276")
 execute("update comparable_answers set institution_id=58 where institution_id in (168,285,361)")
 execute("update comparable_answers set institution_id=57 where institution_id in (154,243,271,360)")
 execute("update comparable_answers set institution_id=123 where institution_id in (218,245)")
 execute("delete from institutions_year_history where institution_id in (276,168,285,361,154,243,271,360,218,245)")
 
+execute("update institutions set group_id=62 where id in(131,100)")
+execute("update institutions set group_id=63 where id in(106)")
+execute("update institutions set group_id=64 where id in(112)")
+execute("update institutions set group_id=0 where id in (335,362,218,245)")
 
-execute("CREATE  TABLE `supervisor` (
+execute("DROP TABLE IF EXISTS regions")
+execute("CREATE  TABLE regions (
+  id INT NOT NULL ,
+  name VARCHAR(250) NULL )")
+
+begin
+execute("ALTER TABLE institutions
+ADD COLUMN group_id VARCHAR(45) NULL  AFTER id_2008");
+
+execute("ALTER TABLE institutions
+ADD COLUMN region_id INT NULL  AFTER id_2008")
+rescue
+  puts "Colunas já existem"
+end
+
+execute("insert into regions (id, name) values
+  (0, 'POLO PROGRESSO'),
+  (1, 'POLO OESTE 1'),
+  (2, 'POLO OESTE 2'),
+  (3, 'POLO OESTE 3'),
+  (4, 'POLO APARECIDINHA'),
+  (5, 'POLO NORTE IPA 1'),
+  (6, 'POLO NORTE ITA 1'),
+  (7, 'POLO NORTE ITA 2'),
+  (8, 'POLO NORTE ITA 3'),
+  (9, 'POLO CENTRAL'),
+  (10, 'POLO LESTE'),
+  (11, 'POLO ÉDEN/CAJURU'),
+  (12, 'POLO LESTE 2'),
+  (13, 'POLO BRIGADEIRO')")
+
+execute("update institutions set region_id = 0 where id in (66, 48, 69, 62, 41, 132, 76, 25, 122)")
+execute("update institutions set region_id = 1 where id in (90, 81, 39, 55, 64, 34, 22, 77, 65, 109, 112, 108)")
+execute("update institutions set region_id = 2 where id in (47, 57, 63, 12, 18, 53, 44, 33, 130, 111, 99)")
+execute("update institutions set region_id = 3 where id in (31, 37, 60, 88, 92, 125, 127)")
+execute("update institutions set region_id = 4 where id in (118, 11, 83)")
+execute("update institutions set region_id = 5 where id in (85, 74, 89, 15, 61, 54, 27, 128, 105, 101)")
+execute("update institutions set region_id = 6 where id in (70, 50, 67, 73, 93, 115, 104, 106, 100)")
+execute("update institutions set region_id = 7 where id in (21, 36, 124, 103, 94, 96, 98, 102)")
+execute("update institutions set region_id = 8 where id in (29, 38, 71, 9, 17, 68, 126, 28, 131, 119)")
+execute("update institutions set region_id = 9 where id in (20, 32, 58, 56, 121, 120, 113)")
+execute("update institutions set region_id = 10 where id in (24, 51, 78, 84, 79, 30, 45, 123, 107, 114)")
+execute("update institutions set region_id = 11 where id in (35, 14, 59, 91, 129)")
+execute("update institutions set region_id = 12 where id in (87, 86, 16, 75, 52, 49, 110)")
+execute("update institutions set region_id = 13 where id in (19, 46, 72, 133)")
+
+
+execute("drop table IF EXISTS supervisors")
+execute("CREATE  TABLE `supervisors` (
   `id` INT NOT NULL ,
   `name` VARCHAR(250) NULL )")
 
@@ -154,7 +195,11 @@ execute("insert into supervisors (id, name) values
   (13, 'Fábio'),
   (14, 'Sara')")
 
+begin
 execute("ALTER TABLE institutions ADD COLUMN supervisor_id INTEGER AFTER group_id")
+rescue
+
+end
 
 execute("update institutions set supervisor_id = 0 where id in (104,70,106,85,105,89,50)")
 execute("update institutions set supervisor_id = 1 where id in (101,74,15,54,56,128,122)")
@@ -173,7 +218,8 @@ execute("update institutions set supervisor_id = 13 where id in (38,100,9,96,17,
 execute("update institutions set supervisor_id = 14 where id in (131,29,76,71,68,59,94)")
 
 
-#execute("drop table institutions_year_history")
+
+execute("drop table IF EXISTS institutions_year_history")
 execute ("CREATE  TABLE institutions_year_history (
   institution_id INT NOT NULL ,
   level_type INT NOT NULL,
@@ -190,8 +236,12 @@ execute("insert into institutions_year_history select id,3,2008 from institution
 execute("insert into institutions_year_history select id,3,2009 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 
-
+begin
 execute("ALTER TABLE institutions ADD COLUMN infantil_type INTEGER AFTER group_id;")
+rescue
+
+end
+
 #Infantil Integral
 execute("UPDATE institutions SET infantil_type = 3 WHERE id IN (16,89,22,45,46,49,50,52,56,17,68,30,21,34,25,27,60,61,11,83,88,15,33,75,77,67,33)")
 #Infantil Parcial
@@ -200,17 +250,30 @@ execute("UPDATE institutions SET infantil_type = 2 WHERE id IN (81,118,62,18,19,
 #Integral + Parcial
 execute("UPDATE institutions SET infantil_type = 1 WHERE id IN (66,41,44,87,36,132,48,14,51,59,63,65,72,54,69,86,73,79)")
 
-
+begin
 execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
+rescue
+
+end
 execute("UPDATE institutions SET primary_service_level_id = 3 WHERE id IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
 execute("UPDATE institutions SET primary_service_level_id = 2 WHERE id NOT IN (122, 108, 109, 112, 130, 111, 99, 92, 125, 127, 128, 105, 101, 93, 115, 104, 106, 100, 124, 103, 94, 96, 98, 102, 126, 28, 131, 119, 121, 120, 113, 123, 107, 114, 91, 129, 110, 133)")
-execute("ALTER TABLE comparable_answers CHANGE old_segment_name new_segment_name varchar(200);")
-execute("ALTER TABLE comparable_answers ADD COLUMN new_segment_order INTEGER AFTER answer_date;")
-execute("UPDATE comparable_answers set new_segment_name = segment_name;")
-execute("UPDATE comparable_answers set new_segment_order = segment_order;")
+begin
+execute("ALTER TABLE comparable_answers CHANGE old_segment_name new_segment_name varchar(200)")
+execute("ALTER TABLE comparable_answers ADD COLUMN new_segment_order INTEGER AFTER answer_date")
+rescue
+
+end
+execute("UPDATE comparable_answers set new_segment_name = segment_name")
+execute("UPDATE comparable_answers set new_segment_order = segment_order")
 execute("update comparable_answers set new_segment_name='Funcionários', new_segment_order=4  where new_segment_name like 'Func%';")
 execute("update comparable_answers set new_segment_name='Professores', new_segment_order=2 where new_segment_name like 'Prof%';")
+
+begin
 execute("ALTER TABLE institutions ADD COLUMN alias varchar(255) AFTER primary_service_level_id;")
+rescue
+
+end
+
 result = execute("select id from institutions")
 result.each do |r|
   id = r[0]
