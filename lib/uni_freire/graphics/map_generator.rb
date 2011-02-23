@@ -99,16 +99,16 @@ HEREDOC
         @break = false
         institutions.each do |i|
           break_page_count += 1
-          indicator = i.first
-          [first_table, second_table].each {|s| s << "<tr> <td rowspan = \"#{(@funcs.count+1)}\"> #{indicator} </td>"}
+          institution = i.first
+          [first_table, second_table].each {|s| s << "<tr> <td rowspan = \"#{(@funcs.count+1)}\"> #{institution} </td>"}
           @funcs.each do |f|
             [first_table, second_table].each {|s| s << "<tr> <td> #{f} </td>"}
             numbers.size.times do |n|
               number = numbers[n].first
               if n > columns_size
-                second_table = add_data_in_table(data, indicator, f, number, second_table)
+                second_table = add_data_in_table(data, institution, f, number, second_table)
               else
-                first_table = add_data_in_table(data, indicator, f, number, first_table)
+                first_table = add_data_in_table(data, institution, f, number, first_table)
               end
             end
             [second_table, first_table].each {|s| s << "</tr>"}
@@ -136,20 +136,17 @@ HEREDOC
         html_file.close
       end
 
-      def self.add_data_in_table(data, indicator, f, number, table)
+      def self.add_data_in_table(data, institution, f, number, table)
         number_filled = false
-        data[indicator].each do |d|
-          begin
-            value = d[f][number]
-            if !value.nil?
-              css_class = get_css_class(value)
-              table << "<td class = \"#{css_class}\"> #{value} </td>"
-              number_filled = true
-              break
-            end
-          rescue
-            next
+        begin
+          value = data[institution][f][number]
+          if !value.nil?
+            css_class = get_css_class(value)
+            table << "<td class = \"#{css_class}\"> #{value} </td>"
+            number_filled = true
+            break
           end
+        rescue
         end
         table << "<td> - </td>" if number_filled == false
         table

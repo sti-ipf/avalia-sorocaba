@@ -47,9 +47,15 @@ module UniFreire
 
       def self.as_hash(result)
         data = {}
+        school = nil
+        segment_name = nil
+        indicator = nil
         result.each do |r|
-          data[r[0]] ||= []
-          data[r[0]] << {r[1]=>{r[2]=>r[3]}}
+          data[r[0]] = {} if school != r[0]
+          school = r[0]
+          data[r[0]][r[1]] = {} if segment_name != r[1]
+          segment_name = r[1]
+          data[r[0]][r[1]][r[2]] = r[3]
         end
         data
       end
@@ -76,7 +82,11 @@ module UniFreire
 
       def self.map_with_dimension_media(result, numbers)
         data = as_hash(result)
-        data
+        funcs = %w(Gestores Professores Funcionários Familiares)
+        media_temp = []
+        actual_dimension = nil
+        dimension_i = nil
+        dimension = nil
       end
 
     private
