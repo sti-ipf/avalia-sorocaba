@@ -12,6 +12,38 @@ module UniFreire
       FUNDAMENTAL_INTEGRAL = 65
       FUNDAMENTAL_MEDIO = 66
 
+      POLOS = [{:number=>4,:name=>"aparecidinha"},
+               {:number=>13,:name=>"brigadeiro"},
+               {:number=>9,:name=>"central"},
+               {:number=>11,:name=>"eden_cajuru"},
+               {:number=>10,:name=>"leste_1"},
+               {:number=>12,:name=>"leste_2"},
+               {:number=>6,:name=>"norte_ita_1"},
+               {:number=>7,:name=>"norte_ita_2"},
+               {:number=>8,:name=>"norte_ita_3"},
+               {:number=>5,:name=>"norte_ipa_1"},
+               {:number=>1,:name=>"oeste_1"},
+               {:number=>2,:name=>"oeste_2"},
+               {:number=>3,:name=>"oeste_3"},
+               {:number=>0,:name=>"progresso"}]
+
+      SUPERVISORAS = [{:number=>0,:name=>"edmara"},
+               {:number=>1,:name=>"elaine"},
+               {:number=>2,:name=>"paula"},
+               {:number=>3,:name=>"sonia"},
+               {:number=>4,:name=>"gilsemara"},
+               {:number=>5,:name=>"ana_rosa"},
+               {:number=>6,:name=>"aparecida"},
+               {:number=>7,:name=>"antonio_carlos"},
+               {:number=>8,:name=>"jessimeire"},
+               {:number=>9,:name=>"cristina"},
+               {:number=>10,:name=>"claudia"},
+               {:number=>11,:name=>"marcia"},
+               {:number=>12,:name=>"everton"},
+               {:number=>13,:name=>"fabio"},
+               {:number=>14,:name=>"sara"}]
+
+
       REPORT_TYPES = {
         :infantil=> {:number=>2,
                      :invalid_dimensions=>"7",
@@ -72,11 +104,15 @@ module UniFreire
         legend = UniFreire::Graphics::GeralResultadoInfantil.create_data(REPORT_TYPES)
         print_geral_resultado_infantil(doc,legend)
 
-        print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true,"mapa_infantil_fundamental_integral")
+        print_agrupamento (doc,INFANTIL_FUNDAMENTAL_INTEGRAL,true)
         print_agrupamento (doc,INFANTIL_FUNDAMENTAL_PARCIAL,true)
         print_agrupamento (doc,FUNDAMENTAL_PARCIAL,false)
         print_agrupamento (doc,FUNDAMENTAL_INTEGRAL,false)
         print_agrupamento (doc,FUNDAMENTAL_MEDIO,false)
+
+        print_regiao(doc)
+
+        print_supervisor(doc)
 
         doc.render :pdf, :debug => true, :quality => :prepress,
           :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
@@ -134,7 +170,7 @@ module UniFreire
         arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(INFANTIL_FUNDAMENTAL_PARCIAL,42)
         arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_PARCIAL,36)
         arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_INTEGRAL,60)
-        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_MEDIO,32)
+        arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_MEDIO,28)
         pos=[20.25,18.95,17.4, 16.45, 15.2, 13.6,12.65]
         i=0
         total=0
@@ -145,7 +181,7 @@ module UniFreire
           i+=1
         end
         doc.moveto :x => 17, :y => pos[i]
-        total_perc = ((total.fdiv 624) * 100).round(2).to_s << "%"
+        total_perc = ((total.fdiv 620) * 100).round(2).to_s << "%"
         doc.show total_perc, :with => :font1, :align => :show_center
         doc.next_page
       end
@@ -191,8 +227,8 @@ module UniFreire
         doc.next_page
         doc.image next_page_file(doc)
         doc.next_page
-        next_page_file(doc) #Pula página com mapa de notas
         4.times do |i|
+          doc.image only_next_file(doc)
           doc.image image_file("mapa_infantil_#{i + 1}",doc)
           doc.next_page
         end
@@ -203,10 +239,36 @@ module UniFreire
         print_geral_resultado_agrupamentos(doc,legend,group_id,show_dimension_nine)
         doc.image next_page_file(doc)
         doc.next_page
-        doc.image next_page_file(doc)
+        doc.image only_next_file(doc)
+        doc.image image_file "mapa_grupo_#{group_id}_1",doc
         doc.next_page
-
       end
+
+      def print_regiao (doc)
+        puts "Imprimindo dados da região"
+        POLOS.each do |p|
+          puts "Região #{p[:name]}"
+          doc.image next_page_file(doc)
+          doc.next_page
+          doc.image only_next_file(doc)
+          doc.image image_file("mapa_regiao_#{p[:number]}_1",doc)
+          doc.next_page
+        end
+      end
+
+      def print_supervisor (doc)
+        puts "Imprimindo dados do supervisor"
+        SUPERVISORAS.each do |p|
+          puts "Supervisor #{p[:name]}"
+          doc.image next_page_file(doc)
+          doc.next_page
+          doc.image only_next_file(doc)
+          doc.image image_file("mapa_supervisor_#{p[:number]}_1",doc)
+          doc.next_page
+        end
+      end
+
+
 
       def print_geral_resultado_agrupamentos(doc,legend,group_id,show_dimension_nine)
         11.times do |t|
@@ -280,6 +342,10 @@ module UniFreire
       def page_file(pg_no, doc)
         add_index(doc)
         File.join(TEMPLATE_DIRECTORY,"pg_#{pg_no}.eps")
+      end
+
+      def only_next_file(doc)
+        File.join(TEMPLATE_DIRECTORY,"pg_#{inc_page}.eps")
       end
 
       def image_file(file,doc)

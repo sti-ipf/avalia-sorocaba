@@ -226,15 +226,15 @@ execute ("CREATE  TABLE institutions_year_history (
   year INT NULL)")
 
 
-execute("insert into institutions_year_history select id,2,2008 from institutions where id in (66,16,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,53,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
-58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78)")
-execute("insert into institutions_year_history select id,2,2009 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
-58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
-execute("insert into institutions_year_history select id,2,2010 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,132,45,46,48,49,14,50,51,52,55,56,17,57,154,243,271,360,
-58,168,285,361,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
-execute("insert into institutions_year_history select id,3,2008 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
-execute("insert into institutions_year_history select id,3,2009 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
-execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,133,218,245,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
+execute("insert into institutions_year_history select id,2,2008 from institutions where id in (66,16,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,53,132,45,46,48,49,14,50,51,52,55,56,17,57,
+58,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78)")
+execute("insert into institutions_year_history select id,2,2009 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,132,45,46,48,49,14,50,51,52,55,56,17,57,
+58,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
+execute("insert into institutions_year_history select id,2,2010 from institutions where id in (66,16,41,81,118,62,44,18,87,89,19,22,24,29,31,9,38,39,90,36,85,12,159,35,132,45,46,48,49,14,50,51,52,55,56,17,57,
+58,59,63,64,65,68,70,30,71,47,21,32,34,37,25,27,60,61,72,11,20,83,84,88,15,33,54,69,74,75,76,77,78,86,67,73,79)")
+execute("insert into institutions_year_history select id,3,2008 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,123,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
+execute("insert into institutions_year_history select id,3,2009 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,91,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
+execute("insert into institutions_year_history select id,3,2010 from institutions where id in (107,104,28,106,100,110,105,96,131,98,108,114,101,92,123,1,124,125,126,93,127,128,122,103,121,115,94,130,109,120,111,112,113,129,99,133,102,119)")
 
 begin
 execute("ALTER TABLE institutions ADD COLUMN infantil_type INTEGER AFTER group_id;")
@@ -245,10 +245,11 @@ end
 #Infantil Integral
 execute("UPDATE institutions SET infantil_type = 3 WHERE id IN (16,89,22,45,46,49,50,52,56,17,68,30,21,34,25,27,60,61,11,83,88,15,33,75,77,67,33)")
 #Infantil Parcial
-execute("UPDATE institutions SET infantil_type = 2 WHERE id IN (81,118,62,18,19,24,29,31,9,38,39,90,85,12,35,53,55,57,154,243, 271,360,
-                      58,168,285,361,64,70,71,47,32,37,20,84,74,76,78)")
+execute("UPDATE institutions SET infantil_type = 2 WHERE id IN (81,118,62,18,19,24,29,31,9,38,39,90,85,12,35,53,55,57,
+                      58,64,70,71,47,32,37,20,84,74,76,78)")
 #Integral + Parcial
 execute("UPDATE institutions SET infantil_type = 1 WHERE id IN (66,41,44,87,36,132,48,14,51,59,63,65,72,54,69,86,73,79)")
+
 
 begin
 execute("ALTER TABLE institutions ADD COLUMN primary_service_level_id INTEGER AFTER group_id;")
