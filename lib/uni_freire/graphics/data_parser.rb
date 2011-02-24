@@ -40,16 +40,22 @@ module UniFreire
       def self.as_array(result)
         data = []
         result.each do |r|
-          data << r
+          data << r.first
         end
         data
       end
 
       def self.as_hash(result)
         data = {}
+        school = nil
+        segment_name = nil
+        indicator = nil
         result.each do |r|
-          data[r[0]] ||= []
-          data[r[0]] << {r[1]=>{r[2]=>r[3]}}
+          data[r[0]] = {} if school != r[0]
+          school = r[0]
+          data[r[0]][r[1]] = {} if segment_name != r[1]
+          segment_name = r[1]
+          data[r[0]][r[1]][r[2]] = r[3]
         end
         data
       end
@@ -59,7 +65,7 @@ module UniFreire
         new_numbers = []
         new_number_control = true
         numbers.each do |n|
-          actual_dimension = n.first.split('.')[0]
+          actual_dimension = n.split('.')[0]
           dimension ||= actual_dimension
           new_numbers = add_new_number(new_numbers, dimension) if new_number_control
           new_number_control = false
@@ -74,8 +80,36 @@ module UniFreire
         new_numbers
       end
 
-      def self.map_with_dimension_media(result, numbers)
+      def self.map_with_dimension_media(result, institutions, numbers)
         data = as_hash(result)
+        funcs = %w(Gestores Professores Funcionários Familiares)
+        hash_temp = {}
+        actual_dimension = nil
+        institutions.each do |i|
+          funcs.each do |f|
+            numbers.each do |n|
+              if n.include?("Dimen")
+                actual_dimension = n
+                hash_temp[actual_dimension] = []
+                next
+              end
+              begin
+                value = data[i][f][n].to_f.round(1)
+                hash_temp[actual_dimension] << value if value != 0
+              rescue
+                next
+              end
+            end #numbers each
+            hash_temp.each do |k,v|
+              begin
+                data[i][f][k] = calc_dimension_media(v)
+              rescue
+                next
+              end
+            end
+            hash_temp = {}
+          end #funcs each
+        end #institutions each
         data
       end
 
@@ -83,6 +117,14 @@ module UniFreire
 
       def self.add_new_number(numbers, dimension)
         numbers << "Dimensão #{dimension}"
+      end
+
+      def self.calc_dimension_media(v)
+        return nil if v.count == 0
+        media = 0
+        v.each {|d| media+=d}
+        media = (media.to_f/v.count).to_f.round(1)
+        media = (media.to_i == media)? media.to_i : media
       end
 
       def get_series_with_legends_and_data(data)

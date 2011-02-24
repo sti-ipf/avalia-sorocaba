@@ -86,5 +86,84 @@ namespace :generate do
                             on i.id=ca.institution_id order by institution_id")
   end
 
+  namespace :maps do
+
+    task:all do
+      generate_infant_map
+      generate_groups_map
+      generate_regions_map
+      generate_supervisors_map
+    end
+
+    task:infant do
+      generate_infant_map
+    end
+
+    task:groups do
+      generate_groups_map
+    end
+
+    task:regions do
+      generate_regions_map
+    end
+
+    task:supervisors do
+      generate_supervisors_map
+    end
+
+  end
+
+  private
+
+    def get_data(table)
+      result = ActiveRecord::Base.connection.execute("SELECT id FROM #{table}")
+      parser_data(result)
+    end
+
+    def get_groups_without_infant
+      result = ActiveRecord::Base.connection.execute("
+        SELECT id FROM groups WHERE id NOT IN (61)")
+      parser_data(result)
+    end
+
+    def parser_data(result)
+      data = []
+      result.each{|r| data << r[0]}
+      data
+    end
+
+    def generate_infant_map
+      puts "Gerando mapa infantil"
+      UniFreire::Graphics::MapaInfantil.create
+      puts "Mapa infantil gerado"
+    end
+
+    def generate_groups_map
+      groups = get_groups_without_infant
+      groups.each do |group_id|
+        puts "Gerando mapa do grupo #{group_id}"
+        UniFreire::Graphics::MapaGrupos.create(group_id)
+        puts "Mapa do grupo #{group_id} gerado"
+      end
+    end
+
+    def generate_regions_map
+      regions = get_data("regions")
+      regions.each do |region_id|
+        puts "Gerando mapa da região #{region_id}"
+        UniFreire::Graphics::MapaRegioes.create(region_id)
+        puts "Mapa da região #{region_id} gerado"
+      end
+    end
+
+    def generate_supervisors_map
+      supervisors = get_data("supervisors")
+      supervisors.each do |supervisor_id|
+        puts "Gerando mapa do supervisor #{supervisor_id}"
+        UniFreire::Graphics::MapaSupervisores.create(supervisor_id)
+        puts "Mapa do supervisor #{supervisor_id} gerado"
+      end
+    end
+
 end
 
