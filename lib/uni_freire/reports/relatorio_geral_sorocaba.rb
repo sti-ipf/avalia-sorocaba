@@ -66,17 +66,14 @@ module UniFreire
       end
 
       def report
-       doc = RGhost::Document.new
-        doc.define_tags do
-          tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
-          tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
-        end
+
+        doc = new_doc
 
         doc.image File.expand_path("capa_geral.eps", TEMPLATE_DIRECTORY)
         doc.next_page
 
         # salta 8 páginas
-        8.times do |i|
+        9.times do |i|
           doc.image next_page_file(doc)
           doc.next_page
         end
@@ -89,11 +86,11 @@ module UniFreire
 
         # 1.2. Gráfico geral da série histórica dos resultados das dimensões - INFANTIL
         print_historico_geral(doc,REPORT_TYPES[:infantil],legend,9.5,20.8)
-        graph_positions_infantil=[18.5,6,18.5,5.5,18.5,5,0,19.2,5,19.2,8]
+        graph_positions_infantil=[18.5,6,19.3,5.5,19.2,6,0,19.9,5,19.9,8.8]
         print_historico_indicadores(doc,REPORT_TYPES[:infantil],graph_positions_infantil,legend)
 
-        print_historico_geral(doc,REPORT_TYPES[:fundamental],legend,15.5,24.7)
-        graph_positions_fundamental=[18.5,6,18.5,5.5,18.5,5,18.4,6.1,0,19.2,8]
+        print_historico_geral(doc,REPORT_TYPES[:fundamental],legend,15.5,24.4)
+        graph_positions_fundamental=[18.5,6,19.3,5.5,19.1,6,18.4,6.8,0,19.9,8]
         print_historico_indicadores(doc,REPORT_TYPES[:fundamental],graph_positions_fundamental,legend)
 
         legend = UniFreire::Graphics::GeralResultadoInfantilFundamental.create_data(REPORT_TYPES)
@@ -108,15 +105,15 @@ module UniFreire
         print_agrupamento (doc,INFANTIL_FUNDAMENTAL_PARCIAL,true)
         print_agrupamento (doc,FUNDAMENTAL_PARCIAL,false)
         print_agrupamento (doc,FUNDAMENTAL_INTEGRAL,false)
-        print_agrupamento (doc,FUNDAMENTAL_MEDIO,false)
+        print_agrupamento (doc,FUNDAMENTAL_MEDIO,false,false)
+
+        #Gera arquivo PDF
+        print_file(doc,"relatorio_geral")
 
         print_regiao(doc)
 
         print_supervisor(doc)
 
-        doc.render :pdf, :debug => true, :quality => :prepress,
-          :filename => File.join(PUBLIC_DIRECTORY,"relatorio_geral.pdf"),
-          :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
 
 #        html_file = File.new("/home/fabricio/ruby/sandbox/mapa/public/index.html")
 #        kit = PDFKit.new(html_file)
@@ -129,6 +126,21 @@ module UniFreire
       end
 
     private
+
+      def new_doc()
+        doc = RGhost::Document.new
+        doc.define_tags do
+            tag :font1, :name => 'HelveticaBold', :size => 12, :color => '#000000'
+            tag :index, :name => 'Helvetica', :size => 8, :color => '#000000'
+          end
+        doc
+      end
+
+      def print_file(doc,title)
+           doc.render :pdf, :debug => true, :quality => :prepress,
+          :filename => File.join(PUBLIC_DIRECTORY,"#{title}.pdf"),
+          :logfile => File.join(TEMP_DIRECTORY,"sorocaba.log")
+      end
 
       def print_historico_indicadores(doc,hash_report,graph_positions,legend)
         graph_count = 0
@@ -171,7 +183,7 @@ module UniFreire
         arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_PARCIAL,36)
         arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_INTEGRAL,60)
         arr_results << UniFreire::Graphics::GeralPercentualRespondido.get_data_for_type(FUNDAMENTAL_MEDIO,28)
-        pos=[20.25,18.95,17.4, 16.45, 15.2, 13.6,12.65]
+        pos=[19.75,18.45,16.9, 15.95, 14.7, 13.1,12.15]
         i=0
         total=0
         arr_results.each do |a|
@@ -191,7 +203,7 @@ module UniFreire
         11.times do |t|
           dimension = t + 1
             graph_position=19.5
-            graph_position=17 if dimension==1
+            graph_position=17.5 if dimension==1
             graph_position=19 if ((dimension==7) || (dimension==9))
 
             doc.image next_page_file(doc)
@@ -234,38 +246,48 @@ module UniFreire
         end
       end
 
-      def print_agrupamento (doc,group_id,show_dimension_nine)
+      def print_agrupamento (doc,group_id,show_dimension_nine, advance_a_page=true)
         legend = UniFreire::Graphics::GeralResultadoAgrupamentos.create_data(group_id,REPORT_TYPES)
         print_geral_resultado_agrupamentos(doc,legend,group_id,show_dimension_nine)
         doc.image next_page_file(doc)
         doc.next_page
         doc.image only_next_file(doc)
         doc.image image_file "mapa_grupo_#{group_id}_1",doc
-        doc.next_page
+        doc.next_page if advance_a_page
       end
 
       def print_regiao (doc)
+        @index=166
+        @inc_page=164
         puts "Imprimindo dados da região"
+        i=1
         POLOS.each do |p|
-          puts "Região #{p[:name]}"
+          doc = new_doc
           doc.image next_page_file(doc)
           doc.next_page
           doc.image only_next_file(doc)
           doc.image image_file("mapa_regiao_#{p[:number]}_1",doc)
-          doc.next_page
+          #doc.next_page
+          print_file(doc, "relatorio_geral_regiao_#{i.to_s}")
+          i+=1
         end
+
       end
 
       def print_supervisor (doc)
+
         puts "Imprimindo dados do supervisor"
         SUPERVISORAS.each do |p|
+          doc = new_doc
           puts "Supervisor #{p[:name]}"
           doc.image next_page_file(doc)
           doc.next_page
           doc.image only_next_file(doc)
           doc.image image_file("mapa_supervisor_#{p[:number]}_1",doc)
-          doc.next_page
+          #doc.next_page
+          print_file(doc, "relatorio_geral_supervisor_#{p[:number]+1}")
         end
+
       end
 
 

@@ -39,7 +39,7 @@ module UniFreire
         # Calculo da media da UE
         connection.execute "
           insert into report_data select institution_id,'#{AVG_UE}',1,segment_name,segment_order,avg(score) as media,dimension,indicator,question
-          from comparable_answers where institution_id= #{institution_id} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question;
+          from comparable_answers where score>0 and institution_id= #{institution_id} and year=2010 and segment_name <> 'Alessandra' group by segment_name,dimension,indicator,question;
           "
           legend << {:name=>AVG_UE,:color=>colors[0]}
 
@@ -47,7 +47,7 @@ module UniFreire
         if infantil
           connection.execute "insert into report_data
             select #{institution_id},'#{AVG_INFANTIL}',2,segment_name,segment_order,avg(score) as media,dimension,indicator,question  from comparable_answers
-            where year=2010  and segment_name <> 'Alessandra'  and level_name = 2
+            where year=2010  and segment_name <> 'Alessandra'  and level_name = 2 and score>0
             group by segment_name,dimension,indicator,question;"
           legend << {:name=>AVG_INFANTIL,:color=>colors[1]}
         end
@@ -57,7 +57,7 @@ module UniFreire
           connection.execute "
             insert into report_data
             select #{institution_id},'#{AVG_FUNDAMENTAL}',3,segment_name,segment_order,avg(score) as media,dimension,indicator,question  from comparable_answers
-             where year=2010  and segment_name <> 'Alessandra' and level_name in (3,4)
+             where year=2010  and segment_name <> 'Alessandra' and score>0 and level_name in (3,4)
             group by segment_name,dimension,indicator,question;"
           legend << {:name=>AVG_FUNDAMENTAL,:color=>colors[2]}
         end
@@ -66,7 +66,7 @@ module UniFreire
         connection.execute "insert into report_data
           select #{institution_id},'#{AVG_AGRUPAMENTO}',4,segment_name,segment_order,avg(score) as media,dimension,indicator,question
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
-          where i.group_id=#{group_id} and ca.year=2010  and ca.segment_name <> 'Alessandra'
+          where i.group_id=#{group_id} and ca.year=2010  and ca.score>0 and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
         legend << {:name=>AVG_AGRUPAMENTO,:color=>colors[3]}
 

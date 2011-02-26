@@ -1,6 +1,9 @@
+#!/usr/bin/env ruby
+
 require "yaml"
 require "rubygems"
 require "active_record"
+
 
 ActiveRecord::Base.establish_connection(
   :adapter => "mysql",
@@ -202,7 +205,7 @@ rescue
 end
 
 execute("update institutions set supervisor_id = 0 where id in (104,70,106,85,105,89,50)")
-execute("update institutions set supervisor_id = 1 where id in (101,74,15,54,56,128,122)")
+execute("update institutions set supervisor_id = 1 where id in (101,74,15,54,56,128,122,27)")
 execute("update institutions set supervisor_id = 2  where id in (107,24,78,79,30,45,123,133)")
 execute("update institutions set supervisor_id = 3 where id in (19,20,32,51,114,46,56,120)")
 execute("update institutions set supervisor_id = 4 where id in (87,86,16,84,52,49,72,115,110)")# 56 <jorge luiz esta em dois grupos>

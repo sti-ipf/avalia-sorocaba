@@ -37,10 +37,14 @@ module UniFreire
         series
       end
 
-      def self.as_array(result)
+      def self.as_array(result,get_first_item = false)
         data = []
         result.each do |r|
-          data << r.first
+          if get_first_item
+            data << r.first
+          else
+            data << r
+          end
         end
         data
       end
@@ -51,8 +55,11 @@ module UniFreire
         segment_name = nil
         indicator = nil
         result.each do |r|
-          data[r[0]] = {} if school != r[0]
-          school = r[0]
+          if school != r[0]
+            data[r[0]] = {}
+            school = r[0]
+            segment_name=nil
+          end
           data[r[0]][r[1]] = {} if segment_name != r[1]
           segment_name = r[1]
           data[r[0]][r[1]][r[2]] = r[3]
@@ -82,9 +89,9 @@ module UniFreire
 
       def self.map_with_dimension_media(result, institutions, numbers)
         data = as_hash(result)
-        funcs = %w(Gestores Professores Funcionários Familiares)
         hash_temp = {}
         actual_dimension = nil
+        funcs = %w(Gestores Professores Funcionários Familiares Educandos)
         institutions.each do |i|
           funcs.each do |f|
             numbers.each do |n|
@@ -94,7 +101,7 @@ module UniFreire
                 next
               end
               begin
-                value = data[i][f][n].to_f.round(1)
+                value = data[i[2]][f][n].to_f.round(1)
                 hash_temp[actual_dimension] << value if value != 0
               rescue
                 next
@@ -102,10 +109,11 @@ module UniFreire
             end #numbers each
             hash_temp.each do |k,v|
               begin
-                data[i][f][k] = calc_dimension_media(v)
+                data[i[2]][f][k] = calc_dimension_media(v)
               rescue
                 next
               end
+
             end
             hash_temp = {}
           end #funcs each

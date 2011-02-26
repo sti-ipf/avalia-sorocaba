@@ -35,6 +35,7 @@ module UniFreire
           from comparable_answers ca inner join institutions i on i.id=ca.institution_id
           where i.region_id=#{region_id}
           and i.primary_service_level_id  in (#{in_clause})
+          and ca.score>0
           and ca.year=2010  and ca.segment_name <> 'Alessandra'
           group by ca.segment_name,ca.dimension,ca.indicator,ca.question;"
 

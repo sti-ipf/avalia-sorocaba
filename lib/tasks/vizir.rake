@@ -31,22 +31,21 @@ namespace :generate do
     puts "Todos os relatórios foram gerados"
   end
 
-  task:set, :id do |t,args|
-    puts "Vai Gerar Relatório para um conjunto"
-    if args[:id].nil?
-      puts "É preciso fornecer o ID da instituição"
-    else
-      puts args[:id]
-      puts args
-      ids = args[:id].split(",")
-      puts ids
-      ids.each do |cur_id|
-        puts "Gerando o relatório para a instituição #{cur_id}"
-        UniFreire::Reports::RelatorioIndividualSoracaba.new(cur_id).report
-        puts "Relatório gerado na pasta public"
-      end
+  task:set do
+    puts "Gerando os relatórios para teste. Vai demorar!"
+    #inst = [93,96,127,129,123,39,132,118,58,101,99,126,86]
+    inst = [101,99,126,86]
+
+    inst.each do |r|
+      puts "Gerando o relatório para a instituição #{r}"
+      UniFreire::Reports::RelatorioIndividualSoracaba.new(r).report
+      puts "Relatório para a instituição gerado #{r}"
     end
+    puts "Todos os relatórios foram gerados"
   end
+
+
+
 
   namespace :resque do
     task:one, :id do |t,args|
