@@ -18,7 +18,7 @@ module UniFreire
           SELECT name FROM institutions
           WHERE id = #{@institution_id}"
           ).fetch_row[0].gsub(/[^a-z0-9çâãáàêẽéèîĩíìõôóòũûúù' ']+/i, '')
-        @file_name = @institution_name.remover_acentos.gsub(' ', '_')
+        @file_name = @institution_name.remover_acentos.gsub(/([' ])/, '_')
       end
 
       def report
