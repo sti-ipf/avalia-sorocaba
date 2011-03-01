@@ -62,9 +62,6 @@ module UniFreire
           :five  => %w(#579d1c #004586 #ff420e #83caff #74132c)
         }
 
-      def initialize
-      end
-
       def report
 
         doc = new_doc
